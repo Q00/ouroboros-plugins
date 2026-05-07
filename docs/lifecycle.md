@@ -16,7 +16,95 @@ first_party
   A UserLevel program shipped with Ouroboros itself.
 ```
 
-Remote package resolution is out of scope for the MVP.
+Distribution shape: **local path + git URL only**. Hosted package
+registries, marketplace search, and auto-update are explicit non-goals
+(see `Non-goals` below and Q00/ouroboros#725 for the framing).
+
+## Repository-URL Source
+
+`ouroboros plugin add <repo-url>` is the canonical install path. The repo URL
+is the **unit of distribution**; the catalog inside the repo is the
+**unit of selection**. The manager:
+
+1. Performs a shallow clone (`git clone --depth 1`) of the repo into a
+   cache directory under `~/.ouroboros/cache/`.
+2. Reads each `plugins/<name>/ouroboros.plugin.json` in the repo to build
+   a catalog.
+3. Prompts the user to select one or more plugins (multi-select).
+4. Installs each selected plugin into `~/.ouroboros/plugins/<name>/` and
+   records it in `~/.ouroboros/plugins.lock`.
+
+Interactive flow:
+
+```text
+$ ouroboros plugin add https://github.com/Q00/ouroboros-plugins
+
+Repository: Q00/ouroboros-plugins (b3a91f2)
+
+Select plugins to install:
+
+  [x] github-pr-ops      0.1.0   review and prepare PR merges
+  [ ] release-coordinator 0.1.0   coordinate changelog and rollout
+  [ ] issue-triage        0.1.0   classify product/engineering issues
+
+Press space to toggle, enter to confirm, esc to cancel.
+```
+
+Non-interactive form for scripts and CI:
+
+```bash
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops --plugin release-coordinator
+```
+
+Local path source still works for development and offline use:
+
+```bash
+ouroboros plugin add ./plugins/github-pr-ops
+```
+
+### Catalog convention
+
+For a repo to be installable via `ouroboros plugin add <repo-url>`:
+
+- Top-level `plugins/` directory.
+- Each immediate subdirectory of `plugins/` is one plugin and contains
+  an `ouroboros.plugin.json`.
+- Optional `catalog/index.json` (or `registry/index.json` pre-rename)
+  may carry a curated ordering / metadata for the prompt.
+
+Plugins outside `plugins/` are ignored by the catalog reader.
+
+## Anti-patterns
+
+The manager **rejects** install strings that leak repository layout into
+the user-visible URL. Examples that are explicitly unsupported:
+
+```bash
+# Subdirectory-leaking install string — rejected with a clear error.
+ouroboros plugin add git+https://github.com/Q00/ouroboros-plugins.git#plugins/github-pr-ops
+```
+
+Error message:
+
+```text
+error: subdirectory-form install strings (#plugins/...) are not supported.
+       Use 'ouroboros plugin add <repo-url> --plugin <name>' instead.
+```
+
+Why: the repository URL is the unit of distribution. Coupling the install
+string to internal directory layout makes plugin authors unable to refactor
+their repos without breaking installs.
+
+Other unsupported forms:
+
+```bash
+# Trying to "install" the catalog file directly.
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins/blob/main/catalog/index.json   # rejected
+
+# Bare PyPI-style names (no remote package registry exists).
+ouroboros plugin add github-pr-ops   # rejected unless ./github-pr-ops or similar is a path
+```
 
 ## States
 
@@ -47,9 +135,13 @@ first_party
 MVP command shape:
 
 ```bash
+ouroboros plugin add <repo-url>                       # multi-select prompt
+ouroboros plugin add <repo-url> --plugin <name>       # non-interactive
+ouroboros plugin add ./plugins/github-pr-ops          # local-path source
 ouroboros plugin discover ./plugins/github-pr-ops
 ouroboros plugin install ./plugins/github-pr-ops
 ouroboros plugin inspect github-pr-ops
+ouroboros plugin list
 ouroboros plugin trust github-pr-ops --scope github:read
 ouroboros plugin disable github-pr-ops
 ouroboros plugin remove github-pr-ops
