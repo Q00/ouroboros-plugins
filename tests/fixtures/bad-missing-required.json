@@ -1,0 +1,97 @@
+{
+  "schema_version": "0.1",
+  "version": "0.1.0",
+  "description": "Reference skeleton for GitHub PR operational workflows.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/github-pr-ops"
+  },
+  "commands": [
+    {
+      "namespace": "github-pr",
+      "name": "review",
+      "summary": "Review a pull request and summarize readiness without mutating it.",
+      "usage": "ooo github-pr review <pull-request-url>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "pull_request_url",
+          "type": "url",
+          "required": true,
+          "description": "GitHub pull request URL to inspect."
+        }
+      ]
+    },
+    {
+      "namespace": "github-pr",
+      "name": "merge",
+      "summary": "Prepare or execute a merge decision under an explicit policy.",
+      "usage": "ooo github-pr merge <pull-request-url> --policy <policy-name>",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "pull_request_url",
+          "type": "url",
+          "required": true,
+          "description": "GitHub pull request URL to merge."
+        },
+        {
+          "name": "policy",
+          "type": "string",
+          "required": true,
+          "description": "Named merge policy to evaluate."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record policy inputs, evidence, and decisions."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record plugin invocation and external GitHub context."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist plugin workflow state between invocations."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach externally verified execution or merge results."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "github:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read PR status, checks, reviews, and branch metadata."
+    },
+    {
+      "scope": "github:pull_request:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Only needed for future merge/write workflows."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m github_pr_ops"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}

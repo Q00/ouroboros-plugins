@@ -1,0 +1,4 @@
+# Dev-only dependencies for validating the contract.
+# Runtime consumers (e.g. Q00/ouroboros core) vendor the schemas; this is
+# exclusively for the in-repo validator and CI.
+jsonschema>=4.21
