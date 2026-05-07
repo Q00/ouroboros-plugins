@@ -93,8 +93,9 @@ schemas/
     audit-event.schema.json  Draft JSON Schema for audit events (v0.1)
 plugins/
   github-pr-ops/       Reference plugin skeleton
-registry/
-  index.json           Local index placeholder
+catalog/
+  index.json           Local catalog (boring index for reproducibility,
+                       NOT a package-registry server)
 ```
 
 ## Validate
