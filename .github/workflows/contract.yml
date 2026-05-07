@@ -1,0 +1,43 @@
+name: contract-validation
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        # Install jsonschema unconditionally so the validator runs whether or
+        # not Q00/ouroboros-plugins#1 (which adds requirements-dev.txt) is
+        # already merged. After #1 merges this falls through to the file.
+        run: |
+          if [ -f requirements-dev.txt ]; then
+            pip install -r requirements-dev.txt
+          else
+            pip install "jsonschema>=4.21"
+          fi
+
+      - name: Validate contract JSON files
+        run: python3 scripts/validate_contract.py
+
+      - name: Run validator tests (if present)
+        run: |
+          if [ -f tests/test_validator.py ]; then
+            python3 -m unittest tests.test_validator -v
+          else
+            echo "tests/test_validator.py not present yet (Q00/ouroboros-plugins#1 not merged); skipping."
+          fi

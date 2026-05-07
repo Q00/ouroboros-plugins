@@ -97,7 +97,10 @@ registry/
 
 ## Validate
 
+A `contract-validation` GitHub Actions workflow runs the validator on every pull request and on pushes to `main`. To run it locally:
+
 ```bash
+pip install -r requirements-dev.txt
 python3 scripts/validate_contract.py
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 ```
