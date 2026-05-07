@@ -126,8 +126,21 @@ blocked
   Policy forbids execution.
 
 first_party
-  Reserved for programs shipped with Ouroboros. First-party programs still
-  declare capabilities so they remain auditable.
+  Reserved for programs shipped with Ouroboros (e.g. `ooo auto`).
+  First-party programs are registered at core boot, NOT through
+  `discovered → installed → trusted`. They still declare capabilities
+  and permissions so they remain auditable, but no user-issued
+  `ouroboros plugin trust` step is needed.
+
+  Consequences:
+    - `ouroboros plugin add` refuses any source resolving to first_party.
+    - `plugin.trusted` audit events are not emitted for first-party
+      programs. All other audit events (plugin.invoked,
+      plugin.permission_used, plugin.completed, plugin.failed) are
+      emitted normally.
+
+  See docs/contract.md "first_party flow" for the manifest-sharing
+  rationale.
 ```
 
 ## Commands

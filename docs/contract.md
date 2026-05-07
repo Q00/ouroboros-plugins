@@ -32,6 +32,33 @@ The MVP accepts only local sources:
 
 Network registry, marketplace search, and auto-update are out of scope.
 
+### first_party flow
+
+`first_party` is **not** part of the user-facing install lifecycle.
+Programs with `source.type=first_party` ship with Ouroboros core (e.g.
+`ooo auto`, `ooo run`, `ooo pm`) and are registered **at core boot**,
+bypassing `discovered → installed → trusted`. They share the manifest
+format with installable plugins so the loader (Q00/ouroboros#728) can
+treat both kinds through one code path, and so first-party programs
+remain auditable through the same capability/permission contract.
+
+Concretely:
+
+- The loader reads first-party manifests from a known location inside
+  Ouroboros core (e.g. `src/ouroboros/programs/<name>/ouroboros.plugin.json`).
+- Trust state is the literal `first_party` (per `States` in
+  `lifecycle.md`); no user-issued `ouroboros plugin trust` step is
+  needed.
+- The manager will refuse `ouroboros plugin add` for any source that
+  resolves to `source.type=first_party` — those manifests are not
+  installable.
+- `plugin.trusted` audit events are **not** emitted for first-party
+  programs (there is no separate trust grant). All other events
+  (`plugin.invoked`, `plugin.permission_used`, `plugin.completed`,
+  `plugin.failed`) are emitted normally.
+
+This is the resolution of the open question in Q00/ouroboros-plugins#8.
+
 ## Commands
 
 Plugins own command namespaces.
