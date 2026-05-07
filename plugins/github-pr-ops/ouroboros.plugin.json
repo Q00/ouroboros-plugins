@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "name": "github-pr-ops",
+  "version": "0.1.0",
+  "description": "Reference skeleton for GitHub PR operational workflows.",
+  "commands": [
+    {
+      "namespace": "github-pr",
+      "name": "review",
+      "usage": "ooo github-pr review <pull-request-url>"
+    },
+    {
+      "namespace": "github-pr",
+      "name": "merge",
+      "usage": "ooo github-pr merge <pull-request-url> --policy <policy-name>"
+    }
+  ],
+  "capabilities": [
+    "ledger:write",
+    "provenance:write",
+    "state:write",
+    "handoff:attach"
+  ],
+  "permissions": [
+    "github:read",
+    "github:pull_request:write"
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m github_pr_ops"
+  }
+}

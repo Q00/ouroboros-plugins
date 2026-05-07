@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1",
+  "plugins": [
+    {
+      "name": "github-pr-ops",
+      "version": "0.1.0",
+      "path": "../plugins/github-pr-ops",
+      "description": "Reference skeleton for GitHub PR operational workflows."
+    }
+  ]
+}
