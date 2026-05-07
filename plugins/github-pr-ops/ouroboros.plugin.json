@@ -44,7 +44,7 @@
     {
       "name": "handoff",
       "access": "attach",
-      "reason": "Attach externally verified execution or merge results."
+      "reason": "Attach externally verified review evidence and downstream execution results."
     }
   ],
   "permissions": [
