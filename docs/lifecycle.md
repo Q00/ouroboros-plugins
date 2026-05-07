@@ -22,7 +22,7 @@ registries, marketplace search, and auto-update are explicit non-goals
 
 ## Repository-URL Source
 
-`ooo plugin add <repo-url>` is the canonical install path. The repo URL
+`ouroboros plugin add <repo-url>` is the canonical install path. The repo URL
 is the **unit of distribution**; the catalog inside the repo is the
 **unit of selection**. The manager:
 
@@ -37,7 +37,7 @@ is the **unit of distribution**; the catalog inside the repo is the
 Interactive flow:
 
 ```text
-$ ooo plugin add https://github.com/Q00/ouroboros-plugins
+$ ouroboros plugin add https://github.com/Q00/ouroboros-plugins
 
 Repository: Q00/ouroboros-plugins (b3a91f2)
 
@@ -53,19 +53,19 @@ Press space to toggle, enter to confirm, esc to cancel.
 Non-interactive form for scripts and CI:
 
 ```bash
-ooo plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
-ooo plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops --plugin release-coordinator
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops --plugin release-coordinator
 ```
 
 Local path source still works for development and offline use:
 
 ```bash
-ooo plugin add ./plugins/github-pr-ops
+ouroboros plugin add ./plugins/github-pr-ops
 ```
 
 ### Catalog convention
 
-For a repo to be installable via `ooo plugin add <repo-url>`:
+For a repo to be installable via `ouroboros plugin add <repo-url>`:
 
 - Top-level `plugins/` directory.
 - Each immediate subdirectory of `plugins/` is one plugin and contains
@@ -82,14 +82,14 @@ the user-visible URL. Examples that are explicitly unsupported:
 
 ```bash
 # Subdirectory-leaking install string — rejected with a clear error.
-ooo plugin add git+https://github.com/Q00/ouroboros-plugins.git#plugins/github-pr-ops
+ouroboros plugin add git+https://github.com/Q00/ouroboros-plugins.git#plugins/github-pr-ops
 ```
 
 Error message:
 
 ```text
 error: subdirectory-form install strings (#plugins/...) are not supported.
-       Use 'ooo plugin add <repo-url> --plugin <name>' instead.
+       Use 'ouroboros plugin add <repo-url> --plugin <name>' instead.
 ```
 
 Why: the repository URL is the unit of distribution. Coupling the install
@@ -100,10 +100,10 @@ Other unsupported forms:
 
 ```bash
 # Trying to "install" the catalog file directly.
-ooo plugin add https://github.com/Q00/ouroboros-plugins/blob/main/catalog/index.json   # rejected
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins/blob/main/catalog/index.json   # rejected
 
 # Bare PyPI-style names (no remote package registry exists).
-ooo plugin add github-pr-ops   # rejected unless ./github-pr-ops or similar is a path
+ouroboros plugin add github-pr-ops   # rejected unless ./github-pr-ops or similar is a path
 ```
 
 ## States
