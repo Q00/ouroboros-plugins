@@ -118,6 +118,9 @@ installed
 
 trusted
   The user or policy granted specific scopes. Trust is scoped, not global.
+  Trust is stored per-user at ~/.ouroboros/plugins/<name>/trust.json.
+  Trust is invalidated by any version bump (re-grant required after
+  `ouroboros plugin update`). See docs/permissions.md Q4 and Q5.
 
 disabled
   The plugin is installed but cannot run until re-enabled.
