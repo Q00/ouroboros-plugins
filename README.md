@@ -97,7 +97,12 @@ registry/
 
 ## Validate
 
+A `contract-validation` GitHub Actions workflow runs the validator on every pull request and on pushes to `main`. To run it locally:
+
 ```bash
+# Install validator deps. requirements-dev.txt is added by
+# Q00/ouroboros-plugins#13; until that lands, install jsonschema directly.
+pip install -r requirements-dev.txt 2>/dev/null || pip install "jsonschema>=4.21"
 python3 scripts/validate_contract.py
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 ```
