@@ -29,6 +29,11 @@ except ImportError as exc:  # pragma: no cover - import-time guard only
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Per docs/contract.md "Versioning": current MAJOR + previous MAJOR. Until
+# 1.0 ships, the only supported MAJOR is 0.1. When 1.0 lands, this set
+# becomes {"0.1", "1.0"}; when 2.0 lands, {"1.0", "2.0"} (0.1 deprecated).
+SUPPORTED_SCHEMA_VERSIONS = {"0.1"}
+
 
 def load_json(path: Path) -> object:
     with path.open(encoding="utf-8") as handle:
@@ -57,11 +62,13 @@ def validate_against(instance: object, schema: dict, label: str) -> None:
     )
 
 
+def schema_dir_for(version: str) -> Path:
+    return ROOT / "schemas" / version
+
+
 def main() -> int:
     # v0 ships archived per-major schemas under schemas/<major>/.
     # See docs/contract.md "Versioning" section.
-    plugin_schema = load_json(ROOT / "schemas" / "0.1" / "plugin.schema.json")
-    audit_schema = load_json(ROOT / "schemas" / "0.1" / "audit-event.schema.json")
 
     index_path = ROOT / "registry" / "index.json"
     if not index_path.exists():
@@ -69,21 +76,14 @@ def main() -> int:
     if not index_path.exists():
         raise SystemExit("error: neither registry/index.json nor catalog/index.json found")
     index = load_json(index_path)
-
-    if not isinstance(plugin_schema, dict):
-        raise SystemExit("plugin schema must be an object")
-    if not isinstance(audit_schema, dict):
-        raise SystemExit("audit schema must be an object")
     if not isinstance(index, dict):
         raise SystemExit(f"{index_path.relative_to(ROOT)}: must be an object")
-
-    validate_schema_self(plugin_schema, "schemas/0.1/plugin.schema.json")
-    validate_schema_self(audit_schema, "schemas/0.1/audit-event.schema.json")
 
     plugins_root = ROOT / "plugins"
     if not plugins_root.is_dir():
         raise SystemExit("plugins/ directory missing")
 
+    schema_cache: dict[str, dict] = {}
     plugin_count = 0
     for plugin_dir in sorted(plugins_root.iterdir()):
         manifest_path = plugin_dir / "ouroboros.plugin.json"
@@ -92,7 +92,33 @@ def main() -> int:
         manifest = load_json(manifest_path)
         if not isinstance(manifest, dict):
             raise SystemExit(f"{manifest_path.relative_to(ROOT)}: must be an object")
-        validate_against(manifest, plugin_schema, str(manifest_path.relative_to(ROOT)))
+
+        declared_version = manifest.get("schema_version")
+        if not isinstance(declared_version, str):
+            raise SystemExit(
+                f"{manifest_path.relative_to(ROOT)}: schema_version must be a string"
+            )
+        if declared_version not in SUPPORTED_SCHEMA_VERSIONS:
+            supported = sorted(SUPPORTED_SCHEMA_VERSIONS)
+            raise SystemExit(
+                f"error: schema_version {declared_version!r} is not supported. "
+                f"Current support window: {supported}. "
+                "Upgrade plugin or pin to a supported core version."
+            )
+
+        if declared_version not in schema_cache:
+            schemas = schema_dir_for(declared_version)
+            plugin_schema = load_json(schemas / "plugin.schema.json")
+            audit_schema = load_json(schemas / "audit-event.schema.json")
+            if not isinstance(plugin_schema, dict):
+                raise SystemExit(f"schemas/{declared_version}/plugin.schema.json: must be an object")
+            if not isinstance(audit_schema, dict):
+                raise SystemExit(f"schemas/{declared_version}/audit-event.schema.json: must be an object")
+            validate_schema_self(plugin_schema, f"schemas/{declared_version}/plugin.schema.json")
+            validate_schema_self(audit_schema, f"schemas/{declared_version}/audit-event.schema.json")
+            schema_cache[declared_version] = plugin_schema
+
+        validate_against(manifest, schema_cache[declared_version], str(manifest_path.relative_to(ROOT)))
         plugin_count += 1
 
     if plugin_count == 0:
