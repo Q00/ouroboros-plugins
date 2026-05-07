@@ -86,9 +86,11 @@ docs/
   lifecycle.md         Local-only plugin lifecycle
   permissions.md       Permission and trust model
   audit.md             Audit and provenance event model
+  migrations/          MAJOR-version schema migration guides (added when needed)
 schemas/
-  plugin.schema.json   Draft JSON Schema for plugin manifests
-  audit-event.schema.json
+  0.1/
+    plugin.schema.json       Draft JSON Schema for plugin manifests (v0.1)
+    audit-event.schema.json  Draft JSON Schema for audit events (v0.1)
 plugins/
   github-pr-ops/       Reference plugin skeleton
 registry/

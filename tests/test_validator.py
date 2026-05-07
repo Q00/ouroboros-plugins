@@ -23,7 +23,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 from jsonschema import Draft202012Validator  # noqa: E402
 
 
-SCHEMA = json.loads((REPO / "schemas" / "plugin.schema.json").read_text())
+SCHEMA = json.loads((REPO / "schemas" / "0.1" / "plugin.schema.json").read_text())
 VALIDATOR = Draft202012Validator(SCHEMA)
 
 
