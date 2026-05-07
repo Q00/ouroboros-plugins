@@ -7,13 +7,11 @@
     "schema_version",
     "name",
     "version",
-    "description",
     "source",
     "commands",
     "capabilities",
     "permissions",
-    "entrypoint",
-    "audit"
+    "entrypoint"
   ],
   "additionalProperties": false,
   "properties": {
@@ -31,7 +29,7 @@
     },
     "description": {
       "type": "string",
-      "minLength": 1
+      "default": ""
     },
     "source": {
       "type": "object",
@@ -184,6 +182,14 @@
       "type": "object",
       "required": ["events"],
       "additionalProperties": false,
+      "default": {
+        "events": [
+          "plugin.invoked",
+          "plugin.permission_used",
+          "plugin.completed",
+          "plugin.failed"
+        ]
+      },
       "properties": {
         "events": {
           "type": "array",
