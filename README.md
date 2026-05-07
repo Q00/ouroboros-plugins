@@ -109,8 +109,8 @@ PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.
 ```
 
 The first step is required: `validate_contract.py` imports `jsonschema` from
-`requirements-dev.txt`. On a clean checkout, skipping the install will make
-the validator exit with `ModuleNotFoundError`.
+`requirements-dev.txt`. On a clean checkout, skipping it makes the validator
+exit `2` with a "jsonschema is required" message.
 
 ## Status
 
