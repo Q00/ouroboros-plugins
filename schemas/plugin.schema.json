@@ -8,10 +8,12 @@
     "name",
     "version",
     "description",
+    "source",
     "commands",
     "capabilities",
     "permissions",
-    "entrypoint"
+    "entrypoint",
+    "audit"
   ],
   "additionalProperties": false,
   "properties": {
@@ -31,12 +33,29 @@
       "type": "string",
       "minLength": 1
     },
+    "source": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["local_path", "plugin_home", "first_party"]
+        },
+        "path": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        }
+      }
+    },
     "commands": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["namespace", "name", "usage"],
+        "required": ["namespace", "name", "summary", "usage", "risk"],
         "additionalProperties": false,
         "properties": {
           "namespace": {
@@ -47,9 +66,45 @@
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$"
           },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
           "usage": {
             "type": "string",
             "minLength": 1
+          },
+          "risk": {
+            "type": "string",
+            "enum": ["read_only", "writes_state", "external_write", "destructive"]
+          },
+          "requires_confirmation": {
+            "type": "boolean",
+            "default": false
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type", "required"],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]*$"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["string", "boolean", "integer", "path", "url"]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -57,14 +112,56 @@
     "capabilities": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "object",
+        "required": ["name", "access"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "seed",
+              "ledger",
+              "state",
+              "provenance",
+              "runtime",
+              "mcp",
+              "handoff",
+              "progress"
+            ]
+          },
+          "access": {
+            "type": "string",
+            "enum": ["read", "write", "execute", "attach"]
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
       },
       "uniqueItems": true
     },
     "permissions": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "object",
+        "required": ["scope", "risk", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "scope": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*(?::[a-z][a-z0-9_-]*){0,3}$"
+          },
+          "risk": {
+            "type": "string",
+            "enum": ["read_only", "write", "destructive"]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
       },
       "uniqueItems": true
     },
@@ -80,6 +177,30 @@
         "command": {
           "type": "string",
           "minLength": 1
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "required": ["events"],
+      "additionalProperties": false,
+      "properties": {
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "plugin.discovered",
+              "plugin.installed",
+              "plugin.trusted",
+              "plugin.invoked",
+              "plugin.permission_used",
+              "plugin.completed",
+              "plugin.failed"
+            ]
+          },
+          "uniqueItems": true
         }
       }
     }

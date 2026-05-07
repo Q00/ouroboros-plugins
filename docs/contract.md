@@ -15,10 +15,22 @@ Required fields:
 - `name`
 - `version`
 - `description`
+- `source`
 - `commands`
 - `capabilities`
 - `permissions`
 - `entrypoint`
+- `audit`
+
+## Sources
+
+The MVP accepts only local sources:
+
+- `local_path`: explicitly configured local directory
+- `plugin_home`: installed directory under `~/.ouroboros/plugins`
+- `first_party`: program shipped with Ouroboros
+
+Network registry, marketplace search, and auto-update are out of scope.
 
 ## Commands
 
@@ -32,6 +44,9 @@ Example:
   "commands": [
     {
       "name": "review",
+      "summary": "Review a pull request and summarize readiness.",
+      "risk": "read_only",
+      "requires_confirmation": false,
       "usage": "ooo github-pr review <pull-request-url>"
     }
   ]
@@ -47,16 +62,14 @@ Capabilities declare access to Ouroboros core primitives.
 
 Initial capability candidates:
 
-- `seed:read`
-- `seed:write`
-- `ledger:read`
-- `ledger:write`
-- `state:read`
-- `state:write`
-- `provenance:write`
-- `runtime:execute`
-- `mcp:call`
-- `handoff:attach`
+- `seed` with `read` or `write`
+- `ledger` with `read` or `write`
+- `state` with `read` or `write`
+- `provenance` with `write`
+- `runtime` with `execute`
+- `mcp` with `call`
+- `handoff` with `attach`
+- `progress` with `write`
 
 Capabilities should be narrower than permissions. They describe core access,
 not external system access.
@@ -78,6 +91,8 @@ Initial permission candidates:
 - `slack:write`
 
 Install should not imply trust for destructive permissions.
+Each permission declares its risk tier and whether it is required for the
+plugin's baseline operation.
 
 ## Entrypoint
 
@@ -107,6 +122,8 @@ Every plugin invocation should record:
 - External permissions used
 - Provenance source
 - Result status
+
+See `docs/audit.md` and `schemas/audit-event.schema.json`.
 
 ## Non-goals
 

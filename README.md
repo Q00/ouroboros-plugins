@@ -83,13 +83,23 @@ ooo github-pr merge --policy team-default
 docs/
   architecture.md      Layer model and design principles
   contract.md          Plugin contract MVP
+  lifecycle.md         Local-only plugin lifecycle
   permissions.md       Permission and trust model
+  audit.md             Audit and provenance event model
 schemas/
   plugin.schema.json   Draft JSON Schema for plugin manifests
+  audit-event.schema.json
 plugins/
   github-pr-ops/       Reference plugin skeleton
 registry/
   index.json           Local index placeholder
+```
+
+## Validate
+
+```bash
+python3 scripts/validate_contract.py
+PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 ```
 
 ## Status
