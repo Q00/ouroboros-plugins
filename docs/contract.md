@@ -30,6 +30,43 @@ so plugin authors don't write ceremonial values.
 When this manifest changes (new field added, or a field's required-status
 flips), bump the schema version per Q00/ouroboros-plugins#11.
 
+### Default normalization
+
+JSON Schema's `default` keyword is an **annotation**, not a runtime
+behavior. `Draft202012Validator` does not inject default values during
+validation — a manifest that omits `description` or `audit` validates
+clean, and the raw dict still has those keys missing.
+
+Therefore consumers MUST normalize at load time. The contract is:
+
+> A manifest read by any consumer MUST be normalized so that absent
+> optional fields are materialized to the defaults declared in the
+> table above (and mirrored in `schemas/<major>/plugin.schema.json` as
+> `default:` annotations). After normalization, downstream code may
+> assume the optional fields are present.
+
+Concretely:
+
+- `description` absent → effective value `""`.
+- `audit` absent → effective value
+  `{ "events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"] }`.
+
+The reference loader (Q00/ouroboros `src/ouroboros/plugin/manifest.py`)
+implements this in `load_manifest`: see the `audit_raw is None` branch
+that constructs `AuditSpec.standard_four_events()` and the
+`raw.get("description", "")` fallback. Other consumers (firewall in
+Q00/ouroboros#729, lockfile in Q00/ouroboros#732, future tools) MUST
+either reuse that loader or apply the equivalent normalization
+themselves before reading optional fields. Reading the raw dict and
+hitting `KeyError` on `audit` is a contract violation, not a manifest
+bug.
+
+`tests/test_validator.py::OptionalDefaultsTest` is the regression test
+that fences this contract: it asserts the schema's `default:`
+annotations match the documented values byte-for-byte and that a
+manifest stripped of optionals validates and normalizes to the
+documented effective values.
+
 ## Sources
 
 The MVP accepts only local sources:
