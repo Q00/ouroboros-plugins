@@ -134,10 +134,11 @@ first_party
 
   Consequences:
     - `ouroboros plugin add` refuses any source resolving to first_party.
-    - `plugin.trusted` audit events are not emitted for first-party
-      programs. All other audit events (plugin.invoked,
-      plugin.permission_used, plugin.completed, plugin.failed) are
-      emitted normally.
+    - The lifecycle audit events plugin.discovered, plugin.installed,
+      and plugin.trusted are not emitted for first-party programs
+      (the discovery / install / trust steps are skipped). The
+      runtime events plugin.invoked, plugin.permission_used,
+      plugin.completed, plugin.failed are emitted normally.
 
   See docs/contract.md "first_party flow" for the manifest-sharing
   rationale.

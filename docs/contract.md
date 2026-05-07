@@ -52,10 +52,12 @@ Concretely:
 - The manager will refuse `ouroboros plugin add` for any source that
   resolves to `source.type=first_party` — those manifests are not
   installable.
-- `plugin.trusted` audit events are **not** emitted for first-party
-  programs (there is no separate trust grant). All other events
-  (`plugin.invoked`, `plugin.permission_used`, `plugin.completed`,
-  `plugin.failed`) are emitted normally.
+- The lifecycle audit events `plugin.discovered`, `plugin.installed`,
+  and `plugin.trusted` are **not** emitted for first-party programs,
+  because they bypass the `discovered → installed → trusted` flow at
+  core boot. The runtime events `plugin.invoked`,
+  `plugin.permission_used`, `plugin.completed`, and `plugin.failed`
+  are emitted normally.
 
 This is the resolution of the open question in Q00/ouroboros-plugins#8.
 
