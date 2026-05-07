@@ -1,8 +1,9 @@
 """Validate repository contract JSON files against their JSON Schemas.
 
 Validates:
-  - plugins/<name>/ouroboros.plugin.json against schemas/plugin.schema.json
-  - registry/index.json (or catalog/index.json post-rename) basic shape
+  - plugins/<name>/ouroboros.plugin.json against schemas/<major>/plugin.schema.json
+    (routed by the manifest's schema_version field)
+  - catalog/index.json basic shape
   - schemas themselves are valid JSON Schema Draft 2020-12
 
 Exits non-zero on any violation. Used by tests/CI as the gate that catches
@@ -70,11 +71,9 @@ def main() -> int:
     # v0 ships archived per-major schemas under schemas/<major>/.
     # See docs/contract.md "Versioning" section.
 
-    index_path = ROOT / "registry" / "index.json"
+    index_path = ROOT / "catalog" / "index.json"
     if not index_path.exists():
-        index_path = ROOT / "catalog" / "index.json"
-    if not index_path.exists():
-        raise SystemExit("error: neither registry/index.json nor catalog/index.json found")
+        raise SystemExit("error: catalog/index.json not found")
     index = load_json(index_path)
     if not isinstance(index, dict):
         raise SystemExit(f"{index_path.relative_to(ROOT)}: must be an object")
