@@ -16,7 +16,7 @@ marketplace.
 ## What we do not accept (here)
 
 - New third-party plugins. Maintain those in your own repository and install
-  via `ooo plugin add <your-repo-url>`.
+  via `ouroboros plugin add <your-repo-url>`.
 - Changes that expand the manifest surface preemptively. The contract evolves
   only when an existing reference plugin demonstrably needs the new field.
 
@@ -24,7 +24,13 @@ marketplace.
 
 1. Open an issue describing the problem or proposal.
 2. Wait for maintainer ack before opening a PR for any contract change.
-3. Run `python3 scripts/validate_contract.py` locally before pushing. The
+3. Install the validator's dev dependency (added by
+   Q00/ouroboros-plugins#13). Until that PR lands the validator is
+   stdlib-only and this step is a no-op:
+   ```bash
+   pip install -r requirements-dev.txt 2>/dev/null || pip install "jsonschema>=4.21"
+   ```
+4. Run `python3 scripts/validate_contract.py` locally before pushing. The
    validator must exit `0`.
 
 ## Code review
