@@ -9,18 +9,26 @@ The goal is to stabilize the boundary before building a registry.
 
 Each plugin package contains an `ouroboros.plugin.json` manifest.
 
-Required fields:
+The manifest carries **8 required + 2 optional** top-level fields. The split is
+deliberate — every required field is load-bearing for some part of the
+lifecycle, lockfile, or firewall; every optional field has a sensible default
+so plugin authors don't write ceremonial values.
 
-- `schema_version`
-- `name`
-- `version`
-- `description`
-- `source`
-- `commands`
-- `capabilities`
-- `permissions`
-- `entrypoint`
-- `audit`
+| Field | Status | Default | Why this status |
+|---|---|---|---|
+| `schema_version` | required | — | Versioning policy (Q00/ouroboros-plugins#11) routes the validator to the right archived schema; the value is the entry point. |
+| `name` | required | — | Identity. Used as plugin home directory name and as audit-event `plugin.name`. |
+| `version` | required | — | Lockfile (Q00/ouroboros#732) and trust-bump invalidation (Q00/ouroboros-plugins#9 Q4) both key off this. |
+| `source` | required | — | Loader (Q00/ouroboros#728) uses `source.type` to distinguish `local_path` / `plugin_home` / `first_party` for trust-state defaults. Inferring from install path is brittle. |
+| `commands` | required | — | Without commands, the plugin has no callable surface. The firewall has nothing to dispatch. |
+| `capabilities` | required | — | Audit trail. Without declared capabilities, "what authority did this plugin exercise" is unanswerable. |
+| `permissions` | required | — | Same as capabilities, for external systems. The trust UX (Q00/ouroboros-plugins#9) is built around this list. |
+| `entrypoint` | required | — | Subprocess launcher in Q00/ouroboros#729 needs a launch command. Even with the "command" type being the only allowed option today, the value is real. |
+| `description` | optional | `""` | No code reads it; pure human documentation. Empty string is a valid default. |
+| `audit` | optional | `{ "events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"] }` | The firewall emits 4 standard events for every invocation. The manifest opts in to *additional* events only when needed. |
+
+When this manifest changes (new field added, or a field's required-status
+flips), bump the schema version per Q00/ouroboros-plugins#11.
 
 ## Sources
 
