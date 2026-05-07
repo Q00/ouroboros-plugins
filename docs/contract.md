@@ -94,6 +94,26 @@ Install should not imply trust for destructive permissions.
 Each permission declares its risk tier and whether it is required for the
 plugin's baseline operation.
 
+## Risk taxonomy
+
+A single 3-value risk enum is shared between `command.risk` and
+`permission.risk`:
+
+- `read_only` — no side effects on state or external systems.
+- `write` — reversible side effects (writes ledger / state, idempotent
+  external operations).
+- `destructive` — irreversible side effects (merging PRs, deleting
+  resources, sending messages, payments).
+
+If `permissions[]` includes any `destructive` scope, the `commands` using
+that scope should declare `risk: destructive` so the manager's
+confirmation prompt is unambiguous. The trust UX
+(Q00/ouroboros-plugins#9) is built around the destructive tier — granting
+a destructive permission is a separate, deliberate user action.
+
+This is the resolution of Q00/ouroboros-plugins#10. Older candidate
+values (`writes_state`, `external_write`) are removed.
+
 ## Entrypoint
 
 The MVP should support local command entrypoints first.

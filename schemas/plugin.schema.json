@@ -76,7 +76,7 @@
           },
           "risk": {
             "type": "string",
-            "enum": ["read_only", "writes_state", "external_write", "destructive"]
+            "enum": ["read_only", "write", "destructive"]
           },
           "requires_confirmation": {
             "type": "boolean",
