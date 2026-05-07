@@ -182,6 +182,73 @@ Every plugin invocation should record:
 
 See `docs/audit.md` and `schemas/audit-event.schema.json`.
 
+## Versioning
+
+The plugin manifest schema and the audit-event schema both follow
+**SemVer-style `MAJOR.MINOR`** versioning. A schema bumps independently
+of the other.
+
+### What is breaking (MAJOR bump)
+
+- Removing a field
+- Renaming a field
+- Removing a value from an `enum`
+- Tightening a `pattern` so previously valid values become invalid
+- Making an optional field required
+
+### What is non-breaking (MINOR bump)
+
+- Adding a new optional field
+- Adding a new value to an `enum`
+- Loosening a `pattern`
+- Adding a new event type to `audit-event.schema.json`
+
+### Bump cadence
+
+On every applicable change. Do not batch breaking changes; each MAJOR
+is a single deliberate decision.
+
+### Support window
+
+**Current MAJOR + previous MAJOR** (i.e. 2 MAJORs at any time). Anything
+older is unsupported. The deprecation deadline for a MAJOR is announced
+in this section when the next MAJOR ships.
+
+### Storage layout
+
+Schemas are archived per MAJOR:
+
+```
+schemas/
+  0.1/
+    plugin.schema.json
+    audit-event.schema.json
+  1.0/                      # when MAJOR 1 ships
+    ...
+```
+
+`scripts/validate_contract.py` reads each manifest's `schema_version`
+field and routes to the matching `schemas/<major>/plugin.schema.json`.
+A manifest declaring an unsupported version is rejected with a clear
+message naming the supported window.
+
+### Migration
+
+For the v0 → v1 transition (the first breaking transition), a manual
+migration guide will live at `docs/migrations/0-to-1.md`. Automated
+migration scripts are out of scope for v0; add when ecosystem size
+demands.
+
+### Independence between schemas
+
+The manifest schema and the audit-event schema bump independently. A
+manifest using `schema_version: "0.1"` may emit audit events using
+`schema_version: "0.2"` if both are within their respective support
+windows. The audit-event schema's `schema_version` field on each event
+is the authoritative version marker.
+
+This is the resolution of Q00/ouroboros-plugins#11.
+
 ## Non-goals
 
 - No public registry in v1

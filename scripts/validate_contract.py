@@ -58,8 +58,10 @@ def validate_against(instance: object, schema: dict, label: str) -> None:
 
 
 def main() -> int:
-    plugin_schema = load_json(ROOT / "schemas" / "plugin.schema.json")
-    audit_schema = load_json(ROOT / "schemas" / "audit-event.schema.json")
+    # v0 ships archived per-major schemas under schemas/<major>/.
+    # See docs/contract.md "Versioning" section.
+    plugin_schema = load_json(ROOT / "schemas" / "0.1" / "plugin.schema.json")
+    audit_schema = load_json(ROOT / "schemas" / "0.1" / "audit-event.schema.json")
 
     index_path = ROOT / "registry" / "index.json"
     if not index_path.exists():
@@ -75,8 +77,8 @@ def main() -> int:
     if not isinstance(index, dict):
         raise SystemExit(f"{index_path.relative_to(ROOT)}: must be an object")
 
-    validate_schema_self(plugin_schema, "schemas/plugin.schema.json")
-    validate_schema_self(audit_schema, "schemas/audit-event.schema.json")
+    validate_schema_self(plugin_schema, "schemas/0.1/plugin.schema.json")
+    validate_schema_self(audit_schema, "schemas/0.1/audit-event.schema.json")
 
     plugins_root = ROOT / "plugins"
     if not plugins_root.is_dir():
