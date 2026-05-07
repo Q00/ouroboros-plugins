@@ -81,6 +81,49 @@ not be written into provenance.
 }
 ```
 
+## `plugin.trusted` event
+
+When the user runs `ouroboros plugin trust <name> --scope <s>`, a
+`plugin.trusted` event is emitted with `granted_by` and `granted_scope`
+in the provenance map (per Q00/ouroboros-plugins#9 Q6 lock):
+
+```json
+{
+  "schema_version": "0.1",
+  "event_type": "plugin.trusted",
+  "occurred_at": "2026-05-07T12:00:00Z",
+  "plugin": {
+    "name": "hypothetical-merge-assistant",
+    "version": "0.1.0",
+    "source_type": "plugin_home"
+  },
+  "command": {
+    "namespace": "trust",
+    "name": "grant",
+    "argv": ["--scope", "github:pull_request:write"]
+  },
+  "trust_state": "trusted",
+  "capabilities_used": [],
+  "permissions_used": [],
+  "result": {
+    "status": "success",
+    "message": "Granted scope github:pull_request:write"
+  },
+  "provenance": {
+    "granted_by": "user:<id>",
+    "granted_scope": "github:pull_request:write"
+  }
+}
+```
+
+Both `granted_by` and `granted_scope` are bounded strings; no tokens or
+free-form text is stored. Reconstruction of "who granted what when" is
+possible from the ledger alone.
+
+`plugin.trusted` is **not** emitted for first-party plugins (per
+Q00/ouroboros-plugins#8 lock: first-party programs skip the trust grant
+step entirely).
+
 ## Principle
 
 If a plugin uses a core capability or external permission, the audit trail
