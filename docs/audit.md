@@ -5,7 +5,10 @@ external operational systems.
 
 ## Event Shape
 
-Audit events follow `schemas/audit-event.schema.json`.
+Audit events follow `schemas/0.1/audit-event.schema.json`. The
+`schema_version` field on each event is the authoritative version
+marker (see `docs/contract.md` "Versioning" — schemas are archived
+per MAJOR).
 
 Required fields:
 

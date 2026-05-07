@@ -180,7 +180,7 @@ Every plugin invocation should record:
 - Provenance source
 - Result status
 
-See `docs/audit.md` and `schemas/audit-event.schema.json`.
+See `docs/audit.md` and `schemas/0.1/audit-event.schema.json`.
 
 ## Versioning
 
