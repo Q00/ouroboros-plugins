@@ -24,11 +24,9 @@ marketplace.
 
 1. Open an issue describing the problem or proposal.
 2. Wait for maintainer ack before opening a PR for any contract change.
-3. Install the validator's dev dependency (added by
-   Q00/ouroboros-plugins#13). Until that PR lands the validator is
-   stdlib-only and this step is a no-op:
+3. Install the validator's dev dependency:
    ```bash
-   pip install -r requirements-dev.txt 2>/dev/null || pip install "jsonschema>=4.21"
+   pip install -r requirements-dev.txt
    ```
 4. Run `python3 scripts/validate_contract.py` locally before pushing. The
    validator must exit `0`.
