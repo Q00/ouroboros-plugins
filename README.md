@@ -103,12 +103,14 @@ catalog/
 A `contract-validation` GitHub Actions workflow runs the validator on every pull request and on pushes to `main`. To run it locally:
 
 ```bash
-# Install validator deps. requirements-dev.txt is added by
-# Q00/ouroboros-plugins#13; until that lands, install jsonschema directly.
-pip install -r requirements-dev.txt 2>/dev/null || pip install "jsonschema>=4.21"
+pip install -r requirements-dev.txt
 python3 scripts/validate_contract.py
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 ```
+
+The first step is required: `validate_contract.py` imports `jsonschema` from
+`requirements-dev.txt`. On a clean checkout, skipping the install will make
+the validator exit with `ModuleNotFoundError`.
 
 ## Status
 
