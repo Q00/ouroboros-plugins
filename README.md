@@ -9,7 +9,7 @@ programs compose those primitives into domain-specific workflows.
 +-------------------------------------------------------------------+
 |                Installable UserLevel Programs                      |
 |                                                                   |
-|  github-pr-ops   merge-assistant   jira-sync   linear-triage       |
+|  autoresearch    github-pr-ops   merge-assistant   jira-sync       |
 |  slack-incident  release-coordinator  customer-debugger  ...       |
 +-------------------------------+-----------------------------------+
                                 |
@@ -61,6 +61,7 @@ Ouroboros core owns primitives:
 Plugins own domain-specific workflows:
 
 - GitHub PR operations
+- Autoresearch experiment handoff
 - Merge assistance
 - Jira/Linear synchronization
 - Slack incident workflows
@@ -70,12 +71,19 @@ Plugins own domain-specific workflows:
 ## Example UX
 
 ```bash
-ouroboros plugin add ./plugins/github-pr-ops
-ouroboros plugin trust github-pr-ops --scope github:read,pull_request:write
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin autoresearch
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
+ouroboros plugin trust github-pr-ops --scope github:read --scope github:pull_request:write
 
+ooo auto-research prepare /path/to/autoresearch --goal "Improve validation bpb"
 ooo github-pr review https://github.com/org/repo/pull/123
 ooo github-pr merge --policy team-default
 ```
+
+Ouroboros `v0.39.1+` prompts for non-destructive required permissions during
+`plugin add`, so `autoresearch` can grant `filesystem:read` and
+`filesystem:write` during install. Destructive scopes, including PR write
+scopes, still require an explicit `plugin trust` command.
 
 ## Layout
 
@@ -92,6 +100,7 @@ schemas/
     plugin.schema.json       Draft JSON Schema for plugin manifests (v0.1)
     audit-event.schema.json  Draft JSON Schema for audit events (v0.1)
 plugins/
+  autoresearch/        Autoresearch-to-ooo-auto handoff plugin
   github-pr-ops/       Reference plugin skeleton
 catalog/
   index.json           Local catalog (boring index for reproducibility,
@@ -105,7 +114,15 @@ A `contract-validation` GitHub Actions workflow runs the validator on every pull
 ```bash
 pip install -r requirements-dev.txt
 python3 scripts/validate_contract.py
+PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch inspect /path/to/autoresearch
+PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch prepare /path/to/autoresearch --goal "Improve validation bpb"
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
+```
+
+During plugin development, install from the local checkout instead:
+
+```bash
+ouroboros plugin add . --plugin autoresearch
 ```
 
 The first step is required: `validate_contract.py` imports `jsonschema` from

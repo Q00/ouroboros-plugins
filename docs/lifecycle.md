@@ -43,6 +43,7 @@ Repository: Q00/ouroboros-plugins (b3a91f2)
 
 Select plugins to install:
 
+  [ ] autoresearch       0.1.0   prepare autoresearch handoffs for ooo auto
   [x] github-pr-ops      0.1.0   review and prepare PR merges
   [ ] release-coordinator 0.1.0   coordinate changelog and rollout
   [ ] issue-triage        0.1.0   classify product/engineering issues
@@ -53,6 +54,7 @@ Press space to toggle, enter to confirm, esc to cancel.
 Non-interactive form for scripts and CI:
 
 ```bash
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin autoresearch
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops --plugin release-coordinator
 ```
@@ -60,7 +62,8 @@ ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr
 Local path source still works for development and offline use:
 
 ```bash
-ouroboros plugin add ./plugins/github-pr-ops
+ouroboros plugin add . --plugin autoresearch
+ouroboros plugin add . --plugin github-pr-ops
 ```
 
 ### Catalog convention
