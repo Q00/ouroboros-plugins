@@ -97,6 +97,11 @@ class AutoresearchPluginTests(unittest.TestCase):
             for file_record in provenance["files"].values():
                 self.assertEqual(len(file_record["sha256"]), 64)
                 self.assertGreater(file_record["bytes"], 0)
+            mapping = payload["ouroboros_capability_mapping"]
+            self.assertEqual(mapping["seed:write"]["artifact"], payload["seed_path"])
+            self.assertEqual(mapping["provenance:write"]["json_pointer"], "/provenance")
+            self.assertIn(payload["handoff_path"], mapping["handoff:attach"]["artifacts"])
+            self.assertEqual(mapping["progress:write"]["artifact"], "stdout-json")
 
     def test_prepare_records_custom_declared_options(self):
         with tempfile.TemporaryDirectory() as td:

@@ -85,3 +85,23 @@ This plugin owns the autoresearch-specific workflow:
 `ooo auto` remains responsible for interview, Seed execution, ledger, and
 runtime orchestration. Ouroboros core does not need to understand neural
 network research loops directly.
+
+## Capability Assimilation Contract
+
+This plugin assimilates `karpathy/autoresearch` into Ouroboros as a bounded
+research-loop handoff capability. It is intentionally not a training runner and
+does not make Ouroboros core understand neural-network research loops. Instead,
+it translates the external workflow into contract-shaped artifacts:
+
+- repository readiness checks (`inspect`)
+- bounded editable/support/program file declarations
+- experiment budget and primary metric
+- verification command
+- Seed-shaped handoff brief (`seed.md`)
+- `ooo auto` goal text (`auto_goal.txt`)
+- provenance and capability mapping (`handoff.json`)
+
+The standalone entrypoint prepares attachable artifacts; it does not directly
+call core ledger or provenance APIs. The generated `handoff.json` includes an
+`ouroboros_capability_mapping` section that explains how each artifact maps to
+the capabilities declared in `ouroboros.plugin.json`.
