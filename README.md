@@ -119,6 +119,12 @@ PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch prepare /path/
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 ```
 
+Optional integration smoke for environments with the `ouroboros` CLI installed:
+
+```bash
+scripts/smoke_autoresearch_plugin.sh
+```
+
 During plugin development, install from the local checkout instead:
 
 ```bash
