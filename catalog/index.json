@@ -2,6 +2,12 @@
   "schema_version": "0.1",
   "plugins": [
     {
+      "name": "autoresearch",
+      "version": "0.1.0",
+      "path": "../plugins/autoresearch",
+      "description": "Ouroboros integration for Karpathy-style autoresearch experiment loops."
+    },
+    {
       "name": "github-pr-ops",
       "version": "0.1.0",
       "path": "../plugins/github-pr-ops",

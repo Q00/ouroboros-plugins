@@ -1,0 +1,108 @@
+{
+  "schema_version": "0.1",
+  "name": "autoresearch",
+  "version": "0.1.0",
+  "description": "Ouroboros integration for Karpathy-style autoresearch experiment loops.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/autoresearch"
+  },
+  "commands": [
+    {
+      "namespace": "auto-research",
+      "name": "inspect",
+      "summary": "Inspect an autoresearch checkout and report its Ouroboros handoff readiness.",
+      "usage": "ooo auto-research inspect <repository-path>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to a local autoresearch-compatible repository."
+        }
+      ]
+    },
+    {
+      "namespace": "auto-research",
+      "name": "prepare",
+      "summary": "Generate an Ouroboros Seed handoff for a bounded autoresearch loop.",
+      "usage": "ooo auto-research prepare <repository-path> --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to a local autoresearch-compatible repository."
+        },
+        {
+          "name": "goal",
+          "type": "string",
+          "required": true,
+          "description": "Research objective to pass into ooo auto as the Seed goal."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "seed",
+      "access": "write",
+      "reason": "Generate a concrete Seed handoff for ooo auto execution."
+    },
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record research constraints, evaluation metric, and handoff output."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record upstream autoresearch repository assumptions and local checkout evidence."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist prepared handoff artifacts under the target repository."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Prepare generated Seed artifacts for an ooo auto handoff."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report readiness and missing prerequisites before ooo auto starts."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Inspect program.md, prepare.py, train.py, and repository layout."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write the generated Seed and handoff manifest into .ouroboros/autoresearch/."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m ouroboros_autoresearch"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}

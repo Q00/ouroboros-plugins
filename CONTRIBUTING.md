@@ -12,6 +12,7 @@ marketplace.
 - Bug fixes to the contract validator, schemas, and reference plugins.
 - Documentation improvements.
 - Schema clarifications proposed via an issue first.
+- New curated reference plugins only after maintainer approval on an issue.
 
 ## What we do not accept (here)
 
