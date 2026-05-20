@@ -63,9 +63,12 @@ compatible forks with repository-relative flags:
 
 The generated handoff includes the recommended
 `ouroboros auto "$(cat .../auto_goal.txt)"` command, the editable file
-boundary, experiment budget, metric, and verification command. `--attach-source`
-is intentionally not used here because current Ouroboros uses it only for
-attaching an already-started run handle, not for loading a Seed or brief file.
+boundary, experiment budget, metric, and verification command. It also records
+provenance for the assimilated checkout: git origin/commit/branch/dirty state
+when available, plus SHA-256 and byte size for the program, support, and target
+files. `--attach-source` is intentionally not used here because current
+Ouroboros uses it only for attaching an already-started run handle, not for
+loading a Seed or brief file.
 
 The optional layout flags (`--program-file`, `--target-file`, and
 `--support-file`) must be repository-relative paths. Absolute paths and `..`

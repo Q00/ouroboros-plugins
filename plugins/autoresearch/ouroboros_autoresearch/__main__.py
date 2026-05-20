@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shlex
+import subprocess
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -109,6 +111,66 @@ def write_text_atomic(path: Path, content: str) -> None:
     tmp_path = path.with_name(f".{path.name}.tmp")
     tmp_path.write_text(content, encoding="utf-8")
     tmp_path.replace(path)
+
+
+def sha256_file(path: Path) -> dict:
+    digest = hashlib.sha256()
+    size = 0
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            size += len(chunk)
+            digest.update(chunk)
+    return {"sha256": digest.hexdigest(), "bytes": size}
+
+
+def run_git(root: Path, *args: str) -> str | None:
+    try:
+        proc = subprocess.run(
+            ["git", *args],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    if proc.returncode != 0:
+        return None
+    return proc.stdout.strip()
+
+
+def git_metadata(root: Path) -> dict:
+    inside = run_git(root, "rev-parse", "--is-inside-work-tree") == "true"
+    if not inside:
+        return {"is_git_repository": False}
+
+    status = run_git(root, "status", "--porcelain")
+    return {
+        "is_git_repository": True,
+        "remote_origin": run_git(root, "remote", "get-url", "origin"),
+        "commit": run_git(root, "rev-parse", "HEAD"),
+        "branch": run_git(root, "branch", "--show-current"),
+        "dirty": bool(status),
+        "status_porcelain": status or "",
+    }
+
+
+def provenance_payload(inspection: RepoInspection) -> dict:
+    files = {}
+    for label, path in (
+        ("program", inspection.program_file),
+        ("target", inspection.target_file),
+        ("support", inspection.support_file),
+    ):
+        rel = display_path(path, inspection.root)
+        files[label] = {"path": rel, **sha256_file(path)}
+
+    return {
+        "upstream": UPSTREAM_REPOSITORY,
+        "repository": str(inspection.root),
+        "git": git_metadata(inspection.root),
+        "files": files,
+    }
 
 
 def fenced_code_block(language: str, content: str) -> list[str]:
@@ -262,6 +324,7 @@ def write_handoff(
         "auto_goal_path": str(auto_goal_path),
         "handoff_path": str(handoff_path),
         "upstream": UPSTREAM_REPOSITORY,
+        "provenance": provenance_payload(inspection),
         "ooo_auto": {
             "recommended_command": (
                 f"ouroboros auto \"$(cat {shlex.quote(str(auto_goal_path))})\""
