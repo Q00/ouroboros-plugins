@@ -52,7 +52,21 @@ ooo auto-research prepare /path/to/autoresearch --goal "Improve validation bpb"
 ```
 
 `inspect` is read-only. It checks that the target checkout has the expected
-`program.md`, `prepare.py`, and `train.py` files.
+`program.md`, `prepare.py`, and `train.py` files. The layout can be adapted for
+compatible forks with repository-relative flags:
+
+- `--program-file` (default: `program.md`)
+- `--target-file` (default: `train.py`)
+- `--support-file` (default: `prepare.py`)
+
+`prepare` accepts the same layout flags and the handoff-budget flags declared in
+`ouroboros.plugin.json`:
+
+- `--goal` (required) — research objective for the Ouroboros handoff
+- `--metric` (default: `val_bpb`) — primary comparison metric
+- `--max-experiments` (default: `8`) — experiment-count budget
+- `--experiment-seconds` (default: `300`) — per-experiment wall-clock budget
+- `--train-command` (default: `uv run train.py`) — verification command
 
 `prepare` writes:
 

@@ -134,6 +134,48 @@ class AutoresearchPluginTests(unittest.TestCase):
                 ]
             )
 
+    def test_prepare_records_custom_declared_options(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "brief.md").write_text("Improve perplexity.\n", encoding="utf-8")
+            (root / "setup.py").write_text("MAX_SEQ_LEN = 512\n", encoding="utf-8")
+            (root / "model.py").write_text("print('loss=1.0')\n", encoding="utf-8")
+
+            proc = self._run(
+                "prepare",
+                str(root),
+                "--program-file",
+                "brief.md",
+                "--support-file",
+                "setup.py",
+                "--target-file",
+                "model.py",
+                "--goal",
+                "Reduce validation loss.",
+                "--metric",
+                "loss",
+                "--max-experiments",
+                "3",
+                "--experiment-seconds",
+                "45",
+                "--train-command",
+                "uv run python model.py",
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            seed = Path(payload["seed_path"]).read_text(encoding="utf-8")
+            auto_goal = Path(payload["auto_goal_path"]).read_text(encoding="utf-8")
+            self.assertEqual(payload["ooo_auto"]["metric"], "loss")
+            self.assertEqual(payload["ooo_auto"]["max_experiments"], 3)
+            self.assertEqual(payload["ooo_auto"]["experiment_seconds"], 45)
+            self.assertEqual(payload["ooo_auto"]["train_command"], "uv run python model.py")
+            self.assertEqual(payload["ooo_auto"]["editable_files"], ["model.py"])
+            self.assertIn("Treat `brief.md` as the research program", seed)
+            self.assertIn("Treat `setup.py` as fixed data prep", seed)
+            self.assertIn("Use `loss` as the primary comparison metric", seed)
+            self.assertIn("Verification command: `uv run python model.py`", auto_goal)
+
     def test_prepare_requires_autoresearch_files(self):
         with tempfile.TemporaryDirectory() as td:
             proc = self._run("prepare", td, "--goal", "Improve the model.")
