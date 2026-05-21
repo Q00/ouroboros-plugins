@@ -1,0 +1,47 @@
+{
+  "schema_version": "0.1",
+  "name": "guardrails-eval",
+  "version": "0.1.0",
+  "description": "Assimilate Guardrails AI validation into Ouroboros audit and handoff artifacts.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/guardrails-eval",
+    "repository": "https://github.com/Q00/ouroboros-plugins"
+  },
+  "commands": [
+    {
+      "namespace": "guardrails",
+      "name": "validate-output",
+      "summary": "Validate a known LLM output against a Guardrails spec and emit an Ouroboros report.",
+      "usage": "ooo guardrails validate-output --spec <path> (--output <path>|--text <string>) [--report <path>] [--handoff <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "spec", "type": "path", "required": true, "description": "Repo-relative Guardrails RAIL or JSON guard spec path."},
+        {"name": "output", "type": "path", "required": false, "description": "Repo-relative LLM output artifact to validate."},
+        {"name": "text", "type": "string", "required": false, "description": "Inline text to validate when no output path is provided."},
+        {"name": "metadata", "type": "path", "required": false, "description": "Repo-relative JSON metadata passed to Guardrails validators."},
+        {"name": "report", "type": "path", "required": false, "description": "Repo-relative path for normalized report JSON."},
+        {"name": "handoff", "type": "path", "required": false, "description": "Repo-relative path for downstream Ouroboros handoff JSON."},
+        {"name": "no_fail_on_validation_fail", "type": "boolean", "required": false, "description": "Return exit 0 for validation failures after writing evidence."}
+      ]
+    }
+  ],
+  "capabilities": [
+    {"name": "ledger", "access": "write", "reason": "Emit validation pass/fail evidence payloads for the ledger."},
+    {"name": "provenance", "access": "write", "reason": "Record bounded guard spec, metadata, and target references."},
+    {"name": "handoff", "access": "attach", "reason": "Attach validation reports for downstream Ouroboros workflows."},
+    {"name": "state", "access": "write", "reason": "Persist validation session status and report/handoff paths."}
+  ],
+  "permissions": [
+    {"scope": "filesystem:read", "risk": "read_only", "required": true, "reason": "Read Guardrails specs, metadata, reports, and target artifacts."},
+    {"scope": "filesystem:write", "risk": "write", "required": false, "reason": "Write normalized validation reports and handoff artifacts."}
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m guardrails_eval"
+  },
+  "audit": {
+    "events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"]
+  }
+}
