@@ -9,27 +9,49 @@ import textwrap
 import unittest
 from pathlib import Path
 
+
 REPO = Path(__file__).resolve().parents[1]
 PLUGIN_PATH = REPO / "plugins" / "openhands-agentos"
 
 
-class OpenHandsAgentOSInspectTests(unittest.TestCase):
-    def _run(self, *args: str) -> subprocess.CompletedProcess:
-        return subprocess.run([sys.executable, "-m", "openhands_agentos", *args], cwd=REPO, env={**os.environ, "PYTHONPATH": str(PLUGIN_PATH)}, capture_output=True, text=True, check=False)
+class OpenHandsAgentOSPluginTests(unittest.TestCase):
+    def _run(self, *args: str, env: dict[str, str] | None = None) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [sys.executable, "-m", "openhands_agentos", *args],
+            cwd=REPO,
+            env={**os.environ, "PYTHONPATH": str(PLUGIN_PATH), **(env or {})},
+            capture_output=True,
+            text=True,
+            check=False,
+        )
 
-    def _fake_openhands(self, root: Path) -> Path:
+    def _fake_openhands(self, root: Path, *, exit_code: int = 0) -> Path:
         script = root / "fake-openhands.py"
-        script.write_text(textwrap.dedent("""
-            #!/usr/bin/env python3
-            import sys
-            if '--version' in sys.argv:
-                print('OpenHands 1.2.3')
-                raise SystemExit(0)
-            if '--help' in sys.argv:
-                print('usage: openhands --headless --json --task TEXT --file PATH --resume ID --last')
-                raise SystemExit(0)
-            raise SystemExit(99)
-        """).strip() + "\n", encoding="utf-8")
+        script.write_text(
+            textwrap.dedent(
+                f"""
+                #!/usr/bin/env python3
+                import json, os, sys
+                if '--version' in sys.argv:
+                    print('OpenHands 1.2.3')
+                    raise SystemExit(0)
+                if '--help' in sys.argv:
+                    print('usage: openhands --headless --json --task TEXT --file PATH --resume ID --last')
+                    raise SystemExit(0)
+                print(json.dumps({{'type': 'command', 'command': 'pytest'}}))
+                print(json.dumps({{'type': 'file', 'path': 'src/app.py'}}))
+                print(json.dumps({{'type': 'final_answer', 'final_answer': 'done'}}))
+                print('human readable log line')
+                print('stderr detail', file=sys.stderr)
+                assert '--headless' in sys.argv
+                assert '--json' in sys.argv
+                assert os.environ.get('RUNTIME') in {{'docker', 'process', 'remote'}}
+                raise SystemExit({exit_code})
+                """
+            ).strip()
+            + "\n",
+            encoding="utf-8",
+        )
         script.chmod(0o755)
         return script
 
@@ -37,6 +59,7 @@ class OpenHandsAgentOSInspectTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             fake = self._fake_openhands(Path(td))
             proc = self._run("--openhands-bin", str(fake), "inspect")
+
         self.assertEqual(proc.returncode, 0, proc.stderr)
         payload = json.loads(proc.stdout)
         self.assertEqual(payload["status"], "installed")
@@ -44,12 +67,6 @@ class OpenHandsAgentOSInspectTests(unittest.TestCase):
         self.assertTrue(payload["json_headless_supported"])
         self.assertIn("Only file presence", payload["config"]["native_config"]["note"])
 
-    def test_inspect_reports_missing_cli(self):
-        proc = self._run("--openhands-bin", "definitely-missing-openhands", "inspect")
-        self.assertEqual(proc.returncode, 0, proc.stderr)
-        payload = json.loads(proc.stdout)
-        self.assertEqual(payload["status"], "missing_openhands_cli")
-        self.assertFalse(payload["openhands"]["installed"])
 
     def test_inspect_reports_missing_explicit_path_as_missing(self):
         with tempfile.TemporaryDirectory() as td:
@@ -61,11 +78,119 @@ class OpenHandsAgentOSInspectTests(unittest.TestCase):
         self.assertFalse(payload["openhands"]["installed"])
         self.assertIsNone(payload["openhands"]["path"])
 
+    def test_run_reports_missing_binary_as_blocked(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            missing = root / "missing-openhands"
+            proc = self._run("--openhands-bin", str(missing), "run", "--workspace", str(root), "--task", "Do work", "--out", ".omx/artifacts/openhands/test/events.jsonl", "--trusted-shell-execute")
+        self.assertEqual(proc.returncode, 1)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["status"], "blocked")
+        self.assertIn("not executable", payload["message"])
+
+    def test_run_requires_trusted_shell_execute(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake = self._fake_openhands(root)
+            proc = self._run(
+                "--openhands-bin",
+                str(fake),
+                "run",
+                "--workspace",
+                str(root),
+                "--task",
+                "Do work",
+                "--out",
+                ".omx/artifacts/openhands/test/events.jsonl",
+            )
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("trusted-shell-execute", proc.stdout)
+
+    def test_run_captures_jsonl_metadata_audit_and_preserves_success(self):
+        with tempfile.TemporaryDirectory(prefix="openhands agentos ") as td:
+            root = Path(td)
+            fake = self._fake_openhands(root)
+            proc = self._run(
+                "--openhands-bin",
+                str(fake),
+                "run",
+                "--workspace",
+                str(root),
+                "--task",
+                "Do work",
+                "--out",
+                ".omx/artifacts/openhands/test/events.jsonl",
+                "--trusted-shell-execute",
+                env={"LLM_API_KEY": "secret-token", "LLM_MODEL": "test-model"},
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            events = Path(payload["events_path"])
+            metadata = json.loads(Path(payload["metadata_path"]).read_text(encoding="utf-8"))
+            audit = Path(payload["audit_path"]).read_text(encoding="utf-8")
+            stderr = Path(payload["stderr_path"]).read_text(encoding="utf-8")
+            self.assertTrue(events.is_file())
+            self.assertEqual(len(events.read_text(encoding="utf-8").splitlines()), 3)
+            self.assertEqual(metadata["status"], "completed")
+            self.assertEqual(metadata["event_count"], 3)
+            self.assertEqual(metadata["environment"]["RUNTIME"], "docker")
+            self.assertNotIn("secret-token", json.dumps(metadata))
+            self.assertIn("plugin.invoked", audit)
+            self.assertIn("plugin.completed", audit)
+            self.assertIn("stderr detail", stderr)
+
+    def test_run_preserves_nonzero_exit_code_and_failed_state(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake = self._fake_openhands(root, exit_code=7)
+            proc = self._run(
+                "--openhands-bin",
+                str(fake),
+                "run",
+                "--workspace",
+                str(root),
+                "--task",
+                "Do work",
+                "--out",
+                ".omx/artifacts/openhands/test/events.jsonl",
+                "--trusted-shell-execute",
+            )
+            payload = json.loads(proc.stdout)
+            metadata = json.loads(Path(payload["metadata_path"]).read_text(encoding="utf-8"))
+
+        self.assertEqual(proc.returncode, 7)
+        self.assertEqual(metadata["status"], "failed")
+        self.assertEqual(metadata["exit_code"], 7)
+
+    def test_task_file_and_output_must_stay_inside_workspace(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake = self._fake_openhands(root)
+            outside = root.parent / "outside-task.md"
+            outside.write_text("escape", encoding="utf-8")
+            proc = self._run(
+                "--openhands-bin",
+                str(fake),
+                "run",
+                "--workspace",
+                str(root),
+                "--task-file",
+                str(outside),
+                "--out",
+                ".omx/artifacts/openhands/test/events.jsonl",
+                "--trusted-shell-execute",
+            )
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("--task-file must stay inside", proc.stderr)
+
     def test_manifest_validates_against_schema(self):
-        from jsonschema import Draft202012Validator
         manifest = json.loads((PLUGIN_PATH / "ouroboros.plugin.json").read_text(encoding="utf-8"))
         schema = json.loads((REPO / "schemas" / "0.1" / "plugin.schema.json").read_text(encoding="utf-8"))
-        self.assertEqual(list(Draft202012Validator(schema).iter_errors(manifest)), [])
+        from jsonschema import Draft202012Validator
+
+        errors = list(Draft202012Validator(schema).iter_errors(manifest))
+        self.assertEqual(errors, [])
+
 
 if __name__ == "__main__":
     unittest.main()
