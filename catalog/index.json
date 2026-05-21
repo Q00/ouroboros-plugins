@@ -8,6 +8,12 @@
       "description": "Ouroboros integration for Karpathy-style autoresearch experiment loops."
     },
     {
+      "name": "agent-skills",
+      "version": "0.1.0",
+      "path": "../plugins/agent-skills",
+      "description": "AgentOS/Ouroboros assimilation adapter for Addy Osmani's agent-skills."
+    },
+    {
       "name": "graphify",
       "version": "0.1.0",
       "path": "../plugins/graphify",
@@ -30,12 +36,6 @@
       "version": "4.3.0",
       "path": "../plugins/superclaude",
       "description": "Ouroboros-native adapter for SuperClaude Framework commands, skills, agents, modes, and MCP guidance."
-    },
-    {
-      "name": "langfuse-observability",
-      "version": "0.1.0",
-      "path": "../plugins/langfuse-observability",
-      "description": "Assimilate Langfuse observability and evaluation evidence into Ouroboros handoff/provenance workflows."
     }
   ]
 }
