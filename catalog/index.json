@@ -102,6 +102,12 @@
       "version": "0.1.0",
       "path": "../plugins/opa-policy-gate",
       "description": "Reference Open Policy Agent policy gate with AgentOS audit and handoff semantics."
+    },
+    {
+      "name": "hermes-skill-assimilator",
+      "version": "0.1.0",
+      "path": "../plugins/hermes-skill-assimilator",
+      "description": "Inspect and convert Hermes Agent skills/plugin metadata into Ouroboros-native handoff artifacts."
     }
   ]
 }
