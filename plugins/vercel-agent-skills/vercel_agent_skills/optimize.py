@@ -26,6 +26,7 @@ def run(argv: list[str]) -> int:
     limitations: list[str] = []
     status = "success"
     signals = _collect_safe_signals(project_path, ns.project)
+    signals["project"]["path"] = relative(project_path, root)
     gate = _gate(signals)
 
     if not os.environ.get("VERCEL_TOKEN"):
