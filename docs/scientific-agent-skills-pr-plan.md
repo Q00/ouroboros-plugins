@@ -105,3 +105,26 @@ Ouroboros core.
 This branch implements the full 7-PR stack as a reviewable reference bundle. It
 can be opened as one integration PR or split along the boundaries above. The
 commits/files are organized to preserve those scopes.
+
+## Issue #27 alignment review
+
+Each proposed PR boundary was reviewed against #27's plugin-authoring and
+capability-assimilation thesis:
+
+| PR | #27 alignment | Guardrail |
+|---|---|---|
+| PR 1 — Inventory/generator/read-only discovery | Treats upstream as an external capability repository and records provenance instead of vendoring a marketplace mirror. | Read-only discovery only; no upstream scripts run. |
+| PR 2 — Permission and risk classifier | Keeps capabilities and permissions explicit and separate; risk metadata is executable safety input, not cosmetic. | Classifier output defaults elevated or ambiguous skills to manual review / blocked execution. |
+| PR 3 — Manifest generation and contract validation | Uses `ouroboros.plugin.json` as the executable boundary and preserves all command aliases through schema-valid manifest generation. | Manifest declares only core capabilities used by this reference adapter; `runtime`/`mcp` are not predeclared as future authority. |
+| PR 4 — Handoff-first prepare model | Converts raw skills into Seed-compatible, auditable, resumable handoffs rather than command wrappers. | `prepare` writes durable artifacts and records `filesystem:write` as required/used authority. |
+| PR 5 — Safe runner boundary | Invocation semantics include blocked/failed outcomes and never pretend high-risk upstream behavior ran. | `run --dry-run` is handoff-only; non-dry-run high-risk paths block with audit evidence. |
+| PR 6 — Smooth AgentOS UX | Makes the capability feel native while keeping `ooo auto` domain-agnostic. | Per-skill aliases preserve upstream names but route through the same plugin boundary. |
+| PR 7 — Reference policy/docs | Preserves `Q00/ouroboros-plugins` as a curated contract/reference repo, not a marketplace. | The long-tail scientific pack remains an external author/repo-level capability pack. |
+
+This review found two P1 alignment fixes and both are implemented in this PR:
+
+1. `filesystem:write` is required and emitted in audit `permissions_used` because
+   every `prepare`/dry-run invocation writes handoff, Seed, provenance, and audit
+   artifacts.
+2. Unused future `runtime`/`mcp` capabilities were removed from the manifest so
+   the adapter does not predeclare authority it does not exercise.

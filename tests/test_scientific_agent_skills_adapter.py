@@ -45,6 +45,9 @@ class ScientificAgentSkillsAdapterTests(unittest.TestCase):
             self.assertEqual(skill["provenance"]["repository"], "https://github.com/K-Dense-AI/scientific-agent-skills")
             self.assertRegex(skill["provenance"]["source_hash"], r"^[0-9a-f]{64}$")
             self.assertTrue(skill["permissions"])
+            required_scopes = {p["scope"] for p in skill["permissions"] if p["required"]}
+            self.assertIn("filesystem:read", required_scopes)
+            self.assertIn("filesystem:write", required_scopes)
 
     def test_manifest_exposes_every_skill_alias(self):
         registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
@@ -52,8 +55,28 @@ class ScientificAgentSkillsAdapterTests(unittest.TestCase):
         command_names = {command["name"] for command in manifest["commands"] if command["namespace"] == "scientific"}
         for generic in {"list", "inspect", "explain", "prepare", "run", "trust-report", "doctor"}:
             self.assertIn(generic, command_names)
+        commands_by_name = {command["name"]: command for command in manifest["commands"] if command["namespace"] == "scientific"}
         for skill in registry["skills"]:
             self.assertIn(skill["slug"], command_names)
+            alias_args = {arg["name"] for arg in commands_by_name[skill["slug"]].get("arguments", [])}
+            self.assertGreaterEqual(alias_args, {"task", "dry_run", "output"})
+
+    def test_manifest_declares_only_used_core_capabilities(self):
+        manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+        capabilities = {(capability["name"], capability["access"]) for capability in manifest["capabilities"]}
+        self.assertNotIn(("runtime", "execute"), capabilities)
+        self.assertNotIn(("mcp", "execute"), capabilities)
+        self.assertGreaterEqual(
+            capabilities,
+            {
+                ("seed", "write"),
+                ("ledger", "write"),
+                ("state", "write"),
+                ("provenance", "write"),
+                ("handoff", "attach"),
+                ("progress", "write"),
+            },
+        )
 
     def test_doctor_reports_alias_and_skill_counts(self):
         proc = self._run("doctor")
@@ -107,6 +130,8 @@ class ScientificAgentSkillsAdapterTests(unittest.TestCase):
             self.assertEqual(audit["schema_version"], "0.1")
             self.assertEqual(audit["event_type"], "plugin.completed")
             self.assertIn("skill=rdkit", audit["result"]["message"])
+            self.assertIn("filesystem:read", audit["permissions_used"])
+            self.assertIn("filesystem:write", audit["permissions_used"])
 
     def test_dry_run_alias_prepares_without_execution(self):
         with tempfile.TemporaryDirectory() as td:
@@ -127,6 +152,7 @@ class ScientificAgentSkillsAdapterTests(unittest.TestCase):
             self.assertEqual(audit["schema_version"], "0.1")
             self.assertEqual(audit["event_type"], "plugin.failed")
             self.assertEqual(audit["result"]["status"], "blocked")
+            self.assertIn("filesystem:write", audit["permissions_used"])
 
 
     def test_generated_audit_events_match_contract_schema(self):
@@ -138,8 +164,14 @@ class ScientificAgentSkillsAdapterTests(unittest.TestCase):
             proc = self._run("prepare", "rdkit", "--task", "cluster these molecules", "--output", td)
             self.assertEqual(proc.returncode, 0, proc.stderr)
             payload = self._json(proc)
-            audit = json.loads(Path(payload["paths"]["audit"]).read_text(encoding="utf-8"))
-        self.assertEqual(list(validator.iter_errors(audit)), [])
+            completed_audit = json.loads(Path(payload["paths"]["audit"]).read_text(encoding="utf-8"))
+
+            blocked = self._run("run", "opentrons-integration", "--task", "execute protocol", "--output", td)
+            self.assertEqual(blocked.returncode, 1)
+            blocked_payload = self._json(blocked)
+            blocked_audit = json.loads(Path(blocked_payload["audit_path"]).read_text(encoding="utf-8"))
+        self.assertEqual(list(validator.iter_errors(completed_audit)), [])
+        self.assertEqual(list(validator.iter_errors(blocked_audit)), [])
 
     def test_unknown_skill_suggests_close_matches(self):
         proc = self._run("inspect", "rdkitt")

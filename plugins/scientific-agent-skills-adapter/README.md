@@ -32,6 +32,21 @@ ooo scientific doctor
 ooo scientific <skill-slug> --task <goal>
 ```
 
+
+## Issue #27 contract alignment
+
+This adapter follows the #27 capability-assimilation contract:
+
+- `ouroboros-plugins` remains a curated contract/reference repository, not the
+  marketplace or canonical home for the long-tail scientific pack.
+- The upstream repository is assimilated through generated metadata,
+  provenance, risk, permissions, audit, and handoff artifacts rather than raw
+  command wrapping.
+- Core capabilities are declared only when this adapter actually uses them;
+  future `runtime` or `mcp` authority must be added only with a corresponding
+  trusted execution path and tests.
+- `ooo auto` consumes generated handoffs while staying domain-agnostic.
+
 ## Safety model
 
 - `list`, `inspect`, `explain`, `trust-report`, and `doctor` are read-only.

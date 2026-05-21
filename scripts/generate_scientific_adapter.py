@@ -209,12 +209,12 @@ def infer_permissions(slug: str, text: str, allowed_tools: list[str], counts: di
     hay = f"{slug} {text}".lower()
     scopes: dict[str, tuple[str, bool, str]] = {
         "filesystem:read": ("read_only", True, "Read upstream SKILL.md metadata and local user inputs for inspection/preparation."),
-        "filesystem:write": ("write", False, "Write Seed-compatible handoff, provenance, audit, and result artifacts."),
+        "filesystem:write": ("write", True, "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run."),
     }
     if counts.get("scripts", 0) or any(tool.lower() == "bash" for tool in allowed_tools):
         scopes["shell:execute"] = ("destructive", False, "Upstream skill includes scripts or Bash authority; execution is blocked until explicitly trusted.")
     if any(tool.lower() in {"write", "edit"} for tool in allowed_tools):
-        scopes["filesystem:write"] = ("write", False, "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.")
+        scopes["filesystem:write"] = ("write", True, "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.")
     if any(word in hay for word in NETWORK_KEYWORDS):
         scopes["network:read"] = ("read_only", False, "Skill may query public scientific databases, papers, documentation, or APIs.")
     if any(word in hay for word in ("submit", "upload", "mutate", "delete", "transfer", "write api")):
@@ -345,10 +345,15 @@ def build_manifest(registry: dict[str, object]) -> dict[str, object]:
         command("trust-report", "Emit the generated trust report for a scientific skill.", "ooo scientific trust-report <skill>", "read_only", [skill_arg]),
         command("doctor", "Check adapter registry integrity and safety defaults.", "ooo scientific doctor", "read_only"),
     ]
+    alias_args = [
+        task_arg,
+        {"name": "dry_run", "type": "boolean", "required": False, "description": "Generate handoff and audit artifacts without executing upstream scripts."},
+        {"name": "output", "type": "path", "required": False, "description": "Output directory for handoff artifacts."},
+    ]
     for skill in registry["skills"]:  # type: ignore[index]
         slug = skill["slug"]  # type: ignore[index]
         risk = skill["risk"]  # type: ignore[index]
-        commands.append(command(str(slug), f"Prepare or dry-run the {slug} scientific capability via AgentOS boundaries.", f"ooo scientific {slug} --task <goal> [--dry-run]", "write" if risk == "read_only" else str(risk), [task_arg], risk == "destructive"))
+        commands.append(command(str(slug), f"Prepare or dry-run the {slug} scientific capability via AgentOS boundaries.", f"ooo scientific {slug} --task <goal> [--dry-run] [--output <path>]", "write" if risk == "read_only" else str(risk), alias_args, risk == "destructive"))
     return {
         "schema_version": "0.1",
         "name": "scientific-agent-skills-adapter",
@@ -362,9 +367,7 @@ def build_manifest(registry: dict[str, object]) -> dict[str, object]:
             {"name": "state", "access": "write", "reason": "Persist selected skill, task, input/output paths, and resume state."},
             {"name": "provenance", "access": "write", "reason": "Record upstream repository, commit, skill path, and source hash."},
             {"name": "handoff", "access": "attach", "reason": "Attach generated plans, dry-run reports, and blocked-execution artifacts."},
-            {"name": "progress", "access": "write", "reason": "Report long-running workflow plan states without hiding state in terminal output."},
-            {"name": "runtime", "access": "execute", "reason": "Reserved for future manually trusted low-risk execution paths; default runner blocks unsafe execution."},
-            {"name": "mcp", "access": "execute", "reason": "Reserved for skills that explicitly require MCP-backed scientific services; v0.1 uses execute as the closest supported access value."},
+            {"name": "progress", "access": "write", "reason": "Report workflow plan states without hiding state in terminal output."},
         ],
         "permissions": [
             {"scope": "filesystem:read", "risk": "read_only", "required": True, "reason": "Read vendored/generated skill metadata, references, and user input paths."},

@@ -25,8 +25,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -80,8 +80,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -132,8 +132,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -192,8 +192,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -246,8 +246,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -303,8 +303,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -384,8 +384,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -441,8 +441,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -504,8 +504,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -576,8 +576,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -630,8 +630,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -690,8 +690,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -744,8 +744,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -801,8 +801,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -869,8 +869,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -930,8 +930,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -998,8 +998,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1047,8 +1047,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1095,8 +1095,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1149,8 +1149,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1197,8 +1197,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1249,8 +1249,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1315,8 +1315,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1369,8 +1369,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1432,8 +1432,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1480,8 +1480,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1546,8 +1546,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1607,8 +1607,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1667,8 +1667,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1734,8 +1734,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1794,8 +1794,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1855,8 +1855,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1909,8 +1909,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -1963,8 +1963,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2011,8 +2011,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2066,8 +2066,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2127,8 +2127,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2173,8 +2173,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2219,8 +2219,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2273,8 +2273,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2346,8 +2346,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2400,8 +2400,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2454,8 +2454,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2502,8 +2502,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2548,8 +2548,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2615,8 +2615,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2672,8 +2672,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2728,8 +2728,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2793,8 +2793,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2850,8 +2850,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2904,8 +2904,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -2971,8 +2971,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3031,8 +3031,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3097,8 +3097,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3164,8 +3164,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3226,8 +3226,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3294,8 +3294,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3356,8 +3356,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3419,8 +3419,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3465,8 +3465,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3511,8 +3511,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3571,8 +3571,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3631,8 +3631,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3692,8 +3692,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3738,8 +3738,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3798,8 +3798,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3850,8 +3850,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3910,8 +3910,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -3970,8 +3970,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4025,8 +4025,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4092,8 +4092,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4164,8 +4164,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4218,8 +4218,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4266,8 +4266,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4318,8 +4318,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4364,8 +4364,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4410,8 +4410,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4469,8 +4469,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4531,8 +4531,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4585,8 +4585,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4651,8 +4651,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4703,8 +4703,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4755,8 +4755,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4808,8 +4808,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4864,8 +4864,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4918,8 +4918,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -4973,8 +4973,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5033,8 +5033,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5093,8 +5093,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5165,8 +5165,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5213,8 +5213,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5285,8 +5285,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5352,8 +5352,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5412,8 +5412,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5472,8 +5472,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5524,8 +5524,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5570,8 +5570,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5630,8 +5630,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5689,8 +5689,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5758,8 +5758,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5813,8 +5813,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5865,8 +5865,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5924,8 +5924,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -5991,8 +5991,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6048,8 +6048,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6103,8 +6103,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6157,8 +6157,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6211,8 +6211,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6262,8 +6262,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6323,8 +6323,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6391,8 +6391,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6448,8 +6448,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6513,8 +6513,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6581,8 +6581,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6633,8 +6633,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6687,8 +6687,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6739,8 +6739,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6799,8 +6799,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6859,8 +6859,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6905,8 +6905,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -6957,8 +6957,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7011,8 +7011,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7065,8 +7065,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7119,8 +7119,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7165,8 +7165,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7217,8 +7217,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7276,8 +7276,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7338,8 +7338,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7384,8 +7384,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7436,8 +7436,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7496,8 +7496,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7565,8 +7565,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7611,8 +7611,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7659,8 +7659,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7710,8 +7710,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7775,8 +7775,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Upstream instructions include file writing/editing authority; prepare writes handoff artifacts only.",
-          "required": false,
+          "reason": "Prepare/dry-run writes handoff artifacts; upstream write/edit authority remains blocked until explicitly trusted.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7823,8 +7823,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },
@@ -7883,8 +7883,8 @@
           "scope": "filesystem:read"
         },
         {
-          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts.",
-          "required": false,
+          "reason": "Write Seed-compatible handoff, provenance, audit, and result artifacts during prepare/dry-run.",
+          "required": true,
           "risk": "write",
           "scope": "filesystem:write"
         },

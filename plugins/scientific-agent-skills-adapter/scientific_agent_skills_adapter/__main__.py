@@ -195,7 +195,7 @@ def build_seed(skill: dict, task: str, handoff_path: Path) -> str:
 
 def audit_event(skill: dict, command: str, status: str, args: dict, artifacts: dict | None = None) -> dict:
     success = status == "completed"
-    scopes = [p["scope"] for p in skill["permissions"] if p["required"]]
+    scopes = sorted({p["scope"] for p in skill["permissions"] if p["required"]})
     message_parts = [f"skill={skill['slug']}", f"risk={skill['risk']}"]
     if artifacts:
         message_parts.extend(f"{name}={path}" for name, path in sorted(artifacts.items()))
