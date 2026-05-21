@@ -220,6 +220,93 @@ class AiderAssistTests(unittest.TestCase):
             self.assertEqual(invocation["result"]["status"], "failed")
             self.assertEqual(invocation["unauthorized_touched_files"], ["other.py"])
 
+    def test_edit_captures_verification_output(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            fake = tmp / "fake-aider"
+            fake.write_text(
+                "#!/usr/bin/env python3\n"
+                "from pathlib import Path\n"
+                "import sys\n"
+                "if '--version' in sys.argv:\n"
+                "    print('aider fake 0.0')\n"
+                "else:\n"
+                "    Path('src.py').write_text(\"print('changed')\\n\")\n"
+                "    print('edited by fake aider')\n"
+            )
+            fake.chmod(0o755)
+            repo = tmp / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            (repo / "src.py").write_text("print('hi')\n")
+            subprocess.run(["git", "add", "src.py"], cwd=repo, check=True, capture_output=True)
+            subprocess.run(["git", "-c", "user.email=t@example.com", "-c", "user.name=T", "commit", "-m", "init"], cwd=repo, check=True, capture_output=True)
+            env = os.environ.copy()
+            env["AIDER_ASSIST_AIDER_BIN"] = str(fake)
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "edit", "--message", "Change", "--file", "src.py", "--test-cmd", "python -c \"print('tests ok')\""],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            artifact_dir = Path(completed.stdout.strip())
+            verification = json.loads((artifact_dir / "verification.json").read_text())
+            self.assertEqual(verification["status"], "passed")
+            self.assertIn("tests ok", verification["after"][0]["stdout"])
+
+    def test_fix_requires_verification_command(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td) / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            (repo / "src.py").write_text("print('hi')\n")
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "fix", "--file", "src.py"],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 2)
+            self.assertIn("fix requires --test-cmd or --lint-cmd", completed.stderr)
+
+    def test_fix_reports_failed_post_verification(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            fake = tmp / "fake-aider"
+            fake.write_text(
+                "#!/usr/bin/env python3\n"
+                "import sys\n"
+                "if '--version' in sys.argv:\n"
+                "    print('aider fake 0.0')\n"
+                "else:\n"
+                "    print('attempted repair')\n"
+            )
+            fake.chmod(0o755)
+            repo = tmp / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            (repo / "src.py").write_text("print('hi')\n")
+            subprocess.run(["git", "add", "src.py"], cwd=repo, check=True, capture_output=True)
+            subprocess.run(["git", "-c", "user.email=t@example.com", "-c", "user.name=T", "commit", "-m", "init"], cwd=repo, check=True, capture_output=True)
+            env = os.environ.copy()
+            env["AIDER_ASSIST_AIDER_BIN"] = str(fake)
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "fix", "--file", "src.py", "--test-cmd", "python -c \"import sys; sys.exit(3)\""],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 1)
+            artifact_dir = Path(completed.stdout.strip())
+            verification = json.loads((artifact_dir / "verification.json").read_text())
+            self.assertEqual(verification["status"], "failed")
+            self.assertEqual(verification["after"][0]["exit_code"], 3)
+
 
 if __name__ == "__main__":
     unittest.main()
