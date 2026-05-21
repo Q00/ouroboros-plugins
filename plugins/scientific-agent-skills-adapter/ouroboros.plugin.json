@@ -1,0 +1,4109 @@
+{
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  },
+  "capabilities": [
+    {
+      "access": "write",
+      "name": "seed",
+      "reason": "Generate Seed-compatible handoff plans from scientific skill metadata."
+    },
+    {
+      "access": "write",
+      "name": "ledger",
+      "reason": "Record risk classifications, decisions, audit events, and outcomes."
+    },
+    {
+      "access": "write",
+      "name": "state",
+      "reason": "Persist selected skill, task, input/output paths, and resume state."
+    },
+    {
+      "access": "write",
+      "name": "provenance",
+      "reason": "Record upstream repository, commit, skill path, and source hash."
+    },
+    {
+      "access": "attach",
+      "name": "handoff",
+      "reason": "Attach generated plans, dry-run reports, and blocked-execution artifacts."
+    },
+    {
+      "access": "write",
+      "name": "progress",
+      "reason": "Report workflow plan states without hiding state in terminal output."
+    }
+  ],
+  "commands": [
+    {
+      "name": "list",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "read_only",
+      "summary": "List assimilated Scientific Agent Skills with optional domain/risk filters.",
+      "usage": "ooo scientific list [--domain <domain>] [--risk <risk>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific Agent Skill slug.",
+          "name": "skill",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "name": "inspect",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "read_only",
+      "summary": "Inspect a scientific skill's metadata, permissions, provenance, and risk.",
+      "usage": "ooo scientific inspect <skill>"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific Agent Skill slug.",
+          "name": "skill",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Optional task context.",
+          "name": "task",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "name": "explain",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "read_only",
+      "summary": "Explain how a scientific skill maps into AgentOS handoff semantics.",
+      "usage": "ooo scientific explain <skill> [--task <goal>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific Agent Skill slug.",
+          "name": "skill",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "prepare",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Write a Seed-compatible handoff plan for a scientific skill without executing upstream code.",
+      "usage": "ooo scientific prepare <skill> --task <goal> [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific Agent Skill slug.",
+          "name": "skill",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        }
+      ],
+      "name": "run",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Run a skill only through dry-run or approved low-risk boundaries; otherwise block with an audit artifact.",
+      "usage": "ooo scientific run <skill> --task <goal> [--dry-run]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific Agent Skill slug.",
+          "name": "skill",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "name": "trust-report",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "read_only",
+      "summary": "Emit the generated trust report for a scientific skill.",
+      "usage": "ooo scientific trust-report <skill>"
+    },
+    {
+      "name": "doctor",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "read_only",
+      "summary": "Check adapter registry integrity and safety defaults.",
+      "usage": "ooo scientific doctor"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "adaptyv",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the adaptyv scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific adaptyv --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "aeon",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the aeon scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific aeon --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "anndata",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the anndata scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific anndata --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "arboreto",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the arboreto scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific arboreto --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "astropy",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the astropy scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific astropy --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "autoskill",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the autoskill scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific autoskill --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "benchling-integration",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the benchling-integration scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific benchling-integration --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "bgpt-paper-search",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the bgpt-paper-search scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific bgpt-paper-search --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "bids",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the bids scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific bids --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "biopython",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the biopython scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific biopython --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "bioservices",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the bioservices scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific bioservices --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "cellxgene-census",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the cellxgene-census scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific cellxgene-census --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "cirq",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the cirq scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific cirq --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "citation-management",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the citation-management scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific citation-management --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "clinical-decision-support",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the clinical-decision-support scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific clinical-decision-support --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "clinical-reports",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the clinical-reports scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific clinical-reports --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "cobrapy",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the cobrapy scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific cobrapy --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "consciousness-council",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the consciousness-council scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific consciousness-council --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "dask",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the dask scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific dask --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "database-lookup",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the database-lookup scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific database-lookup --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "datamol",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the datamol scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific datamol --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "deepchem",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the deepchem scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific deepchem --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "deeptools",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the deeptools scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific deeptools --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "depmap",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the depmap scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific depmap --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "dhdna-profiler",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the dhdna-profiler scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific dhdna-profiler --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "diffdock",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the diffdock scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific diffdock --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "dnanexus-integration",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the dnanexus-integration scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific dnanexus-integration --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "docx",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the docx scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific docx --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "esm",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the esm scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific esm --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "etetoolkit",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the etetoolkit scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific etetoolkit --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "exa-search",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the exa-search scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific exa-search --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "exploratory-data-analysis",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the exploratory-data-analysis scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific exploratory-data-analysis --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "flowio",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the flowio scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific flowio --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "fluidsim",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the fluidsim scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific fluidsim --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "generate-image",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the generate-image scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific generate-image --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "geniml",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the geniml scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific geniml --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "geomaster",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the geomaster scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific geomaster --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "geopandas",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the geopandas scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific geopandas --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "get-available-resources",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the get-available-resources scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific get-available-resources --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "gget",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the gget scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific gget --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "ginkgo-cloud-lab",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the ginkgo-cloud-lab scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific ginkgo-cloud-lab --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "glycoengineering",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the glycoengineering scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific glycoengineering --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "gtars",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the gtars scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific gtars --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "histolab",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the histolab scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific histolab --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "hugging-science",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the hugging-science scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific hugging-science --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "hypogenic",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the hypogenic scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific hypogenic --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "hypothesis-generation",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the hypothesis-generation scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific hypothesis-generation --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "imaging-data-commons",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the imaging-data-commons scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific imaging-data-commons --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "infographics",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the infographics scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific infographics --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "iso-13485-certification",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the iso-13485-certification scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific iso-13485-certification --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "labarchive-integration",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the labarchive-integration scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific labarchive-integration --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "lamindb",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the lamindb scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific lamindb --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "latchbio-integration",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the latchbio-integration scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific latchbio-integration --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "latex-posters",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the latex-posters scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific latex-posters --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "literature-review",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the literature-review scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific literature-review --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "markdown-mermaid-writing",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the markdown-mermaid-writing scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific markdown-mermaid-writing --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "market-research-reports",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the market-research-reports scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific market-research-reports --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "markitdown",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the markitdown scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific markitdown --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "matchms",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the matchms scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific matchms --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "matlab",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the matlab scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific matlab --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "matplotlib",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the matplotlib scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific matplotlib --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "medchem",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the medchem scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific medchem --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "modal",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the modal scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific modal --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "molecular-dynamics",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the molecular-dynamics scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific molecular-dynamics --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "molfeat",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the molfeat scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific molfeat --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "networkx",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the networkx scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific networkx --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "neurokit2",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the neurokit2 scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific neurokit2 --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "neuropixels-analysis",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the neuropixels-analysis scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific neuropixels-analysis --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "omero-integration",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the omero-integration scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific omero-integration --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "open-notebook",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the open-notebook scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific open-notebook --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "opentrons-integration",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the opentrons-integration scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific opentrons-integration --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "optimize-for-gpu",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the optimize-for-gpu scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific optimize-for-gpu --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "paper-lookup",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the paper-lookup scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific paper-lookup --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "paperzilla",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the paperzilla scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific paperzilla --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "parallel-web",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the parallel-web scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific parallel-web --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pathml",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the pathml scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pathml --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pdf",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pdf scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pdf --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "peer-review",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the peer-review scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific peer-review --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pennylane",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pennylane scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pennylane --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "phylogenetics",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the phylogenetics scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific phylogenetics --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "polars",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the polars scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific polars --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "polars-bio",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the polars-bio scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific polars-bio --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pptx",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pptx scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pptx --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pptx-posters",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pptx-posters scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pptx-posters --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "primekg",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the primekg scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific primekg --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "protocolsio-integration",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the protocolsio-integration scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific protocolsio-integration --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pufferlib",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pufferlib scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pufferlib --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pydeseq2",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pydeseq2 scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pydeseq2 --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pydicom",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pydicom scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pydicom --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pyhealth",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pyhealth scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pyhealth --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pylabrobot",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pylabrobot scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pylabrobot --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pymatgen",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pymatgen scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pymatgen --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pymc",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pymc scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pymc --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pymoo",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pymoo scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pymoo --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pyopenms",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the pyopenms scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pyopenms --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pysam",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the pysam scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pysam --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pytdc",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pytdc scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pytdc --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pytorch-lightning",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pytorch-lightning scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pytorch-lightning --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "pyzotero",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the pyzotero scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific pyzotero --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "qiskit",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the qiskit scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific qiskit --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "qutip",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the qutip scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific qutip --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "rdkit",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the rdkit scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific rdkit --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "research-grants",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the research-grants scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific research-grants --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "research-lookup",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the research-lookup scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific research-lookup --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "rowan",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the rowan scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific rowan --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scanpy",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scanpy scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scanpy --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scholar-evaluation",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scholar-evaluation scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scholar-evaluation --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scientific-brainstorming",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the scientific-brainstorming scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scientific-brainstorming --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scientific-critical-thinking",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scientific-critical-thinking scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scientific-critical-thinking --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scientific-schematics",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scientific-schematics scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scientific-schematics --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scientific-slides",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scientific-slides scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scientific-slides --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scientific-visualization",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scientific-visualization scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scientific-visualization --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scientific-writing",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scientific-writing scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scientific-writing --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scikit-bio",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the scikit-bio scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scikit-bio --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scikit-learn",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scikit-learn scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scikit-learn --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scikit-survival",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scikit-survival scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scikit-survival --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scvelo",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scvelo scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scvelo --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "scvi-tools",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the scvi-tools scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific scvi-tools --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "seaborn",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the seaborn scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific seaborn --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "shap",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the shap scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific shap --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "simpy",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the simpy scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific simpy --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "stable-baselines3",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the stable-baselines3 scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific stable-baselines3 --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "statistical-analysis",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the statistical-analysis scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific statistical-analysis --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "statsmodels",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the statsmodels scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific statsmodels --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "sympy",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the sympy scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific sympy --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "tiledbvcf",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the tiledbvcf scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific tiledbvcf --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "timesfm-forecasting",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the timesfm-forecasting scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific timesfm-forecasting --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "torch-geometric",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the torch-geometric scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific torch-geometric --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "torchdrug",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the torchdrug scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific torchdrug --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "transformers",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the transformers scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific transformers --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "treatment-plans",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the treatment-plans scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific treatment-plans --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "umap-learn",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the umap-learn scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific umap-learn --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "usfiscaldata",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the usfiscaldata scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific usfiscaldata --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "vaex",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the vaex scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific vaex --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "venue-templates",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the venue-templates scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific venue-templates --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "what-if-oracle",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the what-if-oracle scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific what-if-oracle --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "xlsx",
+      "namespace": "scientific",
+      "requires_confirmation": true,
+      "risk": "destructive",
+      "summary": "Prepare or dry-run the xlsx scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific xlsx --task <goal> [--dry-run] [--output <path>]"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Scientific task or user goal.",
+          "name": "task",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Generate handoff and audit artifacts without executing upstream scripts.",
+          "name": "dry_run",
+          "required": false,
+          "type": "boolean"
+        },
+        {
+          "description": "Output directory for handoff artifacts.",
+          "name": "output",
+          "required": false,
+          "type": "path"
+        }
+      ],
+      "name": "zarr-python",
+      "namespace": "scientific",
+      "requires_confirmation": false,
+      "risk": "write",
+      "summary": "Prepare or dry-run the zarr-python scientific capability via AgentOS boundaries.",
+      "usage": "ooo scientific zarr-python --task <goal> [--dry-run] [--output <path>]"
+    }
+  ],
+  "description": "Reference adapter proving safe AgentOS assimilation of K-Dense Scientific Agent Skills.",
+  "entrypoint": {
+    "command": "python -m scientific_agent_skills_adapter",
+    "type": "command"
+  },
+  "name": "scientific-agent-skills-adapter",
+  "permissions": [
+    {
+      "reason": "Read vendored/generated skill metadata, references, and user input paths.",
+      "required": true,
+      "risk": "read_only",
+      "scope": "filesystem:read"
+    },
+    {
+      "reason": "Write generated handoff, provenance, audit, and dry-run artifacts.",
+      "required": true,
+      "risk": "write",
+      "scope": "filesystem:write"
+    },
+    {
+      "reason": "Optional public scientific database/paper/API lookup after per-skill trust.",
+      "required": false,
+      "risk": "read_only",
+      "scope": "network:read"
+    },
+    {
+      "reason": "Optional remote job submission or mutation only after explicit trust and confirmation.",
+      "required": false,
+      "risk": "destructive",
+      "scope": "network:write"
+    },
+    {
+      "reason": "Optional upstream script execution; blocked by default until explicitly reviewed.",
+      "required": false,
+      "risk": "destructive",
+      "scope": "shell:execute"
+    },
+    {
+      "reason": "Service-specific lab data mutations require explicit trust.",
+      "required": false,
+      "risk": "destructive",
+      "scope": "benchling:write"
+    },
+    {
+      "reason": "Cloud genomics platform mutations require explicit trust.",
+      "required": false,
+      "risk": "destructive",
+      "scope": "dnanexus:write"
+    },
+    {
+      "reason": "Cloud compute execution requires explicit trust.",
+      "required": false,
+      "risk": "destructive",
+      "scope": "modal:execute"
+    },
+    {
+      "reason": "Physical lab automation execution requires explicit trust.",
+      "required": false,
+      "risk": "destructive",
+      "scope": "opentrons:execute"
+    },
+    {
+      "reason": "Reference library mutations require explicit trust.",
+      "required": false,
+      "risk": "destructive",
+      "scope": "zotero:write"
+    }
+  ],
+  "schema_version": "0.1",
+  "source": {
+    "path": "plugins/scientific-agent-skills-adapter",
+    "repository": "https://github.com/K-Dense-AI/scientific-agent-skills",
+    "type": "local_path"
+  },
+  "version": "0.1.0"
+}
