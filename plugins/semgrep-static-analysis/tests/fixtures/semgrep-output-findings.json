@@ -1,0 +1,18 @@
+{
+  "version": "1.99.0",
+  "results": [
+    {
+      "check_id": "python.lang.security.audit.dangerous-subprocess-use",
+      "path": "src/example.py",
+      "start": {"line": 10, "col": 5},
+      "end": {"line": 10, "col": 25},
+      "extra": {
+        "message": "Avoid shell=True in subprocess calls.",
+        "severity": "ERROR",
+        "metadata": {"cwe": ["CWE-78"], "owasp": ["A03:2021"]},
+        "fix": "subprocess.run(args, check=True)"
+      }
+    }
+  ],
+  "errors": []
+}
