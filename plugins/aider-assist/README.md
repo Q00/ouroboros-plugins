@@ -63,7 +63,11 @@ diff.patch
 touched-files.txt
 ```
 
-Later PRs add `verification.json` for test/lint-backed workflows.
+`edit --test-cmd`, `edit --lint-cmd`, and `fix` also write:
+
+```text
+verification.json
+```
 
 Artifacts are intentionally local and auditable. They must not contain raw API
 keys, provider secrets, or raw sensitive environment values.
@@ -72,7 +76,7 @@ keys, provider secrets, or raw sensitive environment values.
 
 - `ask` treats both `--file` and `--read` as read-only context.
 - `edit` requires explicit editable file bounds and refuses unbounded runs.
-- `fix` requires explicit editable file bounds when implemented in PR3.
+- `fix` requires explicit editable file bounds plus `--test-cmd` or `--lint-cmd`.
 - Aider auto-commit is disabled by default in write modes so Ouroboros owns
   provenance.
 - Interactive `session` mode is deferred until transcript capture, pre/post
