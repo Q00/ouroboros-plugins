@@ -9,8 +9,9 @@ programs compose those primitives into domain-specific workflows.
 +-------------------------------------------------------------------+
 |                Installable UserLevel Programs                      |
 |                                                                   |
-|  autoresearch    github-pr-ops   merge-assistant   jira-sync       |
-|  slack-incident  release-coordinator  customer-debugger  ...       |
+|  autoresearch    github-pr-ops   openhands-agentos            |
+|  merge-assistant  jira-sync       slack-incident               |
+|  release-coordinator  customer-debugger  ...                  |
 +-------------------------------+-----------------------------------+
                                 |
                                 | plugin contract / declared scopes
@@ -73,10 +74,12 @@ Plugins own domain-specific workflows:
 ```bash
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin autoresearch
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin openhands-agentos
 ouroboros plugin trust github-pr-ops --scope github:read --scope github:pull_request:write
 
 ooo auto-research prepare /path/to/autoresearch --goal "Improve validation bpb"
 ooo github-pr review https://github.com/org/repo/pull/123
+ooo openhands agentos --workspace /path/to/repo --goal "Fix the failing test" --trusted-shell-execute
 ooo github-pr merge --policy team-default
 ```
 
@@ -102,6 +105,7 @@ schemas/
 plugins/
   autoresearch/        Autoresearch-to-ooo-auto handoff plugin
   github-pr-ops/       Reference plugin skeleton
+  openhands-agentos/   OpenHands-to-AgentOS audited handoff plugin
 catalog/
   index.json           Local catalog (boring index for reproducibility,
                        NOT a package-registry server)
@@ -117,6 +121,7 @@ python3 scripts/validate_contract.py
 PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch inspect /path/to/autoresearch
 PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch prepare /path/to/autoresearch --goal "Improve validation bpb"
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
+PYTHONPATH=plugins/openhands-agentos python3 -m openhands_agentos inspect
 ```
 
 During plugin development, install from the local checkout instead:

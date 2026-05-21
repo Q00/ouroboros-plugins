@@ -1,0 +1,205 @@
+{
+  "schema_version": "0.1",
+  "name": "openhands-agentos",
+  "version": "0.1.0",
+  "description": "Ouroboros AgentOS bridge for audited OpenHands CLI runs and handoffs.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/openhands-agentos",
+    "repository": "https://github.com/Q00/ouroboros-plugins"
+  },
+  "commands": [
+    {
+      "namespace": "openhands",
+      "name": "inspect",
+      "summary": "Inspect OpenHands CLI readiness without launching an agent.",
+      "usage": "ooo openhands inspect",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "openhands_bin",
+          "type": "string",
+          "required": false,
+          "description": "OpenHands CLI binary name or path."
+        }
+      ]
+    },
+    {
+      "namespace": "openhands",
+      "name": "run",
+      "summary": "Run OpenHands headless JSON output inside an audited bounded workspace.",
+      "usage": "ooo openhands run --workspace <path> --task <task> --out .omx/artifacts/openhands/<run>/events.jsonl --trusted-shell-execute",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "workspace",
+          "type": "path",
+          "required": true,
+          "description": "Bounded local workspace for the OpenHands run."
+        },
+        {
+          "name": "task",
+          "type": "string",
+          "required": false,
+          "description": "Inline task passed to openhands --task."
+        },
+        {
+          "name": "task_file",
+          "type": "path",
+          "required": false,
+          "description": "Workspace-relative task file passed to openhands --file."
+        },
+        {
+          "name": "out",
+          "type": "path",
+          "required": true,
+          "description": "Workspace-contained JSONL capture path."
+        },
+        {
+          "name": "trusted_shell_execute",
+          "type": "boolean",
+          "required": true,
+          "description": "Explicit trust acknowledgement for shell:execute."
+        }
+      ]
+    },
+    {
+      "namespace": "openhands",
+      "name": "summarize",
+      "summary": "Summarize a captured OpenHands JSONL run.",
+      "usage": "ooo openhands summarize --run <events.jsonl>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "run",
+          "type": "path",
+          "required": true,
+          "description": "Captured OpenHands JSONL events."
+        }
+      ]
+    },
+    {
+      "namespace": "openhands",
+      "name": "handoff",
+      "summary": "Convert a captured OpenHands JSONL run into an Ouroboros handoff artifact.",
+      "usage": "ooo openhands handoff --run <events.jsonl> --metadata <metadata.json> --out <handoff.md>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "run",
+          "type": "path",
+          "required": true,
+          "description": "Captured OpenHands JSONL events."
+        },
+        {
+          "name": "metadata",
+          "type": "path",
+          "required": false,
+          "description": "Run metadata emitted by ooo openhands run."
+        },
+        {
+          "name": "out",
+          "type": "path",
+          "required": true,
+          "description": "Markdown handoff output path."
+        }
+      ]
+    },
+    {
+      "namespace": "openhands",
+      "name": "agentos",
+      "summary": "Run OpenHands and emit an AgentOS handoff in one bounded audited flow.",
+      "usage": "ooo openhands agentos --workspace <path> --goal <goal> --trusted-shell-execute",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "workspace",
+          "type": "path",
+          "required": true,
+          "description": "Bounded local workspace for the OpenHands run."
+        },
+        {
+          "name": "goal",
+          "type": "string",
+          "required": true,
+          "description": "Goal passed to OpenHands and later summarized for Ouroboros."
+        },
+        {
+          "name": "trusted_shell_execute",
+          "type": "boolean",
+          "required": true,
+          "description": "Explicit trust acknowledgement for shell:execute."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record run metadata, OpenHands event counts, exit status, and handoff evidence."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record redacted command/environment provenance for OpenHands execution."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist JSONL, stderr, metadata, audit, and handoff artifacts under the bounded workspace."
+    },
+    {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Launch OpenHands CLI as an external runtime inside the plugin boundary."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Prepare machine-readable and Markdown handoff artifacts for Ouroboros workflows."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report blocked, failed, and completed states without losing evidence."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Inspect workspace, task files, OpenHands CLI availability, and captured run artifacts."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write JSONL captures, metadata, audit events, and handoff artifacts under .omx/."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": true,
+      "reason": "Launch the OpenHands CLI with --headless --json after explicit trust acknowledgement."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m openhands_agentos"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
