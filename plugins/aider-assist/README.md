@@ -105,3 +105,29 @@ coding agent:
 
 This keeps core small while allowing a serious external agent tool to become
 permissioned, auditable, and resumable inside the AgentOS ecosystem.
+
+## Issue #44 acceptance checklist
+
+Implemented by the PR1–PR4 stack:
+
+- [x] A design document and README explain Aider as an AgentOS capability.
+- [x] The implementation references the #27 capability-assimilation thesis.
+- [x] A valid `aider-assist` manifest exists.
+- [x] Read-only `ask` runs through the plugin boundary.
+- [x] Bounded write `edit` runs with explicit file allowlists.
+- [x] Invocation artifacts include input, command, selected files, Aider version,
+      safe model metadata, exit status, and handoff.
+- [x] Write workflows capture pre/post git state, diff, and touched files.
+- [x] Verification output is captured for `--test-cmd` / `--lint-cmd`.
+- [x] Capabilities and permissions are declared narrowly for current schema 0.1.
+- [x] Secret values are redacted from JSON/text artifacts.
+- [x] `architect` preserves Aider's planning flow as read-only by default.
+- [x] Interactive session support is deferred with a staged safety plan.
+
+## Deferred interactive session plan
+
+`ooo aider session` remains out of v0. It should only be added after the plugin
+can capture or summarize the transcript, pre/post git state, final diff,
+touched files, permission-use events, and a post-session handoff. The session
+must advertise an explicit trust boundary before launch and must not store raw
+provider secrets or environment values.

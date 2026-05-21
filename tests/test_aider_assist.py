@@ -307,6 +307,66 @@ class AiderAssistTests(unittest.TestCase):
             self.assertEqual(verification["status"], "failed")
             self.assertEqual(verification["after"][0]["exit_code"], 3)
 
+    def test_architect_writes_plan_and_redacts_secrets(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            fake = tmp / "fake-aider"
+            fake.write_text(
+                "#!/usr/bin/env python3\n"
+                "import sys\n"
+                "if '--version' in sys.argv:\n"
+                "    print('aider fake 0.0')\n"
+                "else:\n"
+                "    print('plan with api_key=SHOULD_NOT_APPEAR')\n"
+            )
+            fake.chmod(0o755)
+            repo = tmp / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            (repo / "src.py").write_text("print('hi')\n")
+            env = os.environ.copy()
+            env["AIDER_ASSIST_AIDER_BIN"] = str(fake)
+            env["AIDER_MODEL"] = "gpt-safe-name"
+            env["OPENAI_API_KEY"] = "SHOULD_NOT_APPEAR"
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "architect", "--message", "Design", "--file", "src.py"],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            artifact_dir = Path(completed.stdout.strip())
+            self.assertIn("api_key=<redacted>", (artifact_dir / "plan.md").read_text())
+            invocation = json.loads((artifact_dir / "invocation.json").read_text())
+            self.assertEqual(invocation["model_metadata"]["main_model"], "gpt-safe-name")
+            self.assertNotIn("OPENAI_API_KEY", json.dumps(invocation))
+
+    def test_fix_blocks_when_verification_already_passes(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            fake = tmp / "fake-aider"
+            fake.write_text("#!/usr/bin/env python3\nprint('should not run')\n")
+            fake.chmod(0o755)
+            repo = tmp / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            (repo / "src.py").write_text("print('hi')\n")
+            env = os.environ.copy()
+            env["AIDER_ASSIST_AIDER_BIN"] = str(fake)
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "fix", "--file", "src.py", "--test-cmd", "python -c \"print('already ok')\""],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 2)
+            artifact_dir = Path(completed.stdout.strip())
+            verification = json.loads((artifact_dir / "verification.json").read_text())
+            self.assertEqual(verification["status"], "blocked")
+            self.assertIn("already ok", verification["before"][0]["stdout"])
+
 
 if __name__ == "__main__":
     unittest.main()
