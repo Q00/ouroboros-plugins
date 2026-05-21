@@ -1,0 +1,103 @@
+{
+  "schema_version": "0.1",
+  "name": "github-pr-ops",
+  "version": "0.1.0",
+  "description": "Reference skeleton for GitHub PR operational workflows.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/github-pr-ops"
+  },
+  "commands": [
+    {
+      "namespace": "github-pr",
+      "name": "review",
+      "summary": "Review a pull request and summarize readiness without mutating it.",
+      "usage": "ooo github-pr review <pull-request-url>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "pull_request_url",
+          "type": "url",
+          "required": true,
+          "description": "GitHub pull request URL to inspect."
+        }
+      ],
+      "permissions": [
+        "github:read"
+      ],
+      "upstream": {
+        "capability": "pull-request-review",
+        "mode": "installed_tool",
+        "tool": "gh"
+      },
+      "artifacts": {
+        "writes": [
+          "result.json",
+          "report.md",
+          "provenance.json",
+          "handoff.json"
+        ],
+        "bounded": true
+      },
+      "handoff": {
+        "produces": true,
+        "consumer": "ooo auto"
+      },
+      "timeout_seconds": 30,
+      "result_states": [
+        "completed",
+        "blocked",
+        "failed"
+      ],
+      "redaction": {
+        "rules": [
+          "no secrets",
+          "bounded metadata only"
+        ]
+      }
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record policy inputs, evidence, and decisions."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record plugin invocation and external GitHub context."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist plugin workflow state between invocations."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach externally verified review evidence and downstream execution results."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "github:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read PR status, checks, reviews, and branch metadata."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m github_pr_ops"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
