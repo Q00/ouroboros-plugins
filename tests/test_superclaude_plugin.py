@@ -65,11 +65,13 @@ class SuperClaudeManifestTests(unittest.TestCase):
         self.assertEqual(errs, [], f"superclaude manifest invalid: {errs}")
 
     def test_manifest_enumerates_all_upstream_commands(self):
-        names = {cmd["name"] for cmd in MANIFEST["commands"] if cmd["namespace"] == "superclaude"}
+        commands = {cmd["name"]: cmd for cmd in MANIFEST["commands"] if cmd["namespace"] == "superclaude"}
+        names = set(commands)
         self.assertTrue(EXPECTED_UPSTREAM_COMMANDS.issubset(names))
         self.assertIn("skill", names)
         self.assertIn("confidence-check", names)
         self.assertIn("token-efficiency", names)
+        self.assertEqual(commands["skill"]["risk"], "write")
 
     def test_sc_alias_is_not_declared_as_namespace(self):
         namespaces = {cmd["namespace"] for cmd in MANIFEST["commands"]}
@@ -168,6 +170,14 @@ class SuperClaudeRuntimeTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         payload = self._json(proc)
         self.assertEqual(payload["assets"]["skill"]["path"], "assets/skills/deep-research/SKILL.md")
+
+    def test_deep_research_web_requires_network_scope(self):
+        proc = self._run("skill", "deep-research", "AgentOS", "--web")
+        self.assertEqual(proc.returncode, 1)
+        payload = self._json(proc)
+        self.assertIn("network:read", payload["missing"])
+        proc = self._run("skill", "deep-research", "AgentOS", "--web", scopes="network:read")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
 
     def test_agent_and_mode_selection_load_assets(self):
         proc = self._run("analyze", "src", "--agent", "security-engineer", "--mode", "DeepResearch")
