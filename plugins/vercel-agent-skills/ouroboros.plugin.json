@@ -1,0 +1,336 @@
+{
+  "schema_version": "0.1",
+  "name": "vercel-agent-skills",
+  "version": "0.1.0",
+  "description": "AgentOS/Ouroboros adapter for vercel-labs/agent-skills as a curated capability pack.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/vercel-agent-skills",
+    "repository": "https://github.com/vercel-labs/agent-skills"
+  },
+  "commands": [
+    {
+      "namespace": "vercel",
+      "name": "optimize",
+      "summary": "Optimize a Vercel project using metrics-first upstream vercel-optimize semantics.",
+      "usage": "ooo vercel optimize <project-path> [--project <id-or-name>] [--limited] [--out <dir>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "project_path",
+          "type": "path",
+          "required": true,
+          "description": "Project directory to inspect."
+        },
+        {
+          "name": "project",
+          "type": "string",
+          "required": false,
+          "description": "Vercel project id or name."
+        },
+        {
+          "name": "limited",
+          "type": "boolean",
+          "required": false,
+          "description": "Allow limited local-only output when Vercel metrics are unavailable."
+        },
+        {
+          "name": "out",
+          "type": "path",
+          "required": false,
+          "description": "Output artifact directory."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "react-best-practices",
+      "summary": "Audit React/Next.js code against Vercel performance practices.",
+      "usage": "ooo vercel react-best-practices <path-or-glob> [--format markdown|json]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "target",
+          "type": "path",
+          "required": true,
+          "description": "File, directory, or glob to audit."
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "required": false,
+          "description": "Output format: markdown or json."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "web-design-guidelines",
+      "summary": "Audit UI files against Vercel Web Interface Guidelines.",
+      "usage": "ooo vercel web-design-guidelines <file-or-glob> [--guidelines-url <url>] [--format markdown|json]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "target",
+          "type": "path",
+          "required": true,
+          "description": "File, directory, or glob to audit."
+        },
+        {
+          "name": "guidelines_url",
+          "type": "url",
+          "required": false,
+          "description": "Guidelines URL to fetch and record."
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "required": false,
+          "description": "Output format: markdown or json."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "react-native-skills",
+      "summary": "Audit React Native / Expo code against upstream rule categories.",
+      "usage": "ooo vercel react-native-skills <path-or-glob> [--format markdown|json]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "target",
+          "type": "path",
+          "required": true,
+          "description": "File, directory, or glob to audit."
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "required": false,
+          "description": "Output format: markdown or json."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "react-view-transitions",
+      "summary": "Audit or plan React View Transition API work.",
+      "usage": "ooo vercel react-view-transitions <path-or-glob> [--mode audit|plan|implement]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "target",
+          "type": "path",
+          "required": true,
+          "description": "File, directory, or glob to inspect."
+        },
+        {
+          "name": "mode",
+          "type": "string",
+          "required": false,
+          "description": "Mode: audit or plan; implement is documented but blocked in v0."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "composition-patterns",
+      "summary": "Audit React component composition patterns.",
+      "usage": "ooo vercel composition-patterns <path-or-glob> [--format markdown|json]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "target",
+          "type": "path",
+          "required": true,
+          "description": "File, directory, or glob to audit."
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "required": false,
+          "description": "Output format: markdown or json."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "deploy-preview",
+      "summary": "Create or prepare a Vercel preview deployment with explicit write gates.",
+      "usage": "ooo vercel deploy-preview <project-path> [--scope <team-slug>] [--claimable] [--no-wait] [--confirm]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "project_path",
+          "type": "path",
+          "required": true,
+          "description": "Project directory to deploy."
+        },
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Vercel team slug."
+        },
+        {
+          "name": "claimable",
+          "type": "boolean",
+          "required": false,
+          "description": "Request claimable deployment flow when supported."
+        },
+        {
+          "name": "no_wait",
+          "type": "boolean",
+          "required": false,
+          "description": "Do not wait for completion."
+        },
+        {
+          "name": "confirm",
+          "type": "boolean",
+          "required": false,
+          "description": "Required explicit confirmation gate."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "deploy-production",
+      "summary": "Production deployment placeholder; disabled until destructive trust UX is locked.",
+      "usage": "ooo vercel deploy-production <project-path> [--scope <team-slug>]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "project_path",
+          "type": "path",
+          "required": true,
+          "description": "Project directory."
+        },
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Vercel team slug."
+        }
+      ]
+    },
+    {
+      "namespace": "vercel",
+      "name": "cli-with-tokens",
+      "summary": "Preflight Vercel CLI token/auth assumptions without leaking secrets.",
+      "usage": "ooo vercel cli-with-tokens <preflight|env-check> <project-path>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "subcommand",
+          "type": "string",
+          "required": true,
+          "description": "preflight or env-check."
+        },
+        {
+          "name": "project_path",
+          "type": "path",
+          "required": true,
+          "description": "Project directory to inspect."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record command inputs, decisions, limitations, and outcomes."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record upstream skill version, Vercel context, guideline URLs, report paths, and redacted evidence."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist long-running optimization/deployment workflow state."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach audit reports, deployment outputs, and recommendations to downstream workflows."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report multi-stage collection, gating, audit, deployment, and verification progress."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read bounded repo files and upstream skill resources."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Fetch guidelines, Vercel metrics, docs references, and project metadata."
+    },
+    {
+      "scope": "network:write",
+      "risk": "write",
+      "required": false,
+      "reason": "Create preview deployments or call Vercel mutation APIs."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Run bounded upstream helper scripts and safe Vercel CLI inspection commands."
+    },
+    {
+      "scope": "vercel:metrics:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Collect Vercel metrics for optimization workflows."
+    },
+    {
+      "scope": "vercel:usage:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Collect Vercel usage and billing-adjacent signals."
+    },
+    {
+      "scope": "vercel:deploy:preview",
+      "risk": "write",
+      "required": false,
+      "reason": "Create preview deployments."
+    },
+    {
+      "scope": "vercel:deploy:production",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Represent production deployments only after destructive trust UX is available."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m vercel_agent_skills"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
