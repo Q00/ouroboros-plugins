@@ -82,6 +82,32 @@ class HermesCronAdapterTests(unittest.TestCase):
             self.assertTrue((Path(td) / "hermes-cron-risk-map.json").is_file())
 
 
+class HermesRunnerTests(unittest.TestCase):
+    def _run(self, *args: str) -> subprocess.CompletedProcess:
+        return subprocess.run([sys.executable, "-m", "ouroboros_hermes_runner", *args], cwd=REPO, env={**os.environ, "PYTHONPATH": str(RUNNER_PATH)}, capture_output=True, text=True, check=False)
+
+    def test_dry_run_records_session_and_export(self):
+        with tempfile.TemporaryDirectory() as td, tempfile.TemporaryDirectory() as out:
+            proc = self._run("run", "review this repository", "--dry-run", "--session-root", td, "--session-id", "hermes-test")
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            state = json.loads(proc.stdout)
+            self.assertEqual(state["status"], "dry_run_completed")
+            self.assertTrue(Path(state["artifacts"]["handoff"]).is_file())
+            status = self._run("status", "hermes-test", "--session-root", td)
+            self.assertEqual(status.returncode, 0, status.stderr)
+            self.assertEqual(json.loads(status.stdout)["session_id"], "hermes-test")
+            exported = self._run("export", "hermes-test", "--session-root", td, "--out", out)
+            self.assertEqual(exported.returncode, 0, exported.stderr)
+            self.assertTrue((Path(out) / "session.json").is_file())
+            self.assertTrue((Path(out) / "handoff.md").is_file())
+
+    def test_chat_creates_attach_metadata(self):
+        with tempfile.TemporaryDirectory() as td:
+            proc = self._run("chat", "--session-root", td, "--session-id", "hermes-chat")
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            state = json.loads(proc.stdout)
+            self.assertEqual(state["status"], "attach_ready")
+            self.assertIn("attach_contract", state)
 
 
 if __name__ == "__main__":

@@ -114,6 +114,12 @@
       "version": "0.1.0",
       "path": "../plugins/hermes-automation-adapter",
       "description": "Convert Hermes cron jobs and automations into reviewable Ouroboros Seed handoff drafts."
+    },
+    {
+      "name": "hermes-agent-runner",
+      "version": "0.1.0",
+      "path": "../plugins/hermes-agent-runner",
+      "description": "Run Hermes Agent as a bounded external runtime with Ouroboros session state and handoff artifacts."
     }
   ]
 }
