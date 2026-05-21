@@ -319,11 +319,13 @@
     {
       "kind": "command",
       "name": "skill",
-      "risk": "read_only",
+      "risk": "write",
       "source": "assets/skills/*/SKILL.md",
-      "summary": "Skill dispatcher for concrete SKILL.md assets.",
+      "summary": "Skill dispatcher for concrete SKILL.md assets; conservative write risk because selected skills may create artifacts or guide edits.",
       "writes_handoff_by_default": false,
-      "required_scopes": []
+      "required_scopes": [
+        "filesystem:write"
+      ]
     },
     {
       "kind": "skill",

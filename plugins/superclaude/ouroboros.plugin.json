@@ -492,9 +492,9 @@
     {
       "namespace": "superclaude",
       "name": "skill",
-      "summary": "Invoke a concrete upstream SuperClaude SKILL.md by name.",
+      "summary": "Invoke a concrete upstream SuperClaude SKILL.md by name; conservative write risk because some skills create artifacts or guide edits.",
       "usage": "ooo superclaude skill <skill-name> [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
-      "risk": "read_only",
+      "risk": "write",
       "requires_confirmation": false,
       "arguments": [
         {
