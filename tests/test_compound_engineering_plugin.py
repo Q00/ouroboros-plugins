@@ -71,7 +71,8 @@ class CompoundEngineeringPluginTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 1)
             payload = json.loads(proc.stdout)
             self.assertEqual(payload["status"], "blocked")
-            self.assertEqual(payload["permissions_used"], [])
+            self.assertEqual(payload["permissions_used"], ["filesystem:read", "filesystem:write"])
+            self.assertIn("git:write", payload["required_permissions"])
             self.assertTrue(any(path.endswith("audit-event.json") for path in payload["artifacts"]))
 
     def test_destructive_command_can_generate_handoff_with_confirmation(self):
@@ -81,6 +82,7 @@ class CompoundEngineeringPluginTests(unittest.TestCase):
             payload = json.loads(proc.stdout)
             self.assertEqual(payload["status"], "success")
             self.assertEqual(payload["risk"], "destructive")
+            self.assertEqual(payload["permissions_used"], ["filesystem:read", "filesystem:write"])
             self.assertIn("github:pull_request:write", payload["required_permissions"])
 
 

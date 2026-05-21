@@ -44,6 +44,13 @@ def _primary_artifact_path(repo_root: Path, command: str, input_text: str, run_i
     return repo_root / ".omx" / "compound" / _artifact_dir(command) / f"{run_id}-{slug}{suffix}"
 
 
+def actual_permissions_used(status: str) -> list[str]:
+    # The adapter itself only reads vendored CE assets and writes bounded local
+    # handoff/audit artifacts. Command-specific elevated permissions remain
+    # declared as required_permissions until a trusted runtime executes them.
+    return ["filesystem:read", "filesystem:write"]
+
+
 def build_payload(command: dict[str, Any], input_text: str, confirm: bool, argv: list[str]) -> tuple[dict[str, Any], str]:
     status = "success"
     message = "handoff artifact generated"
@@ -72,7 +79,7 @@ def build_payload(command: dict[str, Any], input_text: str, confirm: bool, argv:
         "status": status,
         "message": message,
         "capabilities_used": command["capabilities"],
-        "permissions_used": [] if status == "blocked" else command["permissions"],
+        "permissions_used": actual_permissions_used(status),
         "required_permissions": command["permissions"],
         "artifacts": [],
         "handoff": {
