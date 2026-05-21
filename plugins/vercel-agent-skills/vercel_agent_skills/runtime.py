@@ -126,6 +126,20 @@ def write_handoff(ctx: RunContext, status: str, artifacts: list[dict[str, str]],
         "provenance": {"run_dir": str(ctx.run_dir), **(provenance_extra or {})},
     }
     write_json(ctx.run_dir / "handoff.json", handoff)
+    event_type = "plugin.completed" if status in {"success", "blocked"} else "plugin.failed"
+    audit = {
+        "schema_version": "0.1",
+        "event_type": event_type,
+        "occurred_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
+        "plugin": {"name": PLUGIN, "version": VERSION, "source_type": "local_path"},
+        "command": {"namespace": "vercel", "name": ctx.command, "argv": [redact(a) for a in ctx.argv]},
+        "trust_state": "blocked" if status == "blocked" else "trusted",
+        "capabilities_used": ["ledger", "provenance", "handoff", "progress"],
+        "permissions_used": ctx.permissions_used,
+        "provenance": {k: str(v) for k, v in handoff["provenance"].items()},
+        "result": {"status": status, "message": (limitations or ["completed"])[0] if status != "success" else "completed"},
+    }
+    write_json(ctx.run_dir / "audit-event.json", audit)
     return handoff
 
 

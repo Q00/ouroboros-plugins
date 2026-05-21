@@ -22,3 +22,7 @@ Each command writes a run directory under `.ouroboros/plugins/vercel-agent-skill
 ## Safety
 
 Read-only commands never mutate project files. Preview deployment requires explicit confirmation and production deployment is blocked until destructive trust UX is available.
+
+## AgentOS integration
+
+See [`AGENTOS_UX.md`](AGENTOS_UX.md) for natural-language routing, durable audit/handoff outputs, and the PR chain that resolves issue #36.
