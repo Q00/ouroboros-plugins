@@ -52,6 +52,32 @@ def normalized_policy_text(args: list[str]) -> str:
     return " ".join(args).lower().replace("-", "").replace("_", "").replace(".", "")
 
 
+def sensitive_argv_values(args: list[str]) -> list[str]:
+    values: list[str] = []
+    capture_next = False
+    for item in args:
+        if capture_next:
+            if item:
+                values.append(item)
+            capture_next = False
+            continue
+        if item.startswith("--"):
+            flag, sep, value = item.partition("=")
+            normalized_flag = flag.lower().replace("-", "").replace("_", "").replace(".", "")
+            if any(part in normalized_flag for part in ("key", "token", "secret", "password", "credential")):
+                if sep:
+                    values.append(value)
+                else:
+                    capture_next = True
+    return [value for value in values if value]
+
+
+def redact_text(text: str, secrets: list[str]) -> str:
+    for secret in secrets:
+        text = text.replace(secret, "<redacted>")
+    return text
+
+
 def required_permissions(upstream_args: list[str], execute: bool) -> list[str]:
     perms = list(EXECUTE_PERMISSIONS if execute else WRITE_PERMISSIONS)
     joined = " ".join(upstream_args)
@@ -130,8 +156,9 @@ def run_like(command: str, argv: list[str]) -> int:
     if shutil.which(ns.agentos_sweagent_bin) is None and not Path(ns.agentos_sweagent_bin).exists():
         return blocked(bundle_dir, run_spec=run_spec, reason=f"sweagent executable not found: {ns.agentos_sweagent_bin}", permissions=permissions)
     proc = subprocess.run(upstream_command, cwd=Path.cwd(), capture_output=True, text=True, check=False)
-    (bundle_dir / "stdout.log").write_text(proc.stdout, encoding="utf-8")
-    (bundle_dir / "stderr.log").write_text(proc.stderr, encoding="utf-8")
+    secrets = sensitive_argv_values(upstream_args)
+    (bundle_dir / "stdout.log").write_text(redact_text(proc.stdout, secrets), encoding="utf-8")
+    (bundle_dir / "stderr.log").write_text(redact_text(proc.stderr, secrets), encoding="utf-8")
     result = collect_bundle(source_output_dir=upstream_output, bundle_dir=bundle_dir, run_spec=run_spec, returncode=proc.returncode)
     payload = {"status": result["status"], "returncode": proc.returncode, "artifact_dir": bundle_dir.as_posix(), "exit_code": 0 if proc.returncode == 0 else 1}
     return emit(payload)
