@@ -8,6 +8,11 @@ is the adapter substrate that makes those workflows discoverable,
 permissioned, auditable, provenance-tracked, handoff-capable, and composable
 with Ouroboros Seed / Ledger / State / Provenance / Handoff primitives.
 
+This plugin follows the #27 capability-assimilation contract: it is a curated
+reference adapter that proves an external skill pack can become Ouroboros-native
+without turning this repository into a marketplace, adding domain-specific
+branches to core, or exposing a generic unbounded subprocess wrapper.
+
 ## Commands
 
 Lifecycle aliases preserve the upstream command muscle memory:
@@ -78,7 +83,8 @@ Optional permissions are never implied:
 The adapter does not deploy, push, merge, delete resources, or mutate external
 systems by default. Guarded edit and browser workflows produce handoffs unless
 the caller has already granted the necessary authority through the plugin trust
-layer.
+layer. Capabilities describe Ouroboros substrate access; permissions describe
+external authority. Keeping those separate is required by the #27 contract.
 
 ## Why this is not a prompt-pack wrapper
 
