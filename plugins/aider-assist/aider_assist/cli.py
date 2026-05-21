@@ -7,9 +7,10 @@ from pathlib import Path
 from . import __version__
 from .artifacts import root as artifact_root
 from .artifacts import run_id, write_handoff, write_json, write_text
+from .config import safe_model_metadata
 from .git_state import diff, snapshot, touched_files
 from .policy import PolicyError, normalize_paths
-from .runner import ask_args, edit_args, run_aider, version
+from .runner import architect_args, ask_args, edit_args, run_aider, version
 from .verification import all_passed, failure_context, run_verifications, serialize
 
 
@@ -41,8 +42,11 @@ def build_parser() -> argparse.ArgumentParser:
     fix.add_argument("--lint-cmd")
     fix.add_argument("--timeout", type=int, default=7200)
 
-    architect = sub.add_parser("architect", help="architect is declared in the manifest and implemented by the final stacked PR.")
-    architect.set_defaults(not_implemented="architect")
+    architect = sub.add_parser("architect", help="Ask Aider for a read-only architecture plan.")
+    architect.add_argument("--message", required=True)
+    architect.add_argument("--file", action="append", default=[], help="Context file; treated as read-only in architect mode.")
+    architect.add_argument("--read", action="append", default=[], help="Additional read-only context file.")
+    architect.add_argument("--timeout", type=int, default=3600)
     return parser
 
 
@@ -72,6 +76,7 @@ def ask(ns: argparse.Namespace) -> int:
         "selected_context": read_only,
         "repo_state_before": before,
         "aider_version": aider_version,
+        "model_metadata": safe_model_metadata(),
         "result": {"status": status, "exit_code": result.returncode},
     })
     write_text(out / "stdout.txt", result.stdout)
@@ -146,7 +151,11 @@ def write_mode(ns: argparse.Namespace, command_name: str) -> int:
         "repo_state_before": before,
         "repo_state_after": after,
         "aider_version": aider_version,
+<<<<<<< HEAD
         "unauthorized_touched_files": unauthorized_touched,
+=======
+        "model_metadata": safe_model_metadata(),
+>>>>>>> 06a2d41 (Preserve Aider planning with redacted handoffs)
         "verification_before": serialize(pre_verification),
         "verification_after": serialize(post_verification),
         "result": {"status": status, "exit_code": result.returncode},
@@ -168,6 +177,44 @@ def write_mode(ns: argparse.Namespace, command_name: str) -> int:
     return 0 if status == "completed" else (result.returncode or 1)
 
 
+def architect(ns: argparse.Namespace) -> int:
+    repo_root = Path(ns.repo).resolve()
+    try:
+        read_only = normalize_paths([*ns.file, *ns.read], repo_root)
+    except PolicyError as exc:
+        print(f"blocked: {exc}", file=sys.stderr)
+        return 2
+
+    rid = run_id("architect")
+    out = artifact_root(repo_root, rid)
+    out.mkdir(parents=True, exist_ok=True)
+    argv = architect_args(ns.message, read_only)
+    before = snapshot(repo_root)
+    aider_version = version(repo_root)
+    result = run_aider(argv, repo_root, timeout=ns.timeout)
+    status = "completed" if result.returncode == 0 else "failed"
+
+    write_json(out / "invocation.json", {
+        "schema_version": "0.1",
+        "plugin": {"name": "aider-assist", "version": __version__},
+        "command": "architect",
+        "argv": argv,
+        "message": ns.message,
+        "selected_context": read_only,
+        "repo_state_before": before,
+        "aider_version": aider_version,
+        "model_metadata": safe_model_metadata(),
+        "result": {"status": status, "exit_code": result.returncode},
+    })
+    write_text(out / "stdout.txt", result.stdout)
+    write_text(out / "stderr.txt", result.stderr)
+    write_text(out / "plan.md", result.stdout)
+    summary = result.stdout.strip() or result.stderr.strip() or f"Aider exited with code {result.returncode}."
+    write_handoff(out / "handoff.md", command="architect", message=ns.message, selected_context=read_only, status=status, aider_version=aider_version, summary=summary)
+    print(str(out))
+    return result.returncode
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     ns = parser.parse_args(argv)
@@ -180,6 +227,8 @@ def main(argv: list[str] | None = None) -> int:
         return write_mode(ns, "edit")
     if ns.command == "fix":
         return write_mode(ns, "fix")
+    if ns.command == "architect":
+        return architect(ns)
     parser.error("unknown command")
     return 2
 

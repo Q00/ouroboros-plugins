@@ -60,3 +60,10 @@ def edit_args(message: str, editable_paths: list[str], read_only_paths: list[str
         args.extend(["--read", path])
     args.extend(editable_paths)
     return args
+
+
+def architect_args(message: str, read_only_paths: list[str]) -> list[str]:
+    args = [aider_bin(), "--chat-mode", "architect", "--message", message]
+    for path in read_only_paths:
+        args.extend(["--read", path])
+    return args
