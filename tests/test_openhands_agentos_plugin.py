@@ -183,6 +183,54 @@ class OpenHandsAgentOSPluginTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 2)
         self.assertIn("--task-file must stay inside", proc.stderr)
 
+    def test_handoff_and_summarize_generate_reviewable_artifacts(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            events = root / "events.jsonl"
+            metadata = root / "metadata.json"
+            handoff = root / "handoff.md"
+            events.write_text(
+                '\n'.join([
+                    json.dumps({"type": "command", "command": "pytest"}),
+                    json.dumps({"type": "file", "path": "src/app.py"}),
+                    json.dumps({"type": "final_answer", "final_answer": "done"}),
+                ]) + '\n',
+                encoding="utf-8",
+            )
+            metadata.write_text(json.dumps({"run_id": "r1", "status": "completed", "exit_code": 0, "task": {"kind": "inline", "value": "Do work"}, "artifacts": {"metadata": "metadata.json", "audit": "audit.jsonl", "stderr": "stderr.log"}}), encoding="utf-8")
+
+            sproc = self._run("summarize", "--run", str(events))
+            hproc = self._run("handoff", "--run", str(events), "--metadata", str(metadata), "--out", str(handoff))
+            self.assertEqual(sproc.returncode, 0, sproc.stderr)
+            summary = json.loads(sproc.stdout)
+            self.assertEqual(summary["event_count"], 3)
+            self.assertIn("pytest", summary["commands_executed"])
+            self.assertEqual(hproc.returncode, 0, hproc.stderr)
+            self.assertIn("OpenHands AgentOS Handoff", handoff.read_text(encoding="utf-8"))
+            self.assertTrue(handoff.with_suffix(".json").is_file())
+
+    def test_agentos_runs_and_writes_handoff(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake = self._fake_openhands(root)
+            proc = self._run(
+                "--openhands-bin",
+                str(fake),
+                "agentos",
+                "--workspace",
+                str(root),
+                "--goal",
+                "Do work",
+                "--out-dir",
+                ".omx/artifacts/openhands/agentos-test",
+                "--trusted-shell-execute",
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            handoff = Path(payload["handoff_path"])
+            self.assertTrue(handoff.is_file())
+            self.assertIn("OpenHands AgentOS Handoff", handoff.read_text(encoding="utf-8"))
+
     def test_manifest_validates_against_schema(self):
         manifest = json.loads((PLUGIN_PATH / "ouroboros.plugin.json").read_text(encoding="utf-8"))
         schema = json.loads((REPO / "schemas" / "0.1" / "plugin.schema.json").read_text(encoding="utf-8"))
