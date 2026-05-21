@@ -42,6 +42,12 @@
       "version": "4.3.0",
       "path": "../plugins/superclaude",
       "description": "Ouroboros-native adapter for SuperClaude Framework commands, skills, agents, modes, and MCP guidance."
+    },
+    {
+      "name": "vercel-agent-skills",
+      "version": "0.1.0",
+      "path": "../plugins/vercel-agent-skills",
+      "description": "AgentOS/Ouroboros adapter for Vercel Agent Skills."
     }
   ]
 }
