@@ -38,6 +38,12 @@
       "description": "Assimilate Guardrails AI validation into Ouroboros audit and handoff artifacts."
     },
     {
+      "name": "gsd-agentos",
+      "version": "0.1.0",
+      "path": "../plugins/gsd-agentos",
+      "description": "Reference AgentOS adapter for the gsd-build/get-shit-done command surface."
+    },
+    {
       "name": "openhands-agentos",
       "version": "0.1.0",
       "path": "../plugins/openhands-agentos",
