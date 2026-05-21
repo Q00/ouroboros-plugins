@@ -140,6 +140,96 @@
           "only named configuration keys"
         ]
       }
+    },
+    {
+      "namespace": "target",
+      "name": "plan",
+      "summary": "Generate a bounded assimilation plan for the target repository.",
+      "usage": "ooo target plan --target-root <path> --target-repository owner/name",
+      "risk": "write",
+      "requires_confirmation": false,
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "upstream": {
+        "capability": "assimilation-planning",
+        "mode": "pinned_checkout"
+      },
+      "artifacts": {
+        "writes": [
+          "result.json",
+          "report.md",
+          "stdout.txt",
+          "stderr.txt",
+          "provenance.json",
+          "handoff.json",
+          "assimilation-plan.md"
+        ],
+        "bounded": true
+      },
+      "handoff": {
+        "produces": true,
+        "consumer": "ooo auto",
+        "description": "Continue from generated assimilation plan."
+      },
+      "timeout_seconds": 60,
+      "result_states": [
+        "completed",
+        "blocked",
+        "failed"
+      ],
+      "redaction": {
+        "rules": [
+          "no secrets",
+          "bounded file inventory only"
+        ]
+      }
+    },
+    {
+      "namespace": "target",
+      "name": "publish",
+      "summary": "Reference destructive gate for remote mutation commands; blocks unless trust and confirmation are explicit.",
+      "usage": "ooo target publish --target-root <path> --confirm-destructive --trusted-scope target:publish:write",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "permissions": [
+        "filesystem:write",
+        "network:write",
+        "target:publish:write"
+      ],
+      "upstream": {
+        "capability": "remote-publication",
+        "mode": "managed_install_deferred"
+      },
+      "artifacts": {
+        "writes": [
+          "result.json",
+          "report.md",
+          "stdout.txt",
+          "stderr.txt",
+          "provenance.json",
+          "handoff.json"
+        ],
+        "bounded": true
+      },
+      "handoff": {
+        "produces": true,
+        "consumer": "ooo auto",
+        "description": "Explain destructive gate result."
+      },
+      "timeout_seconds": 30,
+      "result_states": [
+        "blocked",
+        "failed",
+        "cancelled"
+      ],
+      "redaction": {
+        "rules": [
+          "never store credentials",
+          "no remote mutation in reference package"
+        ]
+      }
     }
   ],
   "capabilities": [
@@ -181,6 +271,18 @@
       "risk": "write",
       "required": false,
       "reason": "Write bounded plans, reports, artifacts, and handoffs under .ouroboros."
+    },
+    {
+      "scope": "network:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Reserved for future remote mutation tranches; blocked in this reference package."
+    },
+    {
+      "scope": "target:publish:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Reference exact-scope destructive trust gate for target publication."
     }
   ],
   "entrypoint": {
