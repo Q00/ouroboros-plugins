@@ -1,0 +1,3214 @@
+{
+  "schema_version": "agent-skills.catalog.v1",
+  "generated_from_issue": "https://github.com/Q00/ouroboros-plugins/issues/33",
+  "source_repository": "https://github.com/anthropics/skills",
+  "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+  "skills": [
+    {
+      "source_skill": "algorithmic-art",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "algorithmic art",
+        "generative art",
+        "flow field poster"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "p5.js runtime or browser artifact renderer"
+      ],
+      "commands": [
+        {
+          "name": "create",
+          "surface": "ooo skill algorithmic-art create",
+          "summary": "create via the assimilated algorithmic-art Agent Skill contract.",
+          "usage": "ooo skill algorithmic-art create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke algorithmic-art create --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "brand-guidelines",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "brand guidelines",
+        "apply brand",
+        "brand styling"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [],
+      "commands": [
+        {
+          "name": "apply",
+          "surface": "ooo skill brand-guidelines apply",
+          "summary": "apply via the assimilated brand-guidelines Agent Skill contract.",
+          "usage": "ooo skill brand-guidelines apply [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke brand-guidelines apply --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "canvas-design",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "canvas design",
+        "poster",
+        "visual design"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "image/pdf artifact renderer"
+      ],
+      "commands": [
+        {
+          "name": "create",
+          "surface": "ooo skill canvas-design create",
+          "summary": "create via the assimilated canvas-design Agent Skill contract.",
+          "usage": "ooo skill canvas-design create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke canvas-design create --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "claude-api",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "claude api",
+        "anthropic sdk",
+        "prompt caching"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "network:read for docs when requested"
+      ],
+      "commands": [
+        {
+          "name": "advise",
+          "surface": "ooo skill claude-api advise",
+          "summary": "advise via the assimilated claude-api Agent Skill contract.",
+          "usage": "ooo skill claude-api advise [args...]",
+          "risk": "read_only",
+          "requires_confirmation": false,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "network:read",
+              "risk": "read_only",
+              "required": false,
+              "reason": "Fetch official API documentation when requested."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "migrate",
+          "surface": "ooo skill claude-api migrate",
+          "summary": "migrate via the assimilated claude-api Agent Skill contract.",
+          "usage": "ooo skill claude-api migrate [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "network:read",
+              "risk": "read_only",
+              "required": false,
+              "reason": "Fetch official API documentation when requested."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "optimize",
+          "surface": "ooo skill claude-api optimize",
+          "summary": "optimize via the assimilated claude-api Agent Skill contract.",
+          "usage": "ooo skill claude-api optimize [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "network:read",
+              "risk": "read_only",
+              "required": false,
+              "reason": "Fetch official API documentation when requested."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke claude-api advise --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "doc-coauthoring",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "coauthor documentation",
+        "write docs",
+        "proposal drafting"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [],
+      "commands": [
+        {
+          "name": "start",
+          "surface": "ooo skill doc-coauthoring start",
+          "summary": "start via the assimilated doc-coauthoring Agent Skill contract.",
+          "usage": "ooo skill doc-coauthoring start [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke doc-coauthoring start --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "docx",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "source-available",
+      "assimilation_mode": "adapter-only",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "word doc",
+        "docx",
+        "microsoft word"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "python document tooling"
+      ],
+      "commands": [
+        {
+          "name": "read",
+          "surface": "ooo skill docx read",
+          "summary": "read via the assimilated docx Agent Skill contract.",
+          "usage": "ooo skill docx read [args...]",
+          "risk": "read_only",
+          "requires_confirmation": false,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "create",
+          "surface": "ooo skill docx create",
+          "summary": "create via the assimilated docx Agent Skill contract.",
+          "usage": "ooo skill docx create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "edit",
+          "surface": "ooo skill docx edit",
+          "summary": "edit via the assimilated docx Agent Skill contract.",
+          "usage": "ooo skill docx edit [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke docx read --dry-run",
+      "known_limitations": [
+        "Restricted/source-available upstream materials are not vendored; operate adapter-only with user-provided source."
+      ]
+    },
+    {
+      "source_skill": "frontend-design",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "frontend design",
+        "ui design",
+        "landing page"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "html/css artifact renderer"
+      ],
+      "commands": [
+        {
+          "name": "create",
+          "surface": "ooo skill frontend-design create",
+          "summary": "create via the assimilated frontend-design Agent Skill contract.",
+          "usage": "ooo skill frontend-design create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke frontend-design create --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "internal-comms",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "internal comms",
+        "memo",
+        "announcement"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [],
+      "commands": [
+        {
+          "name": "draft",
+          "surface": "ooo skill internal-comms draft",
+          "summary": "draft via the assimilated internal-comms Agent Skill contract.",
+          "usage": "ooo skill internal-comms draft [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke internal-comms draft --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "mcp-builder",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": true,
+      "trigger_aliases": [
+        "mcp builder",
+        "mcp server",
+        "model context protocol"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "target language toolchain when scaffolding"
+      ],
+      "commands": [
+        {
+          "name": "plan",
+          "surface": "ooo skill mcp-builder plan",
+          "summary": "plan via the assimilated mcp-builder Agent Skill contract.",
+          "usage": "ooo skill mcp-builder plan [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "scaffold",
+          "surface": "ooo skill mcp-builder scaffold",
+          "summary": "scaffold via the assimilated mcp-builder Agent Skill contract.",
+          "usage": "ooo skill mcp-builder scaffold [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "evaluate",
+          "surface": "ooo skill mcp-builder evaluate",
+          "summary": "evaluate via the assimilated mcp-builder Agent Skill contract.",
+          "usage": "ooo skill mcp-builder evaluate [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke mcp-builder plan --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "pdf",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "source-available",
+      "assimilation_mode": "adapter-only",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "pdf",
+        "extract pdf",
+        "fill form",
+        "ocr pdf"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "python pdf tooling",
+        "ocr engine for ocr"
+      ],
+      "commands": [
+        {
+          "name": "read",
+          "surface": "ooo skill pdf read",
+          "summary": "read via the assimilated pdf Agent Skill contract.",
+          "usage": "ooo skill pdf read [args...]",
+          "risk": "read_only",
+          "requires_confirmation": false,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "extract",
+          "surface": "ooo skill pdf extract",
+          "summary": "extract via the assimilated pdf Agent Skill contract.",
+          "usage": "ooo skill pdf extract [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "merge",
+          "surface": "ooo skill pdf merge",
+          "summary": "merge via the assimilated pdf Agent Skill contract.",
+          "usage": "ooo skill pdf merge [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "split",
+          "surface": "ooo skill pdf split",
+          "summary": "split via the assimilated pdf Agent Skill contract.",
+          "usage": "ooo skill pdf split [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "fill",
+          "surface": "ooo skill pdf fill",
+          "summary": "fill via the assimilated pdf Agent Skill contract.",
+          "usage": "ooo skill pdf fill [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "ocr",
+          "surface": "ooo skill pdf ocr",
+          "summary": "ocr via the assimilated pdf Agent Skill contract.",
+          "usage": "ooo skill pdf ocr [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke pdf read --dry-run",
+      "known_limitations": [
+        "Restricted/source-available upstream materials are not vendored; operate adapter-only with user-provided source."
+      ]
+    },
+    {
+      "source_skill": "pptx",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "source-available",
+      "assimilation_mode": "adapter-only",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "powerpoint",
+        "pptx",
+        "slide deck"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "python presentation tooling"
+      ],
+      "commands": [
+        {
+          "name": "read",
+          "surface": "ooo skill pptx read",
+          "summary": "read via the assimilated pptx Agent Skill contract.",
+          "usage": "ooo skill pptx read [args...]",
+          "risk": "read_only",
+          "requires_confirmation": false,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "create",
+          "surface": "ooo skill pptx create",
+          "summary": "create via the assimilated pptx Agent Skill contract.",
+          "usage": "ooo skill pptx create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "edit",
+          "surface": "ooo skill pptx edit",
+          "summary": "edit via the assimilated pptx Agent Skill contract.",
+          "usage": "ooo skill pptx edit [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke pptx read --dry-run",
+      "known_limitations": [
+        "Restricted/source-available upstream materials are not vendored; operate adapter-only with user-provided source."
+      ]
+    },
+    {
+      "source_skill": "skill-creator",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": true,
+      "trigger_aliases": [
+        "create skill",
+        "skill creator",
+        "convert agent skill"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "skill packaging tools"
+      ],
+      "commands": [
+        {
+          "name": "create",
+          "surface": "ooo skill skill-creator create",
+          "summary": "create via the assimilated skill-creator Agent Skill contract.",
+          "usage": "ooo skill skill-creator create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "evaluate",
+          "surface": "ooo skill skill-creator evaluate",
+          "summary": "evaluate via the assimilated skill-creator Agent Skill contract.",
+          "usage": "ooo skill skill-creator evaluate [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "convert",
+          "surface": "ooo skill skill-creator convert",
+          "summary": "convert via the assimilated skill-creator Agent Skill contract.",
+          "usage": "ooo skill skill-creator convert [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke skill-creator create --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "slack-gif-creator",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "slack gif",
+        "animated gif",
+        "ship it gif"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "gif renderer/validator"
+      ],
+      "commands": [
+        {
+          "name": "create",
+          "surface": "ooo skill slack-gif-creator create",
+          "summary": "create via the assimilated slack-gif-creator Agent Skill contract.",
+          "usage": "ooo skill slack-gif-creator create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "validate",
+          "surface": "ooo skill slack-gif-creator validate",
+          "summary": "validate via the assimilated slack-gif-creator Agent Skill contract.",
+          "usage": "ooo skill slack-gif-creator validate [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke slack-gif-creator create --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "theme-factory",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "theme factory",
+        "apply theme",
+        "create theme"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [],
+      "commands": [
+        {
+          "name": "apply",
+          "surface": "ooo skill theme-factory apply",
+          "summary": "apply via the assimilated theme-factory Agent Skill contract.",
+          "usage": "ooo skill theme-factory apply [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "create",
+          "surface": "ooo skill theme-factory create",
+          "summary": "create via the assimilated theme-factory Agent Skill contract.",
+          "usage": "ooo skill theme-factory create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke theme-factory apply --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "web-artifacts-builder",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "web artifact",
+        "react artifact",
+        "html artifact"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "node package manager when building"
+      ],
+      "commands": [
+        {
+          "name": "init",
+          "surface": "ooo skill web-artifacts-builder init",
+          "summary": "init via the assimilated web-artifacts-builder Agent Skill contract.",
+          "usage": "ooo skill web-artifacts-builder init [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "build",
+          "surface": "ooo skill web-artifacts-builder build",
+          "summary": "build via the assimilated web-artifacts-builder Agent Skill contract.",
+          "usage": "ooo skill web-artifacts-builder build [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "bundle",
+          "surface": "ooo skill web-artifacts-builder bundle",
+          "summary": "bundle via the assimilated web-artifacts-builder Agent Skill contract.",
+          "usage": "ooo skill web-artifacts-builder bundle [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke web-artifacts-builder init --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "webapp-testing",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "apache-2.0",
+      "assimilation_mode": "reference-adapter",
+      "reference_conversion": true,
+      "trigger_aliases": [
+        "test web app",
+        "playwright",
+        "screenshot web app"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "Playwright",
+        "local web server lifecycle"
+      ],
+      "commands": [
+        {
+          "name": "test",
+          "surface": "ooo skill webapp-testing test",
+          "summary": "test via the assimilated webapp-testing Agent Skill contract.",
+          "usage": "ooo skill webapp-testing test [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "inspect",
+          "surface": "ooo skill webapp-testing inspect",
+          "summary": "inspect via the assimilated webapp-testing Agent Skill contract.",
+          "usage": "ooo skill webapp-testing inspect [args...]",
+          "risk": "read_only",
+          "requires_confirmation": false,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        },
+        {
+          "name": "screenshot",
+          "surface": "ooo skill webapp-testing screenshot",
+          "summary": "screenshot via the assimilated webapp-testing Agent Skill contract.",
+          "usage": "ooo skill webapp-testing screenshot [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": null
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke webapp-testing test --dry-run",
+      "known_limitations": [
+        "MVP records bounded handoff/provenance; full script execution requires explicit trust adapter."
+      ]
+    },
+    {
+      "source_skill": "xlsx",
+      "source_repository": "https://github.com/anthropics/skills",
+      "source_revision": "690f15cac7f7b4c055c5ab109c79ed9259934081",
+      "license_classification": "source-available",
+      "assimilation_mode": "adapter-only",
+      "reference_conversion": false,
+      "trigger_aliases": [
+        "excel",
+        "xlsx",
+        "spreadsheet",
+        "clean csv"
+      ],
+      "required_bundled_files": [
+        "SKILL.md"
+      ],
+      "runtime_dependencies": [
+        "python spreadsheet tooling"
+      ],
+      "commands": [
+        {
+          "name": "read",
+          "surface": "ooo skill xlsx read",
+          "summary": "read via the assimilated xlsx Agent Skill contract.",
+          "usage": "ooo skill xlsx read [args...]",
+          "risk": "read_only",
+          "requires_confirmation": false,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "create",
+          "surface": "ooo skill xlsx create",
+          "summary": "create via the assimilated xlsx Agent Skill contract.",
+          "usage": "ooo skill xlsx create [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "edit",
+          "surface": "ooo skill xlsx edit",
+          "summary": "edit via the assimilated xlsx Agent Skill contract.",
+          "usage": "ooo skill xlsx edit [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        },
+        {
+          "name": "clean",
+          "surface": "ooo skill xlsx clean",
+          "summary": "clean via the assimilated xlsx Agent Skill contract.",
+          "usage": "ooo skill xlsx clean [args...]",
+          "risk": "write",
+          "requires_confirmation": true,
+          "arguments": [
+            {
+              "name": "args",
+              "type": "string",
+              "required": false,
+              "description": "Command-specific bounded arguments captured in handoff provenance."
+            }
+          ],
+          "capabilities": [
+            {
+              "name": "ledger",
+              "access": "write"
+            },
+            {
+              "name": "provenance",
+              "access": "write"
+            },
+            {
+              "name": "state",
+              "access": "write"
+            },
+            {
+              "name": "handoff",
+              "access": "attach"
+            },
+            {
+              "name": "runtime",
+              "access": "execute"
+            },
+            {
+              "name": "progress",
+              "access": "write"
+            }
+          ],
+          "permissions": [
+            {
+              "scope": "filesystem:read",
+              "risk": "read_only",
+              "required": true,
+              "reason": "Read local Agent Skill metadata and user-provided inputs."
+            },
+            {
+              "scope": "filesystem:write",
+              "risk": "write",
+              "required": true,
+              "reason": "Write generated artifacts, provenance, state, and handoff output."
+            },
+            {
+              "scope": "shell:execute",
+              "risk": "write",
+              "required": false,
+              "reason": "Only bounded adapters may execute upstream helper scripts after trust checks."
+            }
+          ],
+          "audit_events": [
+            "plugin.invoked",
+            "plugin.permission_used",
+            "plugin.completed",
+            "plugin.failed"
+          ],
+          "resumability": "Handoff records status, inputs, outputs, evidence, permissions used, and next actions.",
+          "blocked_reason": "restricted-license-adapter-only"
+        }
+      ],
+      "handoff_schema": "agent-skills.handoff.v1",
+      "verification_command": "PYTHONPATH=plugins/agent-skills python3 -m agent_skills invoke xlsx read --dry-run",
+      "known_limitations": [
+        "Restricted/source-available upstream materials are not vendored; operate adapter-only with user-provided source."
+      ]
+    }
+  ]
+}
