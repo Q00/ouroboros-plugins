@@ -41,7 +41,7 @@ harness can continue without embedding unbounded target-repository content.
 
 ## Trust boundary
 
-- Read-only commands inspect target metadata and write bounded artifacts only.
+- Inspection commands only read target metadata, but they are declared `write` risk because this reference package writes bounded local artifacts and handoffs.
 - `plan` writes a generated `assimilation-plan.md` artifact inside the run
   directory.
 - `publish` is a destructive reference command. It always returns `blocked` in

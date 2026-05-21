@@ -32,7 +32,7 @@ class TargetCapabilitiesPluginTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stderr)
             payload = json.loads(proc.stdout)
             self.assertEqual(payload["status"], "completed")
-            self.assertEqual(payload["risk"], "read_only")
+            self.assertEqual(payload["risk"], "write")
             self.assertIn("inspect", {cmd["name"] for cmd in payload["commands"]})
             result_path = cwd / payload["artifacts"]["result.json"]
             handoff_path = cwd / payload["handoff"]

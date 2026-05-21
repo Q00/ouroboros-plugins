@@ -12,9 +12,9 @@
     {
       "namespace": "target",
       "name": "list-commands",
-      "summary": "List the bounded command adapters exposed by the target capabilities reference package.",
+      "summary": "Emit a bounded artifact listing the command adapters exposed by the target capabilities reference package.",
       "usage": "ooo target list-commands [--target-root <path>]",
-      "risk": "read_only",
+      "risk": "write",
       "requires_confirmation": false,
       "permissions": [
         "filesystem:read",
@@ -58,7 +58,7 @@
       "name": "inspect",
       "summary": "Inspect a configured external target repository and produce assimilation readiness evidence.",
       "usage": "ooo target inspect --target-root <path> [--target-repository owner/name]",
-      "risk": "read_only",
+      "risk": "write",
       "requires_confirmation": false,
       "permissions": [
         "filesystem:read",
@@ -102,7 +102,7 @@
       "name": "doctor",
       "summary": "Check whether the target dependency is configured and trust gates are explicit.",
       "usage": "ooo target doctor [--target-root <path>]",
-      "risk": "read_only",
+      "risk": "write",
       "requires_confirmation": false,
       "permissions": [
         "filesystem:read",
