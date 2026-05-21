@@ -1,0 +1,859 @@
+{
+  "schema_version": "0.1",
+  "name": "anthropic-agent-skills",
+  "version": "0.1.0",
+  "description": "Assimilate anthropics/skills into AgentOS/Ouroboros command, provenance, audit, and handoff contracts.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/anthropic-agent-skills",
+    "repository": "https://github.com/anthropics/skills"
+  },
+  "commands": [
+    {
+      "namespace": "anthropic-skills",
+      "name": "inspect",
+      "summary": "Inspect a local Agent Skill directory and emit structured metadata.",
+      "usage": "ooo anthropic-skills inspect <skill-dir>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "skill_dir",
+          "type": "path",
+          "required": true,
+          "description": "Agent Skill directory containing SKILL.md."
+        }
+      ]
+    },
+    {
+      "namespace": "anthropic-skills",
+      "name": "catalog",
+      "summary": "Catalog a repository of Agent Skill directories.",
+      "usage": "ooo anthropic-skills catalog <repo-or-path>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repo_or_path",
+          "type": "path",
+          "required": true,
+          "description": "Repository/path containing skills/*/SKILL.md or skill directories."
+        }
+      ]
+    },
+    {
+      "namespace": "anthropic-skills",
+      "name": "validate",
+      "summary": "Validate a skill or assimilated plugin contract, including license policy warnings.",
+      "usage": "ooo anthropic-skills validate <skill-dir-or-plugin-dir>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "path",
+          "type": "path",
+          "required": true,
+          "description": "Skill or plugin directory to validate."
+        }
+      ]
+    },
+    {
+      "namespace": "anthropic-skills",
+      "name": "resolve",
+      "summary": "Resolve natural-language skill intent to command candidates without bypassing the firewall.",
+      "usage": "ooo anthropic-skills resolve <request>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "string",
+          "required": true,
+          "description": "Natural-language request to resolve."
+        }
+      ]
+    },
+    {
+      "namespace": "anthropic-skills",
+      "name": "prepare-handoff",
+      "summary": "Generate an AgentOS handoff artifact for a skill command outcome.",
+      "usage": "ooo anthropic-skills prepare-handoff <skill> <command> --status <status>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "skill",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "command",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "namespace": "anthropic-skills",
+      "name": "invoke",
+      "summary": "Invoke a skill command through bounded progressive-disclosure adapter semantics.",
+      "usage": "ooo anthropic-skills invoke <skill> <command> [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "skill",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "command",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "args",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "algorithmic-art-create",
+      "summary": "create via the assimilated algorithmic-art Agent Skill contract.",
+      "usage": "ooo skill algorithmic-art create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "brand-guidelines-apply",
+      "summary": "apply via the assimilated brand-guidelines Agent Skill contract.",
+      "usage": "ooo skill brand-guidelines apply [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "canvas-design-create",
+      "summary": "create via the assimilated canvas-design Agent Skill contract.",
+      "usage": "ooo skill canvas-design create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "claude-api-advise",
+      "summary": "advise via the assimilated claude-api Agent Skill contract.",
+      "usage": "ooo skill claude-api advise [args...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "claude-api-migrate",
+      "summary": "migrate via the assimilated claude-api Agent Skill contract.",
+      "usage": "ooo skill claude-api migrate [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "claude-api-optimize",
+      "summary": "optimize via the assimilated claude-api Agent Skill contract.",
+      "usage": "ooo skill claude-api optimize [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "doc-coauthoring-start",
+      "summary": "start via the assimilated doc-coauthoring Agent Skill contract.",
+      "usage": "ooo skill doc-coauthoring start [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "docx-read",
+      "summary": "read via the assimilated docx Agent Skill contract.",
+      "usage": "ooo skill docx read [args...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "docx-create",
+      "summary": "create via the assimilated docx Agent Skill contract.",
+      "usage": "ooo skill docx create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "docx-edit",
+      "summary": "edit via the assimilated docx Agent Skill contract.",
+      "usage": "ooo skill docx edit [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "frontend-design-create",
+      "summary": "create via the assimilated frontend-design Agent Skill contract.",
+      "usage": "ooo skill frontend-design create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "internal-comms-draft",
+      "summary": "draft via the assimilated internal-comms Agent Skill contract.",
+      "usage": "ooo skill internal-comms draft [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "mcp-builder-plan",
+      "summary": "plan via the assimilated mcp-builder Agent Skill contract.",
+      "usage": "ooo skill mcp-builder plan [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "mcp-builder-scaffold",
+      "summary": "scaffold via the assimilated mcp-builder Agent Skill contract.",
+      "usage": "ooo skill mcp-builder scaffold [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "mcp-builder-evaluate",
+      "summary": "evaluate via the assimilated mcp-builder Agent Skill contract.",
+      "usage": "ooo skill mcp-builder evaluate [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pdf-read",
+      "summary": "read via the assimilated pdf Agent Skill contract.",
+      "usage": "ooo skill pdf read [args...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pdf-extract",
+      "summary": "extract via the assimilated pdf Agent Skill contract.",
+      "usage": "ooo skill pdf extract [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pdf-merge",
+      "summary": "merge via the assimilated pdf Agent Skill contract.",
+      "usage": "ooo skill pdf merge [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pdf-split",
+      "summary": "split via the assimilated pdf Agent Skill contract.",
+      "usage": "ooo skill pdf split [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pdf-fill",
+      "summary": "fill via the assimilated pdf Agent Skill contract.",
+      "usage": "ooo skill pdf fill [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pdf-ocr",
+      "summary": "ocr via the assimilated pdf Agent Skill contract.",
+      "usage": "ooo skill pdf ocr [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pptx-read",
+      "summary": "read via the assimilated pptx Agent Skill contract.",
+      "usage": "ooo skill pptx read [args...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pptx-create",
+      "summary": "create via the assimilated pptx Agent Skill contract.",
+      "usage": "ooo skill pptx create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "pptx-edit",
+      "summary": "edit via the assimilated pptx Agent Skill contract.",
+      "usage": "ooo skill pptx edit [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "skill-creator-create",
+      "summary": "create via the assimilated skill-creator Agent Skill contract.",
+      "usage": "ooo skill skill-creator create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "skill-creator-evaluate",
+      "summary": "evaluate via the assimilated skill-creator Agent Skill contract.",
+      "usage": "ooo skill skill-creator evaluate [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "skill-creator-convert",
+      "summary": "convert via the assimilated skill-creator Agent Skill contract.",
+      "usage": "ooo skill skill-creator convert [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "slack-gif-creator-create",
+      "summary": "create via the assimilated slack-gif-creator Agent Skill contract.",
+      "usage": "ooo skill slack-gif-creator create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "slack-gif-creator-validate",
+      "summary": "validate via the assimilated slack-gif-creator Agent Skill contract.",
+      "usage": "ooo skill slack-gif-creator validate [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "theme-factory-apply",
+      "summary": "apply via the assimilated theme-factory Agent Skill contract.",
+      "usage": "ooo skill theme-factory apply [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "theme-factory-create",
+      "summary": "create via the assimilated theme-factory Agent Skill contract.",
+      "usage": "ooo skill theme-factory create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "web-artifacts-builder-init",
+      "summary": "init via the assimilated web-artifacts-builder Agent Skill contract.",
+      "usage": "ooo skill web-artifacts-builder init [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "web-artifacts-builder-build",
+      "summary": "build via the assimilated web-artifacts-builder Agent Skill contract.",
+      "usage": "ooo skill web-artifacts-builder build [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "web-artifacts-builder-bundle",
+      "summary": "bundle via the assimilated web-artifacts-builder Agent Skill contract.",
+      "usage": "ooo skill web-artifacts-builder bundle [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "webapp-testing-test",
+      "summary": "test via the assimilated webapp-testing Agent Skill contract.",
+      "usage": "ooo skill webapp-testing test [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "webapp-testing-inspect",
+      "summary": "inspect via the assimilated webapp-testing Agent Skill contract.",
+      "usage": "ooo skill webapp-testing inspect [args...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "webapp-testing-screenshot",
+      "summary": "screenshot via the assimilated webapp-testing Agent Skill contract.",
+      "usage": "ooo skill webapp-testing screenshot [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "xlsx-read",
+      "summary": "read via the assimilated xlsx Agent Skill contract.",
+      "usage": "ooo skill xlsx read [args...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "xlsx-create",
+      "summary": "create via the assimilated xlsx Agent Skill contract.",
+      "usage": "ooo skill xlsx create [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "xlsx-edit",
+      "summary": "edit via the assimilated xlsx Agent Skill contract.",
+      "usage": "ooo skill xlsx edit [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    },
+    {
+      "namespace": "skill",
+      "name": "xlsx-clean",
+      "summary": "clean via the assimilated xlsx Agent Skill contract.",
+      "usage": "ooo skill xlsx clean [args...]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Command-specific bounded arguments captured in handoff provenance."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record skill command outcomes and validation decisions."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record upstream repository, revision, loaded files, scripts, and produced artifacts."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist resumable invocation state."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach handoff artifacts for downstream ooo auto / Workflow IR consumers."
+    },
+    {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Run bounded adapters for trusted command execution."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report long-running skill adapter progress."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read local Agent Skill directories and user-provided inputs."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write catalog, provenance, state, and handoff artifacts."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": false,
+      "reason": "Execute only bounded, trusted helper-script adapters."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Fetch official docs or upstream metadata when explicitly requested."
+    },
+    {
+      "scope": "network:write",
+      "risk": "write",
+      "required": false,
+      "reason": "Reserved for future adapters that call external APIs with explicit trust."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m agent_skills"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
