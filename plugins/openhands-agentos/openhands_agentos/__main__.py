@@ -296,6 +296,66 @@ def run_openhands(args: argparse.Namespace) -> CommandResult:
     return CommandResult(status, proc.returncode, done["result"]["message"], run_dir, events_path, metadata_path, stderr_path, audit_path)
 
 
+def load_jsonl(path: Path) -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    if not path.is_file():
+        raise ValueError(f"JSONL run file not found: {path}")
+    for line_no, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
+        if not line.strip():
+            continue
+        try:
+            obj = json.loads(line)
+        except json.JSONDecodeError:
+            events.append({"type": "parse_error", "line": line_no, "content": line})
+        else:
+            events.append(obj if isinstance(obj, dict) else {"type": "non_object", "line": line_no, "content": obj})
+    return events
+
+
+def event_text(event: dict[str, Any]) -> str:
+    for key in ("message", "content", "thought", "final_answer", "answer"):
+        value = event.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return json.dumps(event, sort_keys=True)[:500]
+
+
+def summarize_events(events: list[dict[str, Any]]) -> dict[str, Any]:
+    counts: dict[str, int] = {}
+    commands: list[str] = []
+    files: set[str] = set()
+    errors: list[str] = []
+    final_answer = ""
+    for event in events:
+        typ = str(event.get("type") or event.get("event") or event.get("kind") or "unknown")
+        counts[typ] = counts.get(typ, 0) + 1
+        command = event.get("command") or event.get("cmd")
+        if isinstance(command, str):
+            commands.append(command)
+        path = event.get("path") or event.get("file") or event.get("filepath")
+        if isinstance(path, str):
+            files.add(path)
+        if typ in {"error", "failed", "failure", "parse_error"} or event.get("error"):
+            errors.append(event_text(event))
+        if typ in {"final", "final_answer", "message"} or event.get("final_answer"):
+            final_answer = event_text(event)
+    return {"event_count": len(events), "event_type_counts": counts, "commands_executed": commands, "files_referenced": sorted(files), "errors": errors, "final_answer": final_answer}
+
+
+def build_handoff_markdown(events_path: Path, metadata: dict[str, Any], summary: dict[str, Any]) -> str:
+    command = " ".join(shlex.quote(p) for p in metadata.get("openhands", {}).get("command", []))
+    lines = ["# OpenHands AgentOS Handoff", "", f"generated_at: {utc_now()}", f"plugin: {PLUGIN_NAME} {PLUGIN_VERSION}", f"run_id: {metadata.get('run_id', 'unknown')}", f"status: {metadata.get('status', 'unknown')}", f"exit_code: {metadata.get('exit_code', 'unknown')}", "", "## Task", "", f"- kind: {metadata.get('task', {}).get('kind', 'unknown')}", f"- value: {metadata.get('task', {}).get('value', '')}", "", "## Execution Boundary", "", f"- workspace: {metadata.get('workspace', '')}", f"- config_mode: {metadata.get('config_mode', '')}", f"- sandbox: {metadata.get('sandbox', '')}", f"- command: `{command}`", "", "## Event Summary", "", f"- events: {summary['event_count']}", f"- event types: `{json.dumps(summary['event_type_counts'], sort_keys=True)}`", f"- files referenced: {', '.join(summary['files_referenced']) or 'none detected'}", f"- commands executed: {len(summary['commands_executed'])}", "", "## Commands Executed", ""]
+    lines.extend((f"- `{cmd}`" for cmd in summary["commands_executed"]) if summary["commands_executed"] else ["- none detected in captured events"])
+    lines.extend(["", "## Errors / Blockers", ""])
+    if summary["errors"]:
+        lines.extend(f"- {err}" for err in summary["errors"])
+    elif metadata.get("status") == "failed":
+        lines.append("- OpenHands exited non-zero; inspect stderr and raw events.")
+    else:
+        lines.append("- none detected")
+    lines.extend(["", "## Final Answer", "", summary["final_answer"] or "No final answer detected in captured events.", "", "## Provenance", "", f"- raw_events: `{events_path}`", f"- metadata: `{metadata.get('artifacts', {}).get('metadata', '')}`", f"- audit: `{metadata.get('artifacts', {}).get('audit', '')}`", f"- stderr: `{metadata.get('artifacts', {}).get('stderr', '')}`", "", "## Recommended Next Action", "", "Review the workspace diff, run the relevant test suite, and pass this handoff to `ooo auto` only as a prepared artifact; do not add OpenHands-specific routing to `ooo auto`.", ""])
+    return "\n".join(lines)
+
 
 def command_inspect(args: argparse.Namespace) -> int:
     print_json(inspect_payload(args)); return 0
@@ -310,6 +370,51 @@ def command_run(args: argparse.Namespace) -> int:
     return result.exit_code
 
 
+def command_summarize(args: argparse.Namespace) -> int:
+    try:
+        events = load_jsonl(Path(args.run).expanduser().resolve())
+    except ValueError as exc:
+        return die(str(exc), 2)
+    print_json(summarize_events(events)); return 0
+
+
+def command_handoff(args: argparse.Namespace) -> int:
+    try:
+        events_path = Path(args.run).expanduser().resolve()
+        metadata_path = Path(args.metadata).expanduser().resolve() if args.metadata else events_path.parent / "metadata.json"
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8")) if metadata_path.is_file() else {}
+        summary = summarize_events(load_jsonl(events_path))
+        out_path = Path(args.out).expanduser().resolve()
+        write_text_atomic(out_path, build_handoff_markdown(events_path, metadata, summary))
+        json_out = Path(args.json_out).expanduser().resolve() if args.json_out else out_path.with_suffix(".json")
+        write_json_atomic(json_out, {"metadata": metadata, "summary": summary, "handoff_path": str(out_path)})
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return die(str(exc), 2)
+    print_json({"status": "completed", "handoff_path": str(out_path), "handoff_json_path": str(json_out), "summary": summary}); return 0
+
+
+def command_agentos(args: argparse.Namespace) -> int:
+    try:
+        workspace = resolve_existing_dir(args.workspace, "--workspace")
+        run_id = args.run_id or f"agentos-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
+        out_dir = resolve_inside(workspace, args.out_dir or str(DEFAULT_STATE_ROOT / run_id), "--out-dir")
+        events_path = out_dir / "events.jsonl"
+        run_args = argparse.Namespace(**vars(args))
+        run_args.task = args.goal; run_args.task_file = None; run_args.out = str(events_path); run_args.metadata_out = str(out_dir / "metadata.json"); run_args.audit_out = str(out_dir / "audit.jsonl"); run_args.run_id = run_id
+        result = run_openhands(run_args)
+        handoff_dir = resolve_inside(workspace, str(DEFAULT_HANDOFF_ROOT), "handoff directory")
+        handoff_path = handoff_dir / f"{run_id}.md"
+        metadata_path = out_dir / "metadata.json"
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8")) if metadata_path.is_file() else {}
+        summary = summarize_events(load_jsonl(events_path)) if events_path.is_file() else {"event_count": 0, "event_type_counts": {}, "commands_executed": [], "files_referenced": [], "errors": [result.message], "final_answer": ""}
+        write_text_atomic(handoff_path, build_handoff_markdown(events_path, metadata, summary))
+        write_json_atomic(handoff_path.with_suffix(".json"), {"metadata": metadata, "summary": summary, "handoff_path": str(handoff_path)})
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return die(str(exc), 2)
+    print_json({"status": result.status, "exit_code": result.exit_code, "run_id": run_id, "events_path": str(events_path), "metadata_path": str(metadata_path), "handoff_path": str(handoff_path)})
+    return result.exit_code
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="openhands-agentos", description="Run OpenHands as an audited Ouroboros AgentOS plugin.")
     parser.add_argument("--openhands-bin", default="openhands", help="OpenHands CLI binary to inspect or invoke.")
@@ -319,12 +424,19 @@ def build_parser() -> argparse.ArgumentParser:
     for name in ("task", "task-file", "workspace", "out", "resume", "run-id", "metadata-out", "audit-out"):
         run.add_argument(f"--{name}", required=name in {"workspace", "out"})
     run.add_argument("--trusted-shell-execute", action="store_true"); run.add_argument("--config-mode", choices=["isolated", "native"], default="isolated"); run.add_argument("--sandbox", choices=["docker", "process", "remote"], default="docker"); run.add_argument("--pass-llm-env", action="store_true"); run.add_argument("--override-with-envs", action="store_true"); run.add_argument("--last", action="store_true"); run.set_defaults(func=command_run)
+    summarize = sub.add_parser("summarize", help="Summarize a captured OpenHands JSONL run."); summarize.add_argument("--run", required=True); summarize.set_defaults(func=command_summarize)
+    handoff = sub.add_parser("handoff", help="Convert a captured OpenHands run into an Ouroboros handoff."); handoff.add_argument("--run", required=True); handoff.add_argument("--metadata"); handoff.add_argument("--out", required=True); handoff.add_argument("--json-out"); handoff.set_defaults(func=command_handoff)
+    agentos = sub.add_parser("agentos", help="Run OpenHands and produce an AgentOS handoff in one smooth flow.")
+    for name in ("goal", "workspace", "out-dir", "resume", "run-id", "metadata-out", "audit-out"):
+        agentos.add_argument(f"--{name}", required=name in {"goal", "workspace"})
+    agentos.add_argument("--trusted-shell-execute", action="store_true"); agentos.add_argument("--config-mode", choices=["isolated", "native"], default="isolated"); agentos.add_argument("--sandbox", choices=["docker", "process", "remote"], default="docker"); agentos.add_argument("--pass-llm-env", action="store_true"); agentos.add_argument("--override-with-envs", action="store_true"); agentos.add_argument("--last", action="store_true"); agentos.set_defaults(func=command_agentos)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     return args.func(args)
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
