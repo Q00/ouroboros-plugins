@@ -26,6 +26,12 @@
       "description": "Reference skeleton for GitHub PR operational workflows."
     },
     {
+      "name": "openhands-agentos",
+      "version": "0.1.0",
+      "path": "../plugins/openhands-agentos",
+      "description": "Ouroboros AgentOS bridge for audited OpenHands CLI runs and handoffs."
+    },
+    {
       "name": "scientific-agent-skills-adapter",
       "version": "0.1.0",
       "path": "../plugins/scientific-agent-skills-adapter",
