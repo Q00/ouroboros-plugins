@@ -1,0 +1,1094 @@
+[
+  {
+    "upstream_skill": "ce-agent-native-architecture",
+    "command": "agent-native-architecture",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Build applications where agents are first-class citizens. Use this skill when designing autonomous agents, creating MCP tools, implementing self-modifying systems, or building apps where features are outcomes achieved by agents operating...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound agent-native-architecture [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/agent-native-architecture/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-agent-native-audit",
+    "command": "agent-native-audit",
+    "namespace": "compound",
+    "risk": "read_only",
+    "summary": "Run comprehensive agent-native architecture review with scored principles",
+    "argument_hint": "[optional: specific principle to audit]",
+    "usage": "ooo compound agent-native-audit [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read"
+    ],
+    "artifacts": [
+      ".omx/compound/agent-native-audit/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-brainstorm",
+    "command": "brainstorm",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Explore requirements and approaches through collaborative dialogue, then write a right-sized requirements document. Use when the user says \"let's brainstorm\", \"what should we build\", or \"help me think through X\", presents a vague or ambi...",
+    "argument_hint": "[feature idea or problem to explore]",
+    "usage": "ooo compound brainstorm [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/brainstorms/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-clean-gone-branches",
+    "command": "clean-gone-branches",
+    "namespace": "compound",
+    "risk": "destructive",
+    "summary": "Clean up local branches whose remote tracking branch is gone. Use when the user says \"clean up branches\", \"delete gone branches\", \"prune local branches\", \"clean gone\", or wants to remove stale local branches that no longer exist on the r...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound clean-gone-branches [input] --confirm",
+    "requires_confirmation": true,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "git:write",
+      "shell:execute"
+    ],
+    "artifacts": [
+      ".omx/compound/clean-gone-branches/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-code-review",
+    "command": "code-review",
+    "namespace": "compound",
+    "risk": "read_only",
+    "summary": "Structured code review using tiered persona agents, confidence-gated findings, and a merge/dedup pipeline. Use when reviewing code changes before creating a PR.",
+    "argument_hint": "[blank to review current branch, or provide PR link]",
+    "usage": "ooo compound code-review [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read"
+    ],
+    "artifacts": [
+      ".omx/compound/reviews/<timestamp>-<scope>.json",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-commit",
+    "command": "commit",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Create a git commit with a clear, value-communicating message. Use when the user says \"commit\", \"commit this\", \"save my changes\", \"create a commit\", or wants to commit staged or unstaged work. Produces well-structured commit messages tha...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound commit [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "git:write",
+      "shell:execute"
+    ],
+    "artifacts": [
+      ".omx/compound/commit/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-commit-push-pr",
+    "command": "commit-push-pr",
+    "namespace": "compound",
+    "risk": "destructive",
+    "summary": "Commit, push, and open a PR with an adaptive, value-first description that scales in depth with the change. Use when the user says \"commit and PR\", \"ship this\", \"create a PR\", or \"open a pull request\". Also handles description-only flows...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound commit-push-pr [input] --confirm",
+    "requires_confirmation": true,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "git:write",
+      "github:pull_request:write",
+      "network:write",
+      "shell:execute"
+    ],
+    "artifacts": [
+      ".omx/compound/commit-push-pr/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-compound",
+    "command": "compound",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Document a recently solved problem to compound your team's knowledge",
+    "argument_hint": "[optional: brief context] [mode:headless] ",
+    "usage": "ooo compound compound [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/learnings/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-compound-refresh",
+    "command": "compound-refresh",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Refresh stale learning and pattern docs under docs/solutions/ by reviewing them against the current codebase, then updating, consolidating, or deleting drifted ones. Use when the user asks to \"refresh my learnings\", \"audit docs/solutions...",
+    "argument_hint": "[optional: scope hint \u2014 directory, filename, module, or keyword] [mode:headless] ",
+    "usage": "ooo compound compound-refresh [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/learnings/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-debug",
+    "command": "debug",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Systematically find root causes and fix bugs. Use when debugging errors, investigating test failures, reproducing bugs from issue trackers (GitHub, Linear, Jira), or when stuck on a problem after failed fix attempts. Also use when the us...",
+    "argument_hint": "[issue reference, error message, test path, or description of broken behavior]",
+    "usage": "ooo compound debug [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/debug/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-demo-reel",
+    "command": "demo-reel",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Capture a visual demo reel (GIF, terminal recording, screenshots) for PR descriptions. Use when shipping UI changes, CLI features, or any work with observable behavior that benefits from visual proof. Also use when asked to add a demo, r...",
+    "argument_hint": "[what to capture, e.g. 'the new settings page' or 'CLI output of the migrate command']",
+    "usage": "ooo compound demo-reel [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/demo-reel/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-dhh-rails-style",
+    "command": "dhh-rails-style",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "This skill should be used when writing Ruby and Rails code in DHH's distinctive 37signals style. It applies when writing Ruby code, Rails applications, creating models, controllers, or any Ruby file. Triggers on Ruby/Rails code generatio...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound dhh-rails-style [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/dhh-rails-style/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-doc-review",
+    "command": "doc-review",
+    "namespace": "compound",
+    "risk": "read_only",
+    "summary": "Review requirements or plan documents using parallel persona agents that surface role-specific issues. Use when a requirements document or plan document exists and the user wants to improve it.",
+    "argument_hint": "[mode:headless] [path/to/document.md]",
+    "usage": "ooo compound doc-review [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read"
+    ],
+    "artifacts": [
+      ".omx/compound/doc-review/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-frontend-design",
+    "command": "frontend-design",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Build web interfaces with genuine design quality, not AI slop. Use for any frontend work - landing pages, web apps, dashboards, admin panels, components, interactive experiences. Activates for both greenfield builds and modifications to...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound frontend-design [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/frontend-design/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-gemini-imagegen",
+    "command": "gemini-imagegen",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "This skill should be used when generating and editing images using the Gemini API (Nano Banana Pro). It applies when creating images from text prompts, editing existing images, applying style transfers, generating logos with text, creati...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound gemini-imagegen [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "network:write",
+      "api_key:gemini"
+    ],
+    "artifacts": [
+      ".omx/compound/gemini-imagegen/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-ideate",
+    "command": "ideate",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Generate and critically evaluate grounded ideas about a topic. Use when asking what to improve, requesting idea generation, exploring surprising directions, or wanting the AI to proactively suggest strong options before brainstorming one...",
+    "argument_hint": "[feature, focus area, or constraint]",
+    "usage": "ooo compound ideate [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/ideate/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-optimize",
+    "command": "optimize",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Run metric-driven iterative optimization loops -- define a measurable goal, run parallel experiments, measure each against hard gates or LLM-as-judge scores, keep improvements, and converge on the best solution. Use when optimizing clust...",
+    "argument_hint": "[path to optimization spec YAML, or describe the optimization goal]",
+    "usage": "ooo compound optimize [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/optimize/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-plan",
+    "command": "plan",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Create structured plans for multi-step tasks -- software features, research workflows, events, study plans, or any goal that benefits from breakdown. Also deepens existing plans with interactive sub-agent review. Use when the user says '...",
+    "argument_hint": "[optional: feature description, requirements doc path, plan path to deepen, or any task to plan]",
+    "usage": "ooo compound plan [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/plans/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-polish-beta",
+    "command": "polish-beta",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "[BETA] Start the dev server, open the feature in a browser, and iterate on improvements together.",
+    "argument_hint": "[PR number, branch name, or blank for current branch]",
+    "usage": "ooo compound polish-beta [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/polish-beta/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-product-pulse",
+    "command": "product-pulse",
+    "namespace": "compound",
+    "risk": "read_only",
+    "summary": "Generate a time-windowed pulse report on what users experienced and how the product performed - usage, quality, errors, signals worth investigating. Use when the user says 'run a pulse', 'show me the pulse', 'how are we doing', 'weekly r...",
+    "argument_hint": "[lookback window, e.g. '24h', '7d', '1h'; default 24h]",
+    "usage": "ooo compound product-pulse [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read"
+    ],
+    "artifacts": [
+      ".omx/compound/product-pulse/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-proof",
+    "command": "proof",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Run human-in-the-loop review loops over markdown via Proof (proofeditor.ai) \u2014 share, view, comment on, edit, and sync collaborative docs. Use when the user says \"view this in proof\", \"share to proof\", \"HITL this doc\", or wants a shared m...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound proof [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/proof/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-release-notes",
+    "command": "release-notes",
+    "namespace": "compound",
+    "risk": "read_only",
+    "summary": "Summarize recent compound-engineering plugin releases, or answer a specific question about a past release with a version citation. Use when the user types `/ce-release-notes` or asks \"what changed in compound-engineering recently?\" or \"w...",
+    "argument_hint": "[optional: question about a past release]",
+    "usage": "ooo compound release-notes [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read"
+    ],
+    "artifacts": [
+      ".omx/compound/release-notes/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-report-bug",
+    "command": "report-bug",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Report a bug in the compound-engineering plugin",
+    "argument_hint": "[optional: brief description of the bug]",
+    "usage": "ooo compound report-bug [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/report-bug/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-resolve-pr-feedback",
+    "command": "resolve-pr-feedback",
+    "namespace": "compound",
+    "risk": "destructive",
+    "summary": "Resolve PR review feedback by evaluating validity and fixing issues in parallel. Use when addressing PR review comments, resolving review threads, or fixing code review feedback.",
+    "argument_hint": "[PR number, comment URL, or blank for current branch's PR]",
+    "usage": "ooo compound resolve-pr-feedback [input] --confirm",
+    "requires_confirmation": true,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "github:pull_request:write",
+      "network:write",
+      "git:write"
+    ],
+    "artifacts": [
+      ".omx/compound/resolve-pr-feedback/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-riffrec-feedback-analysis",
+    "command": "riffrec-feedback-analysis",
+    "namespace": "compound",
+    "risk": "read_only",
+    "summary": "Riffrec product-feedback workflow. ALWAYS load when the user posts a `riffrec-*.zip`, a bundle with `session.json` + `events.json` + `recording.webm` + `voice.webm`, a video/audio recording for product feedback, or asks how to capture an...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound riffrec-feedback-analysis [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read"
+    ],
+    "artifacts": [
+      ".omx/compound/riffrec-feedback-analysis/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-sessions",
+    "command": "sessions",
+    "namespace": "compound",
+    "risk": "read_only",
+    "summary": "Search and ask questions about coding agent session history across Claude Code, Codex, and Cursor. Use when asking what was worked on, what was tried before, how a problem was investigated across sessions, what happened recently, or any...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound sessions [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read"
+    ],
+    "artifacts": [
+      ".omx/compound/sessions/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-setup",
+    "command": "setup",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Diagnose and configure compound-engineering environment. Checks CLI dependencies, plugin version, and repo-local config. Offers guided installation for missing tools. Use when troubleshooting missing tools, verifying setup, or before onb...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound setup [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "shell:execute"
+    ],
+    "artifacts": [
+      ".omx/compound/setup/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-simplify-code",
+    "command": "simplify-code",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Simplify and refine recently changed code for clarity, reuse, quality, and efficiency while preserving behavior.",
+    "argument_hint": "[blank to simplify current branch changes, or describe what to simplify]",
+    "usage": "ooo compound simplify-code [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/simplify-code/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-slack-research",
+    "command": "slack-research",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Search Slack for interpreted organizational context -- decisions, constraints, and discussion arcs -- and produce a synthesized research digest with cross-cutting analysis. Use when the user says 'search slack for', 'what did we discuss...",
+    "argument_hint": "[input]",
+    "usage": "ooo compound slack-research [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "slack:read",
+      "network:read"
+    ],
+    "artifacts": [
+      ".omx/compound/slack-research/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-strategy",
+    "command": "strategy",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Create or maintain STRATEGY.md - the product's target problem, approach, users, key metrics, and tracks of work. Use when starting a new product, updating direction, or when prompts like 'write our strategy', 'update the roadmap', 'what...",
+    "argument_hint": "[optional: section to revisit, e.g. 'metrics' or 'approach']",
+    "usage": "ooo compound strategy [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/strategy/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-test-browser",
+    "command": "test-browser",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Run browser tests on pages affected by current PR or branch",
+    "argument_hint": "[PR number, branch name, 'current', or --port PORT]",
+    "usage": "ooo compound test-browser [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "browser:automation",
+      "shell:execute"
+    ],
+    "artifacts": [
+      ".omx/compound/test-browser/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-test-xcode",
+    "command": "test-xcode",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Build and test iOS apps on simulator using XcodeBuildMCP. Use after making iOS code changes, before creating a PR, or when verifying app behavior and checking for crashes on simulator.",
+    "argument_hint": "[scheme name or 'current' to use default]",
+    "usage": "ooo compound test-xcode [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "mcp:call",
+      "xcode:execute",
+      "shell:execute"
+    ],
+    "artifacts": [
+      ".omx/compound/test-xcode/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-update",
+    "command": "update",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "|",
+    "argument_hint": "[input]",
+    "usage": "ooo compound update [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "network:read"
+    ],
+    "artifacts": [
+      ".omx/compound/update/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-work",
+    "command": "work",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Execute work efficiently while maintaining quality and finishing features",
+    "argument_hint": "[Plan doc path or description of work. Blank to auto use latest plan doc]",
+    "usage": "ooo compound work [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/work/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-work-beta",
+    "command": "work-beta",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "[BETA] Execute work with external delegate support. Same as ce-work but includes experimental Codex delegation mode for token-conserving code implementation.",
+    "argument_hint": "[Plan doc path or description of work. Blank to auto use latest plan doc] [delegate:codex]",
+    "usage": "ooo compound work-beta [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/work-beta/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "ce-worktree",
+    "command": "worktree",
+    "namespace": "compound",
+    "risk": "write",
+    "summary": "Create an isolated git worktree for parallel feature work or PR review. Use when starting work that should not disturb the current checkout, or when `ce-work` or `ce-code-review` offers a worktree option.",
+    "argument_hint": "[input]",
+    "usage": "ooo compound worktree [input]",
+    "requires_confirmation": false,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write"
+    ],
+    "artifacts": [
+      ".omx/compound/worktree/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  },
+  {
+    "upstream_skill": "lfg",
+    "command": "lfg",
+    "namespace": "compound",
+    "risk": "destructive",
+    "summary": "Run the full autonomous engineering pipeline end-to-end (plan, work, code review, test, commit, push, open PR, watch CI, fix CI failures until green). Use only when the user explicitly requests hands-off execution of a software task and...",
+    "argument_hint": "[feature description]",
+    "usage": "ooo compound lfg [input] --confirm",
+    "requires_confirmation": true,
+    "capabilities": [
+      "seed",
+      "ledger",
+      "state",
+      "provenance",
+      "runtime",
+      "mcp",
+      "handoff",
+      "progress"
+    ],
+    "permissions": [
+      "filesystem:read",
+      "filesystem:write",
+      "shell:execute",
+      "git:write",
+      "github:pull_request:write",
+      "network:write"
+    ],
+    "artifacts": [
+      ".omx/compound/lfg/<slug>.md",
+      ".omx/compound/runs/<run-id>/result.json"
+    ],
+    "handoff": "Loads the vendored upstream skill instructions and emits a bounded AgentOS handoff artifact; execution remains under Ouroboros runtime permissions."
+  }
+]

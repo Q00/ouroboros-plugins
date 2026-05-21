@@ -1,0 +1,757 @@
+{
+  "schema_version": "0.1",
+  "name": "compound-engineering",
+  "version": "0.1.0",
+  "description": "AgentOS/Ouroboros adapter for Compound Engineering workflows.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/compound-engineering",
+    "repository": "https://github.com/EveryInc/compound-engineering-plugin"
+  },
+  "commands": [
+    {
+      "namespace": "compound",
+      "name": "agent-native-architecture",
+      "summary": "Build applications where agents are first-class citizens. Use this skill when designing autonomous agents, creating MCP tools, implementing self-modifying systems, or building apps where features are outcomes achieved by agents operating...",
+      "usage": "ooo compound agent-native-architecture [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "agent-native-audit",
+      "summary": "Run comprehensive agent-native architecture review with scored principles",
+      "usage": "ooo compound agent-native-audit [input]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "brainstorm",
+      "summary": "Explore requirements and approaches through collaborative dialogue, then write a right-sized requirements document. Use when the user says \"let's brainstorm\", \"what should we build\", or \"help me think through X\", presents a vague or ambi...",
+      "usage": "ooo compound brainstorm [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "clean-gone-branches",
+      "summary": "Clean up local branches whose remote tracking branch is gone. Use when the user says \"clean up branches\", \"delete gone branches\", \"prune local branches\", \"clean gone\", or wants to remove stale local branches that no longer exist on the r...",
+      "usage": "ooo compound clean-gone-branches [input] --confirm",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        },
+        {
+          "name": "confirm",
+          "type": "boolean",
+          "required": false,
+          "description": "Required to allow destructive workflow handoff generation."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "code-review",
+      "summary": "Structured code review using tiered persona agents, confidence-gated findings, and a merge/dedup pipeline. Use when reviewing code changes before creating a PR.",
+      "usage": "ooo compound code-review [input]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "commit",
+      "summary": "Create a git commit with a clear, value-communicating message. Use when the user says \"commit\", \"commit this\", \"save my changes\", \"create a commit\", or wants to commit staged or unstaged work. Produces well-structured commit messages tha...",
+      "usage": "ooo compound commit [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "commit-push-pr",
+      "summary": "Commit, push, and open a PR with an adaptive, value-first description that scales in depth with the change. Use when the user says \"commit and PR\", \"ship this\", \"create a PR\", or \"open a pull request\". Also handles description-only flows...",
+      "usage": "ooo compound commit-push-pr [input] --confirm",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        },
+        {
+          "name": "confirm",
+          "type": "boolean",
+          "required": false,
+          "description": "Required to allow destructive workflow handoff generation."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "compound",
+      "summary": "Document a recently solved problem to compound your team's knowledge",
+      "usage": "ooo compound compound [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "compound-refresh",
+      "summary": "Refresh stale learning and pattern docs under docs/solutions/ by reviewing them against the current codebase, then updating, consolidating, or deleting drifted ones. Use when the user asks to \"refresh my learnings\", \"audit docs/solutions...",
+      "usage": "ooo compound compound-refresh [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "debug",
+      "summary": "Systematically find root causes and fix bugs. Use when debugging errors, investigating test failures, reproducing bugs from issue trackers (GitHub, Linear, Jira), or when stuck on a problem after failed fix attempts. Also use when the us...",
+      "usage": "ooo compound debug [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "demo-reel",
+      "summary": "Capture a visual demo reel (GIF, terminal recording, screenshots) for PR descriptions. Use when shipping UI changes, CLI features, or any work with observable behavior that benefits from visual proof. Also use when asked to add a demo, r...",
+      "usage": "ooo compound demo-reel [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "dhh-rails-style",
+      "summary": "This skill should be used when writing Ruby and Rails code in DHH's distinctive 37signals style. It applies when writing Ruby code, Rails applications, creating models, controllers, or any Ruby file. Triggers on Ruby/Rails code generatio...",
+      "usage": "ooo compound dhh-rails-style [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "doc-review",
+      "summary": "Review requirements or plan documents using parallel persona agents that surface role-specific issues. Use when a requirements document or plan document exists and the user wants to improve it.",
+      "usage": "ooo compound doc-review [input]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "frontend-design",
+      "summary": "Build web interfaces with genuine design quality, not AI slop. Use for any frontend work - landing pages, web apps, dashboards, admin panels, components, interactive experiences. Activates for both greenfield builds and modifications to...",
+      "usage": "ooo compound frontend-design [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "gemini-imagegen",
+      "summary": "This skill should be used when generating and editing images using the Gemini API (Nano Banana Pro). It applies when creating images from text prompts, editing existing images, applying style transfers, generating logos with text, creati...",
+      "usage": "ooo compound gemini-imagegen [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "ideate",
+      "summary": "Generate and critically evaluate grounded ideas about a topic. Use when asking what to improve, requesting idea generation, exploring surprising directions, or wanting the AI to proactively suggest strong options before brainstorming one...",
+      "usage": "ooo compound ideate [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "optimize",
+      "summary": "Run metric-driven iterative optimization loops -- define a measurable goal, run parallel experiments, measure each against hard gates or LLM-as-judge scores, keep improvements, and converge on the best solution. Use when optimizing clust...",
+      "usage": "ooo compound optimize [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "plan",
+      "summary": "Create structured plans for multi-step tasks -- software features, research workflows, events, study plans, or any goal that benefits from breakdown. Also deepens existing plans with interactive sub-agent review. Use when the user says '...",
+      "usage": "ooo compound plan [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "polish-beta",
+      "summary": "[BETA] Start the dev server, open the feature in a browser, and iterate on improvements together.",
+      "usage": "ooo compound polish-beta [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "product-pulse",
+      "summary": "Generate a time-windowed pulse report on what users experienced and how the product performed - usage, quality, errors, signals worth investigating. Use when the user says 'run a pulse', 'show me the pulse', 'how are we doing', 'weekly r...",
+      "usage": "ooo compound product-pulse [input]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "proof",
+      "summary": "Run human-in-the-loop review loops over markdown via Proof (proofeditor.ai) \u2014 share, view, comment on, edit, and sync collaborative docs. Use when the user says \"view this in proof\", \"share to proof\", \"HITL this doc\", or wants a shared m...",
+      "usage": "ooo compound proof [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "release-notes",
+      "summary": "Summarize recent compound-engineering plugin releases, or answer a specific question about a past release with a version citation. Use when the user types `/ce-release-notes` or asks \"what changed in compound-engineering recently?\" or \"w...",
+      "usage": "ooo compound release-notes [input]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "report-bug",
+      "summary": "Report a bug in the compound-engineering plugin",
+      "usage": "ooo compound report-bug [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "resolve-pr-feedback",
+      "summary": "Resolve PR review feedback by evaluating validity and fixing issues in parallel. Use when addressing PR review comments, resolving review threads, or fixing code review feedback.",
+      "usage": "ooo compound resolve-pr-feedback [input] --confirm",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        },
+        {
+          "name": "confirm",
+          "type": "boolean",
+          "required": false,
+          "description": "Required to allow destructive workflow handoff generation."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "riffrec-feedback-analysis",
+      "summary": "Riffrec product-feedback workflow. ALWAYS load when the user posts a `riffrec-*.zip`, a bundle with `session.json` + `events.json` + `recording.webm` + `voice.webm`, a video/audio recording for product feedback, or asks how to capture an...",
+      "usage": "ooo compound riffrec-feedback-analysis [input]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "sessions",
+      "summary": "Search and ask questions about coding agent session history across Claude Code, Codex, and Cursor. Use when asking what was worked on, what was tried before, how a problem was investigated across sessions, what happened recently, or any...",
+      "usage": "ooo compound sessions [input]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "setup",
+      "summary": "Diagnose and configure compound-engineering environment. Checks CLI dependencies, plugin version, and repo-local config. Offers guided installation for missing tools. Use when troubleshooting missing tools, verifying setup, or before onb...",
+      "usage": "ooo compound setup [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "simplify-code",
+      "summary": "Simplify and refine recently changed code for clarity, reuse, quality, and efficiency while preserving behavior.",
+      "usage": "ooo compound simplify-code [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "slack-research",
+      "summary": "Search Slack for interpreted organizational context -- decisions, constraints, and discussion arcs -- and produce a synthesized research digest with cross-cutting analysis. Use when the user says 'search slack for', 'what did we discuss...",
+      "usage": "ooo compound slack-research [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "strategy",
+      "summary": "Create or maintain STRATEGY.md - the product's target problem, approach, users, key metrics, and tracks of work. Use when starting a new product, updating direction, or when prompts like 'write our strategy', 'update the roadmap', 'what...",
+      "usage": "ooo compound strategy [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "test-browser",
+      "summary": "Run browser tests on pages affected by current PR or branch",
+      "usage": "ooo compound test-browser [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "test-xcode",
+      "summary": "Build and test iOS apps on simulator using XcodeBuildMCP. Use after making iOS code changes, before creating a PR, or when verifying app behavior and checking for crashes on simulator.",
+      "usage": "ooo compound test-xcode [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "update",
+      "summary": "|",
+      "usage": "ooo compound update [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "work",
+      "summary": "Execute work efficiently while maintaining quality and finishing features",
+      "usage": "ooo compound work [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "work-beta",
+      "summary": "[BETA] Execute work with external delegate support. Same as ce-work but includes experimental Codex delegation mode for token-conserving code implementation.",
+      "usage": "ooo compound work-beta [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "worktree",
+      "summary": "Create an isolated git worktree for parallel feature work or PR review. Use when starting work that should not disturb the current checkout, or when `ce-work` or `ce-code-review` offers a worktree option.",
+      "usage": "ooo compound worktree [input]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        }
+      ]
+    },
+    {
+      "namespace": "compound",
+      "name": "lfg",
+      "summary": "Run the full autonomous engineering pipeline end-to-end (plan, work, code review, test, commit, push, open PR, watch CI, fix CI failures until green). Use only when the user explicitly requests hands-off execution of a software task and...",
+      "usage": "ooo compound lfg [input] --confirm",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Original CE skill argument text or target path/URL."
+        },
+        {
+          "name": "confirm",
+          "type": "boolean",
+          "required": false,
+          "description": "Required to allow destructive workflow handoff generation."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "seed",
+      "access": "write",
+      "reason": "Generate Seed-ready requirements and execution handoff artifacts."
+    },
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record bounded command runs and outcomes."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist adapter run state under .omx/compound."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Attach upstream skill, version, command, and sanitized invocation metadata."
+    },
+    {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Dispatch bounded CE workflow handoffs without generic shell passthrough."
+    },
+    {
+      "name": "mcp",
+      "access": "execute",
+      "reason": "Declare CE workflows that may rely on MCP-backed tools under host control."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Return artifacts consumable by downstream Ouroboros workflows."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report command status and next recommended CE step."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "api_key:gemini",
+      "risk": "write",
+      "required": false,
+      "reason": "Use a configured Gemini API key for image generation without storing the secret."
+    },
+    {
+      "scope": "browser:automation",
+      "risk": "write",
+      "required": false,
+      "reason": "Drive browser automation for explicit browser testing workflows."
+    },
+    {
+      "scope": "filesystem:read",
+      "risk": "destructive",
+      "required": true,
+      "reason": "Read repository context and vendored upstream CE skill/agent assets."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Write bounded .omx/compound artifacts, state, and handoff files."
+    },
+    {
+      "scope": "git:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Create commits, manipulate branches, or push local git state for explicitly trusted workflows."
+    },
+    {
+      "scope": "github:pull_request:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Create or update PRs/review threads for commit-push and feedback-resolution workflows."
+    },
+    {
+      "scope": "mcp:call",
+      "risk": "write",
+      "required": false,
+      "reason": "Call configured MCP tools for Xcode, Slack, browser, or other CE-backed integrations."
+    },
+    {
+      "scope": "network:read",
+      "risk": "write",
+      "required": false,
+      "reason": "Read external documentation, repository, or service context for research workflows."
+    },
+    {
+      "scope": "network:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Create remote artifacts such as images, PRs, or API-backed workflow outputs when trusted."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Run command-specific local tooling only through explicit, documented CE workflows."
+    },
+    {
+      "scope": "slack:read",
+      "risk": "write",
+      "required": false,
+      "reason": "Read Slack context through configured Slack MCP/API access for research workflows."
+    },
+    {
+      "scope": "xcode:execute",
+      "risk": "write",
+      "required": false,
+      "reason": "Run local Xcode/iOS verification through configured tooling."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m compound_engineering"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
