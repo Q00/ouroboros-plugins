@@ -3,33 +3,14 @@ from __future__ import annotations
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
-
 from .upstream import UPSTREAM_COMMIT, UPSTREAM_LICENSE, UPSTREAM_REPO, UPSTREAM_VERSION
 
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 VENDOR_ROOT = PLUGIN_ROOT / "vendor" / "superpowers"
 SKILLS_ROOT = VENDOR_ROOT / "skills"
 
-READ_ONLY_SKILLS: set[str] = set()
 DESTRUCTIVE_DESCRIBED_SKILLS = {"finishing-a-development-branch"}
 
-CAPABILITIES_BY_SKILL: dict[str, list[dict[str, str]]] = {
-    "using-superpowers": [
-        {"name": "provenance", "access": "write", "reason": "Record inspected upstream skill guidance."},
-        {"name": "progress", "access": "write", "reason": "Report methodology guidance readiness."},
-    ],
-    "requesting-code-review": [
-        {"name": "ledger", "access": "write", "reason": "Record review scope, findings, and evidence."},
-        {"name": "provenance", "access": "write", "reason": "Record upstream review-skill source."},
-        {"name": "handoff", "access": "attach", "reason": "Attach review report for downstream remediation."},
-    ],
-    "verification-before-completion": [
-        {"name": "ledger", "access": "write", "reason": "Record verification commands and outcomes."},
-        {"name": "provenance", "access": "write", "reason": "Record upstream verification-skill source."},
-        {"name": "handoff", "access": "attach", "reason": "Attach completion-gate evidence."},
-    ],
-}
 DEFAULT_CAPABILITIES = [
     {"name": "seed", "access": "write", "reason": "Prepare Seed-compatible handoff artifacts."},
     {"name": "ledger", "access": "write", "reason": "Record workflow decisions, constraints, and evidence."},
@@ -50,15 +31,14 @@ def _permissions_for(skill: str) -> list[dict[str, object]]:
             "reason": "Read vendored upstream Superpowers skill files and local user-supplied inputs.",
         }
     ]
-    if skill not in READ_ONLY_SKILLS:
-        perms.append(
-            {
-                "scope": "filesystem:write",
-                "risk": "write",
-                "required": True,
-                "reason": "Write .omx/superpowers handoff, state, provenance, and evidence artifacts.",
-            }
-        )
+    perms.append(
+        {
+            "scope": "filesystem:write",
+            "risk": "write",
+            "required": True,
+            "reason": "Write .omx/superpowers handoff, state, provenance, and evidence artifacts.",
+        }
+    )
     if skill in {"dispatching-parallel-agents", "subagent-driven-development", "executing-plans"}:
         perms.append(
             {
@@ -66,15 +46,6 @@ def _permissions_for(skill: str) -> list[dict[str, object]]:
                 "risk": "write",
                 "required": False,
                 "reason": "Future controlled execution may launch bounded Ouroboros runtime or team stages; v0 handoff generation does not execute them.",
-            }
-        )
-    if skill in DESTRUCTIVE_DESCRIBED_SKILLS:
-        perms.append(
-            {
-                "scope": "shell:execute",
-                "risk": "destructive",
-                "required": False,
-                "reason": "The upstream workflow describes merge/push/discard choices, but v0 only reports options and does not perform destructive actions.",
             }
         )
     return perms
@@ -88,7 +59,7 @@ def _risk_for(skill: str) -> str:
 
 
 def _capabilities_for(skill: str) -> list[dict[str, str]]:
-    return CAPABILITIES_BY_SKILL.get(skill, DEFAULT_CAPABILITIES)
+    return DEFAULT_CAPABILITIES
 
 
 def parse_frontmatter(text: str) -> dict[str, str]:

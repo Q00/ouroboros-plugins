@@ -20,10 +20,6 @@ def _safe_run_id(skill: str, goal: str, user_input: str) -> str:
     return f"{stamp}-{skill}-{digest}"
 
 
-def _read_skill_body(skill: SkillRecord) -> str:
-    return (PLUGIN_ROOT / skill.skill_path).read_text(encoding="utf-8")
-
-
 def build_handoff_markdown(skill: SkillRecord, *, goal: str, user_input: str, run_id: str) -> str:
     destructive_note = ""
     if skill.destructive_actions_excluded:
@@ -35,8 +31,8 @@ def build_handoff_markdown(skill: SkillRecord, *, goal: str, user_input: str, ru
     continuation = _continuation(skill.name)
     return f"""# Superpowers → Ouroboros handoff: `{skill.name}`
 
-Run ID: `{run_id}`  
-Ouroboros command: `ooo superpowers {skill.name}`  
+Run ID: `{run_id}`
+Ouroboros command: `ooo superpowers {skill.name}`
 Risk: `{skill.risk}`
 
 ## Purpose
@@ -140,6 +136,18 @@ def prepare_handoff(skill: SkillRecord, *, goal: str, user_input: str, output_ro
     run_dir = output_root / "runs" / run_id
     run_dir.mkdir(parents=True, exist_ok=False)
 
+    argument_summary = {
+        "goal_supplied": bool(goal),
+        "goal_sha256": hashlib.sha256(goal.encode()).hexdigest() if goal else None,
+        "goal_length": len(goal),
+        "input_supplied": bool(user_input),
+        "input_sha256": hashlib.sha256(user_input.encode()).hexdigest() if user_input else None,
+        "input_length": len(user_input),
+    }
+    used_permissions = [
+        p for p in skill.permissions
+        if p["scope"] in {"filesystem:read", "filesystem:write"}
+    ]
     invocation = {
         "run_id": run_id,
         "status": "prepared",
@@ -148,10 +156,10 @@ def prepare_handoff(skill: SkillRecord, *, goal: str, user_input: str, output_ro
         "upstream_skill": skill.name,
         "ouroboros_command": f"superpowers {skill.name}",
         "risk": skill.risk,
-        "goal": goal,
-        "input": user_input,
+        "arguments": argument_summary,
         "capabilities": skill.capabilities,
-        "permissions": skill.permissions,
+        "planned_permissions": skill.permissions,
+        "used_permissions": used_permissions,
     }
     provenance = {
         "upstream_repo": UPSTREAM_REPO,
@@ -176,8 +184,19 @@ def prepare_handoff(skill: SkillRecord, *, goal: str, user_input: str, output_ro
         "next_step": _continuation(skill.name),
     }
     audit_events = [
-        {"event": "plugin.invoked", "at": invocation["invoked_at"], "run_id": run_id, "skill": skill.name},
-        {"event": "plugin.permission_used", "at": invocation["invoked_at"], "run_id": run_id, "permissions": skill.permissions},
+        {
+            "event": "plugin.invoked",
+            "at": invocation["invoked_at"],
+            "run_id": run_id,
+            "skill": skill.name,
+            "arguments": argument_summary,
+        },
+        {
+            "event": "plugin.permission_used",
+            "at": invocation["invoked_at"],
+            "run_id": run_id,
+            "permissions": used_permissions,
+        },
         {"event": "plugin.completed", "at": _now(), "run_id": run_id, "artifact": str((run_dir / "handoff.md").as_posix())},
     ]
     handoff = build_handoff_markdown(skill, goal=goal, user_input=user_input, run_id=run_id)
