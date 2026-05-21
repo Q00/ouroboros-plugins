@@ -100,3 +100,24 @@ The epic should land as **5 PRs**. This keeps each reviewable while ensuring the
 ## Implementation note for this worktree
 
 This worktree implements the full 5-PR scope together so it can be split into the PRs above during review. No SuperClaude-specific behavior is added to Ouroboros core.
+
+## Alignment with #27 capability-assimilation SSOT
+
+Issue #27 frames `ouroboros-plugins` as a curated contract/reference repository, not a marketplace, and defines plugins as the capability-assimilation layer that keeps core small while making external tools Ouroboros-native. This stack follows that direction:
+
+| PR | #27 alignment |
+|---|---|
+| PR 1 — Snapshot/provenance/legal baseline | Establishes why SuperClaude is a reference assimilation target, preserves upstream provenance/license, and records that this is not a marketplace submission. |
+| PR 2 — Manifest and command catalog | Makes the external framework explicit through the minimum executable boundary: schema version, identity, commands, capabilities, permissions, entrypoint, audit vocabulary, risk tiers, and namespace constraints. |
+| PR 3 — Skills, agents, modes, MCP, and hook mapping | Packages external capability assets as auditable plugin resources instead of leaking SuperClaude-specific behavior into core or hidden hooks. |
+| PR 4 — Runtime adapter, audit, and handoff artifacts | Converts SuperClaude intent into bounded, trust-gated, auditable, handoff-capable execution rather than an unbounded shell wrapper. |
+| PR 5 — Tests, docs, catalog, and final epic closure | Proves the reference plugin contract with validation, route coverage, smoke tests, docs, catalog metadata, and explicit follow-up contract questions instead of schema bypasses. |
+
+Boundary locks from #27 that this stack must preserve:
+
+- Core remains small; no SuperClaude-specific branch is added to Ouroboros core or `ooo auto`.
+- `Q00/ouroboros-plugins` remains a reference/contract repo, not a general SuperClaude marketplace entry.
+- Capabilities (`state`, `runtime`, `handoff`, `provenance`, `progress`, `mcp`) stay distinct from external permissions (`filesystem:*`, `shell:execute`, `network:read`, `git:write`).
+- Command risk is conservative and shared with permission semantics (`read_only`, `write`, `destructive`).
+- Audit/provenance/handoff are required assimilation outputs, not optional decoration.
+- Schema/runtime gaps (`sc` alias, asset metadata, lifecycle hooks, MCP recommendations, prompt-native commands) are documented as follow-up contract questions rather than bypassed.
