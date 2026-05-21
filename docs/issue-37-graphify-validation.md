@@ -21,6 +21,19 @@ This document is the final validation artifact for the six stacked Graphify PRs.
 - URL/model/MCP/watch/Neo4j-sensitive operations are explicitly classified and blocked in direct adapter use unless `--allow-sensitive` is provided after trust/confirmation.
 - Ouroboros core remains generic: downstream automation consumes handoffs rather than adding Graphify-specific branches.
 
+## Issue #27 final alignment review
+
+Final review found the stacked PRs consistent with issue #27's capability-assimilation RFC:
+
+- **PR1 contract/docs**: establishes Graphify as a contract-bearing reference adapter, explicitly non-marketplace and outside core/`ooo auto` routing.
+- **PR2 manifest/skeleton**: uses the current manifest as the executable boundary and keeps capabilities distinct from external permissions.
+- **PR3 adapter MVP**: remains a thin upstream adapter while adding structured blocked/completed/failed result semantics instead of a raw command wrapper.
+- **PR4 handoff/provenance**: supplies the audit/provenance/handoff evidence that #27 requires for safe assimilation.
+- **PR5 sensitive gates**: preserves lifecycle/trust/firewall intent by blocking network/model/MCP/watch/Neo4j and workspace-escape paths unless explicitly trusted/allowed.
+- **PR6 validation**: records merge evidence and deferred live checks without broadening runtime authority.
+
+No PR adds speculative manifest fields, creates a marketplace listing, bypasses the plugin firewall model, grants destructive permissions implicitly, or adds Graphify-specific logic to `ooo auto`.
+
 ## Verification commands
 
 Run from the head of PR6:
