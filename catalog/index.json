@@ -120,6 +120,12 @@
       "version": "0.1.0",
       "path": "../plugins/hermes-agent-runner",
       "description": "Run Hermes Agent as a bounded external runtime with Ouroboros session state and handoff artifacts."
+    },
+    {
+      "name": "swe-agent-harness",
+      "version": "0.1.0",
+      "path": "../plugins/swe-agent-harness",
+      "description": "AgentOS assimilation adapter for running SWE-agent as a permissioned, auditable issue-to-patch harness."
     }
   ]
 }

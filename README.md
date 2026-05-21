@@ -12,7 +12,7 @@ programs compose those primitives into domain-specific workflows.
 |  autoresearch    gsd-agentos     target-capabilities  github-pr-ops |
 |  openai-skills-superpowers  openhands-agentos  merge-assistant       |
 |  openhands-agentos  merge-assistant  jira-sync  slack-incident      |
-|  release-coordinator  customer-debugger  ...                       |
+|  swe-agent-harness  release-coordinator  customer-debugger  ...       |
 +-------------------------------+-----------------------------------+
                                 |
                                 | plugin contract / declared scopes
@@ -69,6 +69,7 @@ Plugins own domain-specific workflows:
 - Autoresearch experiment handoff
 - GSD AgentOS capability assimilation
 - OpenAI/Agent Skill superpower assimilation
+- SWE-agent issue-to-patch harness assimilation
 - Merge assistance
 - Jira/Linear synchronization
 - Slack incident workflows
@@ -82,6 +83,7 @@ ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin autoresea
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin gsd-agentos
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin openhands-agentos
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin swe-agent-harness
 ouroboros plugin add https://github.com/<author>/<target>-ouroboros --plugin target-capabilities
 ouroboros plugin trust github-pr-ops --scope github:read --scope github:pull_request:write
 
@@ -91,6 +93,7 @@ ooo gsd verify-work 1
 ooo github-pr review https://github.com/org/repo/pull/123
 ooo openhands agentos --workspace /path/to/repo --goal "Fix the failing test" --trusted-shell-execute
 ooo superpower run openai-docs -- "explain how to build a plugin"
+ooo swe-agent run --config config/default.yaml --problem_statement.github_url https://github.com/org/repo/issues/123
 ooo github-pr merge --policy team-default
 ```
 
@@ -148,6 +151,7 @@ PYTHONPATH=plugins/openhands-agentos python3 -m openhands_agentos inspect
 PYTHONPATH=plugins/target-capabilities python3 -m target_capabilities list-commands
 PYTHONPATH=plugins/openai-skills-superpowers python3 -m ouroboros_superpowers catalog refresh --source-path tests/fixtures/openai-skills --ref fixture --out superpowers-catalog.json
 PYTHONPATH=plugins/openai-skills-superpowers python3 -m ouroboros_superpowers --catalog superpowers-catalog.json run openai-docs -- "explain plugins"
+PYTHONPATH=plugins/swe-agent-harness python3 -m swe_agent_harness inspect /path/to/swe-agent-output
 ```
 
 During plugin development, install from the local checkout instead:

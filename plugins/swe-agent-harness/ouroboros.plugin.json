@@ -1,0 +1,216 @@
+{
+  "schema_version": "0.1",
+  "name": "swe-agent-harness",
+  "version": "0.1.0",
+  "description": "AgentOS assimilation adapter for running SWE-agent as a permissioned, auditable issue-to-patch harness.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/swe-agent-harness",
+    "repository": "https://github.com/Q00/ouroboros-plugins"
+  },
+  "commands": [
+    {
+      "namespace": "swe-agent",
+      "name": "run",
+      "summary": "Run upstream SWE-agent on one issue or problem while collecting AgentOS artifacts.",
+      "usage": "ooo swe-agent run --config config/default.yaml --env.repo.github_url <repo> --problem_statement.github_url <issue>",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "upstream_args",
+          "type": "string",
+          "required": false,
+          "description": "Upstream sweagent run flags and dotted overrides, passed through unchanged except for bounded output-dir injection."
+        }
+      ]
+    },
+    {
+      "namespace": "swe-agent",
+      "name": "run-replay",
+      "summary": "Replay an existing SWE-agent trajectory/demo and attach the replay output as AgentOS artifacts.",
+      "usage": "ooo swe-agent run-replay <upstream sweagent run-replay args>",
+      "risk": "write",
+      "requires_confirmation": true
+    },
+    {
+      "namespace": "swe-agent",
+      "name": "inspect",
+      "summary": "Read and summarize existing SWE-agent trajectory artifacts without mutation.",
+      "usage": "ooo swe-agent inspect <trajectory-or-artifact-dir>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "artifact_path",
+          "type": "path",
+          "required": true,
+          "description": "Trajectory file or directory containing SWE-agent artifacts."
+        }
+      ]
+    },
+    {
+      "namespace": "swe-agent",
+      "name": "quick-stats",
+      "summary": "Summarize counts of SWE-agent trajectories, patches, predictions, logs, and configs.",
+      "usage": "ooo swe-agent quick-stats <artifact-dir>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "artifact_dir",
+          "type": "path",
+          "required": true,
+          "description": "Directory containing SWE-agent outputs."
+        }
+      ]
+    },
+    {
+      "namespace": "swe-agent",
+      "name": "collect-artifacts",
+      "summary": "Attach an existing SWE-agent run output directory to AgentOS provenance, audit, and handoff artifacts.",
+      "usage": "ooo swe-agent collect-artifacts <swe-agent-output-dir>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "source_output_dir",
+          "type": "path",
+          "required": true,
+          "description": "Existing SWE-agent output directory to collect."
+        }
+      ]
+    },
+    {
+      "namespace": "swe-agent",
+      "name": "handoff",
+      "summary": "Generate or regenerate handoff.json and handoff.md for a collected SWE-agent artifact bundle.",
+      "usage": "ooo swe-agent handoff <agentos-artifact-dir>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "artifact_dir",
+          "type": "path",
+          "required": true,
+          "description": "AgentOS SWE-agent artifact bundle."
+        }
+      ]
+    },
+    {
+      "namespace": "swe-agent",
+      "name": "verify-artifacts",
+      "summary": "Validate that an AgentOS SWE-agent artifact bundle contains the expected metadata files.",
+      "usage": "ooo swe-agent verify-artifacts <agentos-artifact-dir>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "artifact_dir",
+          "type": "path",
+          "required": true,
+          "description": "AgentOS SWE-agent artifact bundle."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "seed",
+      "access": "write",
+      "reason": "Create Seed-compatible problem and run handoff artifacts for downstream ooo auto continuation."
+    },
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record run status, permission use, artifact evidence, and failure semantics."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist run ids, artifact directories, and resumable collection state."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record bounded repo, issue, config, command, and artifact metadata."
+    },
+    {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Invoke the upstream SWE-agent executable and its configured sandbox/runtime."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach patch, trajectory, prediction, replay, and reviewer handoff artifacts."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report blocked, failed, partial, completed, and submitted run states."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read local configs, problem files, repositories, and existing SWE-agent artifacts."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write bounded AgentOS artifact bundles, logs, run specs, provenance, audit summaries, and handoffs."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": true,
+      "reason": "Invoke the upstream sweagent command and its configured sandbox process."
+    },
+    {
+      "scope": "runtime:execute",
+      "risk": "write",
+      "required": true,
+      "reason": "Allow SWE-agent to use its configured execution substrate such as Docker or SWE-ReX."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Read GitHub issues, repository metadata, or remote artifacts when upstream args reference URLs."
+    },
+    {
+      "scope": "network:write",
+      "risk": "write",
+      "required": false,
+      "reason": "Call LLM provider APIs or remote runtime services when the selected SWE-agent config requires it."
+    },
+    {
+      "scope": "github:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Read GitHub issue and repository metadata for problem statements and remote repositories."
+    },
+    {
+      "scope": "github:pull_request:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Deferred high-trust path for branch push or PR creation; not used by default."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m swe_agent_harness"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
