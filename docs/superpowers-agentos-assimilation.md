@@ -1,6 +1,6 @@
 # Superpowers AgentOS Assimilation RFC
 
-Issue: [Q00/ouroboros-plugins#28](https://github.com/Q00/ouroboros-plugins/issues/28)  
+Issue: [Q00/ouroboros-plugins#28](https://github.com/Q00/ouroboros-plugins/issues/28)
 Consensus context: [Q00/ouroboros-plugins#27](https://github.com/Q00/ouroboros-plugins/issues/27)
 
 ## PR plan and implementation scope
@@ -47,6 +47,31 @@ case.
    - Update `catalog/index.json`.
    - Document why this is Ouroboros-native assimilation rather than a thin prompt
      wrapper.
+
+
+## Alignment with issue #27
+
+This reference plugin is intentionally scoped to the consensus in #27:
+
+- **Contract/reference repository, not marketplace** — `plugins/superpowers` is
+  included because it proves an external agent methodology can be assimilated
+  through the contract. It is not a request to host arbitrary third-party
+  plugins here.
+- **Not a thin wrapper** — commands produce inspectable metadata, permission
+  plans, Seed-compatible handoffs, audit events, and provenance instead of just
+  printing upstream prompts.
+- **Capabilities vs permissions stay distinct** — capabilities describe
+  Ouroboros primitives such as Seed, ledger, state, provenance, handoff, and
+  progress; permissions describe external filesystem/shell/network authority.
+- **Risk taxonomy is preserved** — v0 commands that write `.omx/superpowers`
+  artifacts are `write`; destructive upstream branch operations are excluded
+  rather than hidden behind a write-risk command.
+- **Lifecycle/trust/firewall boundary remains intact** — install/trust semantics
+  belong to Ouroboros. The plugin only declares commands, required scopes, and
+  safe continuation artifacts.
+- **`ooo auto` boundary is preserved** — Superpowers-specific branching remains
+  in the plugin; downstream `ooo auto`, `$ralph`, or `$team` may consume the
+  prepared handoffs.
 
 ## Architecture boundary
 
