@@ -72,6 +72,12 @@
       "version": "0.1.0",
       "path": "../plugins/vercel-agent-skills",
       "description": "AgentOS/Ouroboros adapter for Vercel Agent Skills."
+    },
+    {
+      "name": "target-capabilities",
+      "version": "0.1.0",
+      "path": "../plugins/target-capabilities",
+      "description": "Reference AgentOS assimilation package for external target repositories."
     }
   ]
 }
