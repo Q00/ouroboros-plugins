@@ -62,7 +62,6 @@ def ask(ns: argparse.Namespace) -> int:
         "selected_context": read_only,
         "repo_state_before": before,
         "aider_version": aider_version,
-        "unauthorized_touched_files": unauthorized_touched,
         "result": {"status": status, "exit_code": result.returncode},
     })
     write_text(out / "stdout.txt", result.stdout)
