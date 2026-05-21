@@ -21,6 +21,7 @@ NORMALIZED_NAMES = {
 }
 
 SECRET_KEYS = ("key", "token", "secret", "password", "credential")
+REDACTED = "<redacted>"
 STATUS_VALUES = {"blocked", "failed", "completed", "submitted", "partial", "cancelled"}
 
 
@@ -51,22 +52,61 @@ def resolve_output_dir(value: str | None, run_id: str | None = None) -> Path:
     return (Path.cwd() / ".agentos" / "swe-agent" / (run_id or make_run_id())).resolve()
 
 
+def is_sensitive_name(value: str) -> bool:
+    return any(part in value.lower() for part in SECRET_KEYS)
+
+
+def redact_argv(argv: list[Any]) -> list[Any]:
+    redacted: list[Any] = []
+    redact_next = False
+    for item in argv:
+        if not isinstance(item, str):
+            redacted.append(redact(item))
+            redact_next = False
+            continue
+        if redact_next:
+            redacted.append(REDACTED)
+            redact_next = False
+            continue
+        if item.startswith("--"):
+            flag, sep, _value = item.partition("=")
+            if is_sensitive_name(flag):
+                if sep:
+                    redacted.append(f"{flag}={REDACTED}")
+                else:
+                    redacted.append(flag)
+                    redact_next = True
+                continue
+        redacted.append(item)
+    return redacted
+
+
 def redact(value: Any) -> Any:
     if isinstance(value, dict):
         out: dict[str, Any] = {}
         for key, item in value.items():
             if any(part in key.lower() for part in SECRET_KEYS):
-                out[key] = "<redacted>"
+                out[key] = REDACTED
             else:
                 out[key] = redact(item)
         return out
     if isinstance(value, list):
-        return [redact(item) for item in value]
+        return redact_argv(value)
     return value
 
 
 def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(redact(payload), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def is_safe_regular_file(path: Path, root: Path) -> bool:
+    if path.is_symlink() or not path.is_file():
+        return False
+    try:
+        path.resolve().relative_to(root)
+    except ValueError:
+        return False
+    return True
 
 
 def discover_artifacts(root: Path) -> list[ArtifactHit]:
@@ -76,7 +116,7 @@ def discover_artifacts(root: Path) -> list[ArtifactHit]:
     for kind, patterns in ARTIFACT_PATTERNS.items():
         for pattern in patterns:
             for path in sorted(root.rglob(pattern)):
-                if not path.is_file() or path in seen:
+                if path in seen or not is_safe_regular_file(path, root):
                     continue
                 seen.add(path)
                 hits.append(ArtifactHit(kind=kind, path=path, relpath=path.relative_to(root).as_posix()))
@@ -97,13 +137,13 @@ def infer_status(returncode: int | None, hits: list[ArtifactHit], explicit: str 
         if explicit not in STATUS_VALUES:
             raise ValueError(f"unknown status {explicit!r}; expected one of {sorted(STATUS_VALUES)}")
         return explicit
+    if returncode is not None and returncode != 0:
+        return "failed"
     if any(hit.kind == "patch" for hit in hits):
         return "submitted"
     if returncode is None:
         return "partial" if hits else "failed"
-    if returncode == 0:
-        return "completed"
-    return "failed"
+    return "completed"
 
 
 def edited_files_from_patch(patch_path: Path | None) -> list[str]:
@@ -146,7 +186,7 @@ def build_run_spec(
         "created_at": utc_now(),
         "artifact_dir": artifact_dir.as_posix(),
         "upstream_output_dir": upstream_output_dir.as_posix(),
-        "upstream_command": upstream_command,
+        "upstream_command": redact_argv(upstream_command),
         "agentos_flags": redact(agentos_flags),
         "safety": {
             "host_patch_application_default": "disabled",
@@ -239,6 +279,20 @@ def write_handoff(bundle_dir: Path, *, run_spec: dict[str, Any], hits: list[Arti
     return payload
 
 
+def copy_safe_tree(source: Path, target: Path) -> None:
+    source = source.resolve()
+    for path in sorted(source.rglob("*")):
+        if path.is_symlink():
+            continue
+        rel = path.relative_to(source)
+        dest = target / rel
+        if path.is_dir():
+            dest.mkdir(parents=True, exist_ok=True)
+        elif is_safe_regular_file(path, source):
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, dest)
+
+
 def collect_bundle(
     *,
     source_output_dir: Path,
@@ -259,7 +313,8 @@ def collect_bundle(
     if source_output_dir.exists() and source_output_dir != (bundle_dir / "swe-agent-output").resolve():
         target = bundle_dir / "swe-agent-output"
         if not target.exists():
-            shutil.copytree(source_output_dir, target)
+            target.mkdir(parents=True, exist_ok=True)
+            copy_safe_tree(source_output_dir, target)
     for kind in ("patch", "prediction", "trajectory"):
         copy_first_kind(bundle_dir, hits, kind)
     provenance = write_provenance(bundle_dir, run_spec=run_spec, hits=hits, source_output_dir=source_output_dir, status=final_status)
