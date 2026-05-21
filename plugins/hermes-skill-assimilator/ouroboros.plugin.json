@@ -3,96 +3,22 @@
   "name": "hermes-skill-assimilator",
   "version": "0.1.0",
   "description": "Inspect and convert Hermes Agent skills/plugin metadata into Ouroboros-native handoff artifacts.",
-  "source": {
-    "type": "local_path",
-    "path": "plugins/hermes-skill-assimilator"
-  },
+  "source": {"type": "local_path", "path": "plugins/hermes-skill-assimilator"},
   "commands": [
-    {
-      "namespace": "hermes-skill",
-      "name": "inspect",
-      "summary": "Inspect Hermes skills and plugin metadata without executing them.",
-      "usage": "ooo hermes-skill inspect <repo-or-skill-path>",
-      "risk": "read_only",
-      "requires_confirmation": false,
-      "arguments": [
-        {
-          "name": "path",
-          "type": "path",
-          "required": true,
-          "description": "Hermes Agent repository or skill directory to inspect."
-        }
-      ]
-    },
-    {
-      "namespace": "hermes-skill",
-      "name": "catalog",
-      "summary": "Write a repository-level Hermes skill capability catalog.",
-      "usage": "ooo hermes-skill catalog <repo-path> --out <report>",
-      "risk": "write",
-      "requires_confirmation": false,
-      "arguments": [
-        {
-          "name": "repo_path",
-          "type": "path",
-          "required": true,
-          "description": "Hermes Agent repository to catalog."
-        },
-        {
-          "name": "out",
-          "type": "path",
-          "required": true,
-          "description": "Markdown report output path."
-        }
-      ]
-    }
+    {"namespace": "hermes-skill", "name": "inspect", "summary": "Inspect Hermes skills and plugin metadata without executing them.", "usage": "ooo hermes-skill inspect <repo-or-skill-path>", "risk": "read_only", "requires_confirmation": false, "arguments": [{"name": "path", "type": "path", "required": true, "description": "Hermes Agent repository or skill directory to inspect."}]},
+    {"namespace": "hermes-skill", "name": "catalog", "summary": "Write a repository-level Hermes skill capability catalog.", "usage": "ooo hermes-skill catalog <repo-path> --out <report>", "risk": "write", "requires_confirmation": false, "arguments": [{"name": "repo_path", "type": "path", "required": true, "description": "Hermes Agent repository to catalog."}, {"name": "out", "type": "path", "required": true, "description": "Markdown report output path."}]},
+    {"namespace": "hermes-skill", "name": "convert", "summary": "Generate Ouroboros handoff artifacts from a Hermes skill.", "usage": "ooo hermes-skill convert <skill-path> --out <output-dir>", "risk": "write", "requires_confirmation": false, "arguments": [{"name": "skill_path", "type": "path", "required": true, "description": "Hermes SKILL.md file or skill directory."}, {"name": "out", "type": "path", "required": true, "description": "Artifact output directory."}]}
   ],
   "capabilities": [
-    {
-      "name": "state",
-      "access": "write",
-      "reason": "Persist inspection/import state between invocations."
-    },
-    {
-      "name": "provenance",
-      "access": "write",
-      "reason": "Record Hermes source paths, versions, and conversion decisions."
-    },
-    {
-      "name": "handoff",
-      "access": "attach",
-      "reason": "Attach generated Seed-compatible handoff artifacts."
-    },
-    {
-      "name": "progress",
-      "access": "write",
-      "reason": "Report long-running scan/import progress."
-    }
+    {"name": "state", "access": "write", "reason": "Persist inspection/import state between invocations."},
+    {"name": "provenance", "access": "write", "reason": "Record Hermes source paths, versions, and conversion decisions."},
+    {"name": "handoff", "access": "attach", "reason": "Attach generated Seed-compatible handoff artifacts."},
+    {"name": "progress", "access": "write", "reason": "Report long-running scan/import progress."}
   ],
   "permissions": [
-    {
-      "scope": "filesystem:read",
-      "risk": "read_only",
-      "required": true,
-      "reason": "Read Hermes skills and plugin manifests."
-    },
-    {
-      "scope": "filesystem:write",
-      "risk": "write",
-      "required": true,
-      "reason": "Write conversion reports and handoff artifacts."
-    }
+    {"scope": "filesystem:read", "risk": "read_only", "required": true, "reason": "Read Hermes skills and plugin manifests."},
+    {"scope": "filesystem:write", "risk": "write", "required": true, "reason": "Write conversion reports and handoff artifacts."}
   ],
-  "entrypoint": {
-    "type": "command",
-    "command": "python -m ouroboros_hermes_skill"
-  },
-  "audit": {
-    "events": [
-      "plugin.invoked",
-      "plugin.permission_used",
-      "plugin.completed",
-      "plugin.failed"
-    ]
-  }
+  "entrypoint": {"type": "command", "command": "python -m ouroboros_hermes_skill"},
+  "audit": {"events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"]}
 }
