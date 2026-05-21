@@ -149,5 +149,121 @@ class SweAgentHarnessPluginTests(unittest.TestCase):
             self.assertIn("fake sweagent ran", (bundle / "stdout.log").read_text(encoding="utf-8"))
 
 
+    def test_symlinked_artifacts_are_not_copied_or_normalized(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            source = root / "swe-output" / "instance-1"
+            source.mkdir(parents=True)
+            secret = root / "outside-secret.txt"
+            secret.write_text("do-not-copy\n", encoding="utf-8")
+            try:
+                os.symlink(secret, source / "instance-1.patch")
+                os.symlink(root, source / "linked-dir")
+            except (OSError, NotImplementedError):
+                self.skipTest("symlink creation is unavailable")
+            (source / "instance-1.traj").write_text("{}", encoding="utf-8")
+            bundle = root / "bundle"
+
+            proc = self._run("collect-artifacts", str(root / "swe-output"), "--agentos-artifact-dir", str(bundle))
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            self.assertFalse((bundle / "patch.diff").exists())
+            for artifact in bundle.rglob("*"):
+                if artifact.is_file() and not artifact.is_symlink():
+                    self.assertNotIn("do-not-copy", artifact.read_text(encoding="utf-8", errors="ignore"))
+            self.assertFalse((bundle / "swe-agent-output" / "instance-1" / "linked-dir").exists())
+
+    def test_argv_secrets_are_redacted_from_all_metadata(self):
+        with tempfile.TemporaryDirectory() as td:
+            bundle = Path(td) / "bundle"
+            proc = self._run(
+                "run",
+                "--agentos-dry-run",
+                "--agentos-artifact-dir",
+                str(bundle),
+                "--api-key",
+                "sk-test-secret",
+                "--github-token=ghp_test_secret",
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            combined = "\n".join(
+                path.read_text(encoding="utf-8", errors="ignore")
+                for path in bundle.rglob("*")
+                if path.is_file()
+            )
+            self.assertNotIn("sk-test-secret", combined)
+            self.assertNotIn("ghp_test_secret", combined)
+            self.assertIn("<redacted>", combined)
+
+    def test_failed_run_with_patch_remains_failed_in_audit(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake = root / "fake-sweagent-fails.py"
+            fake.write_text(
+                "#!/usr/bin/env python3\n"
+                "import pathlib, sys\n"
+                "args = sys.argv[1:]\n"
+                "output = pathlib.Path(args[args.index('--output_dir') + 1])\n"
+                "inst = output / 'inst'\n"
+                "inst.mkdir(parents=True, exist_ok=True)\n"
+                "(inst / 'inst.patch').write_text('diff --git a/a.py b/a.py\\n+++ b/a.py\\n')\n"
+                "sys.exit(2)\n",
+                encoding="utf-8",
+            )
+            fake.chmod(0o755)
+            bundle = root / "bundle"
+
+            proc = self._run("run", "--agentos-allow-execute", "--agentos-sweagent-bin", str(fake), "--agentos-artifact-dir", str(bundle))
+
+            self.assertEqual(proc.returncode, 1)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["status"], "failed")
+            self.assertTrue((bundle / "patch.diff").is_file())
+            run_spec = json.loads((bundle / "run-spec.json").read_text(encoding="utf-8"))
+            audit = json.loads((bundle / "audit-summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(run_spec["status"], "failed")
+            self.assertEqual(audit["events"][-1]["type"], "plugin.failed")
+
+    def test_mutation_hints_stay_blocked_even_with_allow_flags(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake = root / "fake-sweagent.py"
+            fake.write_text("#!/usr/bin/env python3\nprint('should not run')\n", encoding="utf-8")
+            fake.chmod(0o755)
+            open_pr_bundle = root / "open-pr-bundle"
+            apply_bundle = root / "apply-bundle"
+
+            open_pr = self._run(
+                "run",
+                "--agentos-allow-execute",
+                "--agentos-allow-open-pr",
+                "--agentos-sweagent-bin",
+                str(fake),
+                "--agentos-artifact-dir",
+                str(open_pr_bundle),
+                "--open-pr",
+                "true",
+            )
+            apply_patch = self._run(
+                "run",
+                "--agentos-allow-execute",
+                "--agentos-allow-host-patch",
+                "--agentos-sweagent-bin",
+                str(fake),
+                "--agentos-artifact-dir",
+                str(apply_bundle),
+                "--apply-to-repo",
+                str(root),
+            )
+
+            self.assertEqual(open_pr.returncode, 1)
+            self.assertEqual(apply_patch.returncode, 1)
+            self.assertEqual(json.loads(open_pr.stdout)["status"], "blocked")
+            self.assertEqual(json.loads(apply_patch.stdout)["status"], "blocked")
+            self.assertEqual((open_pr_bundle / "stdout.log").read_text(encoding="utf-8"), "")
+            self.assertEqual((apply_bundle / "stdout.log").read_text(encoding="utf-8"), "")
+
+
 if __name__ == "__main__":
     unittest.main()
