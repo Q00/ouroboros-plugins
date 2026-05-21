@@ -232,9 +232,6 @@ def architect(ns: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     ns = parser.parse_args(argv)
-    if getattr(ns, "not_implemented", None):
-        print(f"{ns.not_implemented} is declared for the issue #44 stack but implemented in a later PR", file=sys.stderr)
-        return 2
     if ns.command == "ask":
         return ask(ns)
     if ns.command == "edit":
