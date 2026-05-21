@@ -1,0 +1,75 @@
+{
+  "schema_version": "0.1",
+  "name": "superpowers",
+  "version": "0.1.0",
+  "description": "Ouroboros-native adapter exposing pinned Superpowers skills as auditable AgentOS commands.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/superpowers",
+    "repository": "https://github.com/Q00/ouroboros-plugins"
+  },
+  "commands": [
+    {
+      "namespace": "superpowers",
+      "name": "list",
+      "summary": "List pinned upstream Superpowers skills and command mappings.",
+      "usage": "ooo superpowers list",
+      "risk": "write",
+      "requires_confirmation": false
+    },
+    {
+      "namespace": "superpowers",
+      "name": "inspect",
+      "summary": "Inspect one upstream Superpowers skill mapping, risk, permissions, and provenance.",
+      "usage": "ooo superpowers inspect <skill>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "skill",
+          "type": "string",
+          "required": true,
+          "description": "Upstream Superpowers skill name."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record upstream Superpowers version, commit, skill, and command mapping."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report command readiness and discovered skills."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read vendored upstream Superpowers skill files."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write .omx/superpowers/skill-index.json for discovery output."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m superpowers_ouroboros"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
