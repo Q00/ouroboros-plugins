@@ -1,0 +1,15 @@
+{
+  "id": "trace_123",
+  "name": "agent-run",
+  "timestamp": "2026-05-21T00:00:00Z",
+  "input": {"authorization": "Bearer super-secret", "prompt": "hello"},
+  "output": "ok",
+  "metadata": {"api_key": "sk-lf-secret", "notes": "safe"},
+  "metrics": {"latency": 1234, "totalCost": 0.0123},
+  "observations": [
+    {"id": "obs_1", "name": "llm-call", "type": "GENERATION", "input": "short", "output": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
+  ],
+  "scores": [
+    {"id": "score_1", "name": "correctness", "value": 0.8}
+  ]
+}
