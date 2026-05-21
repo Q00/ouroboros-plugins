@@ -8,6 +8,12 @@
       "description": "Ouroboros integration for Karpathy-style autoresearch experiment loops."
     },
     {
+      "name": "graphify",
+      "version": "0.1.0",
+      "path": "../plugins/graphify",
+      "description": "AgentOS adapter for Graphify knowledge-graph workflows with permissioned audit and handoff semantics."
+    },
+    {
       "name": "github-pr-ops",
       "version": "0.1.0",
       "path": "../plugins/github-pr-ops",
