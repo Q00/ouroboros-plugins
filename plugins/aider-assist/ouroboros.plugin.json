@@ -1,0 +1,191 @@
+{
+  "schema_version": "0.1",
+  "name": "aider-assist",
+  "version": "0.1.0",
+  "description": "Assimilates Aider as a bounded, auditable AI pair-programming capability for Ouroboros AgentOS.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/aider-assist"
+  },
+  "commands": [
+    {
+      "namespace": "aider",
+      "name": "ask",
+      "summary": "Ask Aider about selected repository context without editing files.",
+      "usage": "ooo aider ask --message <question> [--file path...] [--read path...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "message",
+          "type": "string",
+          "required": true,
+          "description": "Question or task prompt sent to Aider."
+        },
+        {
+          "name": "file",
+          "type": "path",
+          "required": false,
+          "description": "Repository file to include as read-only context."
+        },
+        {
+          "name": "read",
+          "type": "path",
+          "required": false,
+          "description": "Additional read-only context file."
+        }
+      ]
+    },
+    {
+      "namespace": "aider",
+      "name": "edit",
+      "summary": "Run a bounded Aider edit task and emit diff, touched-file, verification, and handoff evidence.",
+      "usage": "ooo aider edit --message <goal> --file path... [--test-cmd cmd] [--lint-cmd cmd]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "message",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "file",
+          "type": "path",
+          "required": true
+        },
+        {
+          "name": "test_cmd",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "lint_cmd",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "namespace": "aider",
+      "name": "fix",
+      "summary": "Use Aider to repair a failing lint or test command within bounded editable files.",
+      "usage": "ooo aider fix --test-cmd <cmd> --file path... [--lint-cmd cmd]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "file",
+          "type": "path",
+          "required": true
+        },
+        {
+          "name": "test_cmd",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "lint_cmd",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "namespace": "aider",
+      "name": "architect",
+      "summary": "Use Aider architect-style planning to produce a read-only plan or bounded implementation handoff.",
+      "usage": "ooo aider architect --message <goal> [--file path...] [--read path...]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "message",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "file",
+          "type": "path",
+          "required": false
+        },
+        {
+          "name": "read",
+          "type": "path",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record task inputs, selected context, diffs, verification, and decisions."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record Aider version, invocation arguments, model settings, repo ref, and produced artifacts."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist Aider run/session status for resumable workflows."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach answer, diff, touched files, test output, and next-step guidance."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report long-running coding-agent progress."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read selected repository files and context."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": false,
+      "reason": "Apply bounded code edits for write-capable commands and write artifacts."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": true,
+      "reason": "Invoke the Aider CLI and optional verification commands."
+    },
+    {
+      "scope": "network:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Call configured model-provider APIs through Aider."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Reserved for future web/URL context modes; not used by v0 commands."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m aider_assist"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}

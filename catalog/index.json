@@ -8,6 +8,12 @@
       "description": "AgentOS/Ouroboros assimilation adapter for Addy Osmani's agent-skills."
     },
     {
+      "name": "aider-assist",
+      "version": "0.1.0",
+      "path": "../plugins/aider-assist",
+      "description": "Assimilates Aider as a bounded, auditable AgentOS pair-programming capability."
+    },
+    {
       "name": "anthropic-agent-skills",
       "version": "0.1.0",
       "path": "../plugins/anthropic-agent-skills",
