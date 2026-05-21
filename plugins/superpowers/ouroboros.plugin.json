@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "name": "superpowers",
   "version": "0.1.0",
-  "description": "Ouroboros-native adapter exposing pinned Superpowers skills as auditable AgentOS commands.",
+  "description": "Ouroboros-native adapter exposing every pinned obra/superpowers skill as a permissioned, auditable command.",
   "source": {
     "type": "local_path",
     "path": "plugins/superpowers",
@@ -12,7 +12,7 @@
     {
       "namespace": "superpowers",
       "name": "list",
-      "summary": "List pinned upstream Superpowers skills and command mappings.",
+      "summary": "List pinned upstream Superpowers skills and Ouroboros command mappings.",
       "usage": "ooo superpowers list",
       "risk": "write",
       "requires_confirmation": false
@@ -32,18 +32,379 @@
           "description": "Upstream Superpowers skill name."
         }
       ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "prepare-handoff",
+      "summary": "Prepare a Seed-compatible Ouroboros handoff for a Superpowers skill without direct execution.",
+      "usage": "ooo superpowers prepare-handoff <skill> --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "skill",
+          "type": "string",
+          "required": true,
+          "description": "Upstream Superpowers skill name."
+        },
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate into the handoff."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "brainstorming",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'brainstorming'.",
+      "usage": "ooo superpowers brainstorming --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "dispatching-parallel-agents",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'dispatching-parallel-agents'.",
+      "usage": "ooo superpowers dispatching-parallel-agents --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "executing-plans",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'executing-plans'.",
+      "usage": "ooo superpowers executing-plans --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "finishing-a-development-branch",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'finishing-a-development-branch'.",
+      "usage": "ooo superpowers finishing-a-development-branch --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "receiving-code-review",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'receiving-code-review'.",
+      "usage": "ooo superpowers receiving-code-review --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "requesting-code-review",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'requesting-code-review'.",
+      "usage": "ooo superpowers requesting-code-review --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "subagent-driven-development",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'subagent-driven-development'.",
+      "usage": "ooo superpowers subagent-driven-development --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "systematic-debugging",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'systematic-debugging'.",
+      "usage": "ooo superpowers systematic-debugging --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "test-driven-development",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'test-driven-development'.",
+      "usage": "ooo superpowers test-driven-development --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "using-git-worktrees",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'using-git-worktrees'.",
+      "usage": "ooo superpowers using-git-worktrees --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "using-superpowers",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'using-superpowers'.",
+      "usage": "ooo superpowers using-superpowers --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "verification-before-completion",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'verification-before-completion'.",
+      "usage": "ooo superpowers verification-before-completion --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "writing-plans",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'writing-plans'.",
+      "usage": "ooo superpowers writing-plans --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
+      "name": "writing-skills",
+      "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'writing-skills'.",
+      "usage": "ooo superpowers writing-skills --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate through this skill."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
     }
   ],
   "capabilities": [
+    {
+      "name": "seed",
+      "access": "write",
+      "reason": "Generate Seed-compatible handoff artifacts for Superpowers workflows."
+    },
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record command intent, decisions, and verification evidence."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist resumable run artifacts under .omx/superpowers/."
+    },
     {
       "name": "provenance",
       "access": "write",
       "reason": "Record upstream Superpowers version, commit, skill, and command mapping."
     },
     {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Describe controlled downstream Ouroboros runtime continuation without bypassing trust."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach prepared handoff and Seed artifacts to downstream execution."
+    },
+    {
       "name": "progress",
       "access": "write",
-      "reason": "Report command readiness and discovered skills."
+      "reason": "Report command readiness, blocked state, and next actions."
     }
   ],
   "permissions": [
@@ -51,13 +412,31 @@
       "scope": "filesystem:read",
       "risk": "read_only",
       "required": true,
-      "reason": "Read vendored upstream Superpowers skill files."
+      "reason": "Read vendored upstream Superpowers skill files and local user inputs."
     },
     {
       "scope": "filesystem:write",
       "risk": "write",
       "required": true,
-      "reason": "Write .omx/superpowers/skill-index.json for discovery output."
+      "reason": "Write handoff, Seed-preparation, provenance, evidence, and audit artifacts."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": false,
+      "reason": "Future controlled execution may launch bounded Ouroboros runtime/team stages; v0 handoff generation does not execute them."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Future update checks may compare the pinned upstream snapshot with obra/superpowers."
+    },
+    {
+      "scope": "github:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Future code-review workflows may inspect PR metadata without mutation."
     }
   ],
   "entrypoint": {
