@@ -41,3 +41,20 @@ def test_view_transition_implement_is_blocked(tmp_path, monkeypatch):
     assert rc == 2
     handoff = json.loads((out / "handoff.json").read_text())
     assert handoff["status"] == "blocked"
+
+
+def test_web_design_guidelines_blocks_when_fetch_fails(tmp_path, monkeypatch):
+    monkeypatch.chdir(ROOT)
+
+    def fail_urlopen(*args, **kwargs):
+        raise OSError("network disabled")
+
+    import vercel_agent_skills.audits as audits
+
+    monkeypatch.setattr(audits.urllib.request, "urlopen", fail_urlopen)
+    out = tmp_path / "run"
+    rc = main(["web-design-guidelines", "tests/fixtures/vercel-sample", "--format", "json", "--out", str(out)])
+    assert rc == 2
+    handoff = json.loads((out / "handoff.json").read_text())
+    assert handoff["status"] == "blocked"
+    assert any("Guideline fetch blocked" in item for item in handoff["limitations"])

@@ -48,21 +48,26 @@ def run(command: str, argv: list[str]) -> int:
     rules = load_rule_names(ctx)
     files = bounded_paths(ns.target)
     findings = _findings(command, files)
+    limitations = ["Static adapter findings are heuristic; upstream SKILL.md remains the behavioral source for agent review."]
+    status = "success"
     if command == "web-design-guidelines":
-        guideline = _fetch_guideline(ns.guidelines_url)
+        guideline, fetch_error = _fetch_guideline(ns.guidelines_url)
         (ctx.run_dir / "guidelines-source.txt").write_text(guideline[:4000] + "\n")
         provenance_extra = {"guidelines_url": ns.guidelines_url}
+        if fetch_error:
+            status = "blocked"
+            limitations.append(f"Guideline fetch blocked or failed: {fetch_error}")
     else:
         provenance_extra = {}
-    report = _render_report(command, files, findings, rules, upstream, getattr(ns, "mode", "audit"))
+    report = _render_report(command, files, findings, rules, upstream, getattr(ns, "mode", "audit"), status, limitations)
     report_path = ctx.run_dir / ("report.json" if ns.format == "json" else "report.md")
     if ns.format == "json":
         write_json(report_path, {"command": command, "files": [relative(p) for p in files], "rules": rules, "findings": findings})
     else:
         report_path.write_text(report)
-    handoff = write_handoff(ctx, "success", [{"kind": "report", "path": str(report_path)}, {"kind": "upstream_skill", "path": str(ctx.upstream_dir / "SKILL.md")}], findings=findings, limitations=["Static adapter findings are heuristic; upstream SKILL.md remains the behavioral source for agent review."], next_actions=[{"kind": "handoff_to_agentos_automation", "summary": "Use findings and upstream rules to plan targeted code changes."}], provenance_extra=provenance_extra)
-    print(json.dumps(handoff, indent=2) if ns.format == "json" else report)
-    return 0
+    handoff = write_handoff(ctx, status, [{"kind": "report", "path": str(report_path)}, {"kind": "upstream_skill", "path": str(ctx.upstream_dir / "SKILL.md")}], findings=findings, limitations=limitations, next_actions=[{"kind": "handoff_to_agentos_automation", "summary": "Use findings and upstream rules to plan targeted code changes."}], provenance_extra=provenance_extra)
+    print(json.dumps(handoff, indent=2) if ns.format == "json" or status == "blocked" else report)
+    return 2 if status == "blocked" else 0
 
 
 def _blocked_implement(ctx: RunContext) -> int:
@@ -84,21 +89,23 @@ def _findings(command: str, files: list[Path]) -> list[dict[str, Any]]:
     return findings
 
 
-def _render_report(command: str, files: list[Path], findings: list[dict[str, Any]], rules: list[str], upstream: str, mode: str) -> str:
-    out = [f"# Vercel {command} {mode} report", "", f"Reviewed files: {len(files)}", f"Upstream rules/references available: {len(rules)}", ""]
+def _render_report(command: str, files: list[Path], findings: list[dict[str, Any]], rules: list[str], upstream: str, mode: str, status: str, limitations: list[str]) -> str:
+    out = [f"# Vercel {command} {mode} report", "", f"Status: {status}", f"Reviewed files: {len(files)}", f"Upstream rules/references available: {len(rules)}", ""]
     if findings:
         out.append("## Findings")
         for f in findings:
             out.append(f"- `{f['path']}:{f['line']}` [{f['rule']}] {f['summary']}")
     else:
         out.extend(["## Findings", "- No heuristic findings; use upstream skill guidance for deeper agent review."])
+    if limitations:
+        out.extend(["", "## Limitations", *[f"- {item}" for item in limitations]])
     out.extend(["", "## Progressive disclosure", "The adapter loaded the selected upstream `SKILL.md` for this command only.", f"Upstream instruction bytes loaded: {len(upstream.encode('utf-8'))}"])
     return "\n".join(out) + "\n"
 
 
-def _fetch_guideline(url: str) -> str:
+def _fetch_guideline(url: str) -> tuple[str, str | None]:
     try:
         with urllib.request.urlopen(url, timeout=10) as response:  # noqa: S310 - URL is explicit user/plugin input and recorded in provenance.
-            return response.read(64_000).decode("utf-8", errors="replace")
+            return response.read(64_000).decode("utf-8", errors="replace"), None
     except Exception as exc:  # network trust may be unavailable
-        return f"FETCH_BLOCKED_OR_FAILED: {type(exc).__name__}: {exc}"
+        return f"FETCH_BLOCKED_OR_FAILED: {type(exc).__name__}: {exc}", f"{type(exc).__name__}: {exc}"
