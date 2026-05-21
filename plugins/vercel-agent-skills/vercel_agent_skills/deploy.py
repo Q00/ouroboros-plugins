@@ -22,7 +22,8 @@ def preview(argv: list[str]) -> int:
     project = (Path(ns.project_path) if Path(ns.project_path).is_absolute() else Path.cwd() / ns.project_path).resolve()
     limitations = []
     status = "blocked"
-    planned = ["vercel", "deploy", str(project)]
+    project_rel = relative(project, repo_root(project))
+    planned = ["vercel", "deploy", project_rel]
     if ns.scope:
         planned += ["--scope", ns.scope]
     if ns.no_wait:
@@ -33,7 +34,7 @@ def preview(argv: list[str]) -> int:
         limitations.append("VERCEL_TOKEN must be supplied via environment, never command-line arguments.")
     if ns.execute and ns.confirm and os.environ.get("VERCEL_TOKEN"):
         limitations.append("Execution hook is intentionally not enabled in v0 tests; command is prepared for the trusted runtime to execute.")
-    deployment = {"planned_command": planned, "execute_requested": ns.execute, "claimable": ns.claimable, "scope": ns.scope, "project_path": relative(project, repo_root(project))}
+    deployment = {"planned_command": planned, "execute_requested": ns.execute, "claimable": ns.claimable, "scope": ns.scope, "project_path": project_rel}
     write_json(ctx.run_dir / "deployment-plan.json", deployment)
     handoff = write_handoff(ctx, status, [{"kind": "deployment_plan", "path": str(ctx.run_dir / "deployment-plan.json")}], limitations=limitations, next_actions=[{"kind": "trust_gate", "summary": "Rerun with --confirm and VERCEL_TOKEN in the environment from a trusted AgentOS write context."}], provenance_extra={"project_path": deployment["project_path"]})
     print(json.dumps(handoff, indent=2))
