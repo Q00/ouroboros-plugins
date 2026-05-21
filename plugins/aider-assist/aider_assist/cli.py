@@ -62,6 +62,7 @@ def ask(ns: argparse.Namespace) -> int:
         "selected_context": read_only,
         "repo_state_before": before,
         "aider_version": aider_version,
+        "unauthorized_touched_files": unauthorized_touched,
         "result": {"status": status, "exit_code": result.returncode},
     })
     write_text(out / "stdout.txt", result.stdout)
@@ -88,6 +89,23 @@ def edit(ns: argparse.Namespace) -> int:
     rid = run_id("edit")
     out = artifact_root(repo_root, rid)
     out.mkdir(parents=True, exist_ok=True)
+    editable_set = set(editable)
+    preexisting_outside_bounds = sorted(path for path in touched_files(repo_root) if path not in editable_set)
+    if preexisting_outside_bounds:
+        write_json(out / "invocation.json", {
+            "schema_version": "0.1",
+            "plugin": {"name": "aider-assist", "version": __version__},
+            "command": "edit",
+            "message": ns.message,
+            "editable_files": editable,
+            "read_only_context": read_only,
+            "result": {"status": "blocked", "message": "repository has dirty files outside the editable allowlist", "files": preexisting_outside_bounds},
+        })
+        summary = f"Dirty files outside edit bounds: {', '.join(preexisting_outside_bounds)}"
+        write_handoff(out / "handoff.md", command="edit", message=ns.message, selected_context=[*editable, *read_only], status="blocked", aider_version=version(repo_root), summary=summary)
+        print(str(out))
+        return 2
+
     argv = edit_args(ns.message, editable, read_only)
     before = snapshot(repo_root)
     aider_version = version(repo_root)
@@ -95,7 +113,8 @@ def edit(ns: argparse.Namespace) -> int:
     after = snapshot(repo_root)
     patch = diff(repo_root)
     touched = touched_files(repo_root)
-    status = "completed" if result.returncode == 0 else "failed"
+    unauthorized_touched = sorted(path for path in touched if path not in editable_set)
+    status = "completed" if result.returncode == 0 and not unauthorized_touched else "failed"
 
     write_json(out / "invocation.json", {
         "schema_version": "0.1",
@@ -108,6 +127,7 @@ def edit(ns: argparse.Namespace) -> int:
         "repo_state_before": before,
         "repo_state_after": after,
         "aider_version": aider_version,
+        "unauthorized_touched_files": unauthorized_touched,
         "result": {"status": status, "exit_code": result.returncode},
     })
     write_text(out / "stdout.txt", result.stdout)
@@ -115,9 +135,11 @@ def edit(ns: argparse.Namespace) -> int:
     write_text(out / "diff.patch", patch)
     write_text(out / "touched-files.txt", "\n".join(touched) + ("\n" if touched else ""))
     summary = result.stdout.strip() or result.stderr.strip() or f"Aider exited with code {result.returncode}."
+    if unauthorized_touched:
+        summary = f"Aider touched files outside the editable allowlist: {', '.join(unauthorized_touched)}"
     write_handoff(out / "handoff.md", command="edit", message=ns.message, selected_context=[*editable, *read_only], status=status, aider_version=aider_version, summary=summary)
     print(str(out))
-    return result.returncode
+    return 0 if status == "completed" else (result.returncode or 1)
 
 
 def main(argv: list[str] | None = None) -> int:
