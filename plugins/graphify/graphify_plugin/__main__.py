@@ -311,6 +311,7 @@ def normalize_upstream_args(raw: list[str]) -> list[str]:
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="graphify_plugin", add_help=True)
     parser.add_argument("args", nargs=argparse.REMAINDER, help="Arguments forwarded to upstream graphify.")
+    parser.add_argument("--allow-sensitive", action="store_true", help="Allow gated network/model/MCP/watch/Neo4j operations when plugin trust has already been granted.")
     parser.add_argument("--handoff-out", help="Write handoff JSON to this path instead of .omx/handoffs/graphify/.")
     parser.add_argument("--no-handoff", action="store_true", help="Do not write handoff JSON; still print result JSON.")
     ns = parser.parse_args(argv)
@@ -319,6 +320,23 @@ def run(argv: list[str] | None = None) -> int:
     root = Path.cwd().resolve()
     classification = classify_permissions(upstream_args)
     resolution = resolve_graphify()
+
+    if classification["sensitive_operations"] and not ns.allow_sensitive:
+        payload = build_payload(
+            status="blocked",
+            argv=upstream_args,
+            classification=classification,
+            resolution=resolution,
+            returncode=None,
+            message="Sensitive Graphify operation blocked pending explicit trust/confirmation: " + ", ".join(classification["sensitive_operations"]),
+            root=root,
+        )
+        if not ns.no_handoff:
+            out = handoff_path(root, classification["family"], ns.handoff_out)
+            payload["handoff_path"] = str(out)
+            write_json_atomic(out, payload)
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
 
     if resolution.argv is None:
         payload = build_payload(

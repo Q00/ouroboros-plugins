@@ -35,6 +35,16 @@ class GraphifyPluginTests(unittest.TestCase):
         self.assertEqual(payload["plugin"]["name"], "graphify")
         self.assertEqual(payload["command"]["family"], "build")
 
+    def test_network_add_is_blocked_without_sensitive_allow(self):
+        with tempfile.TemporaryDirectory() as td:
+            proc = self._run("--no-handoff", "add", "https://example.com/doc", cwd=Path(td))
+
+        self.assertEqual(proc.returncode, 1)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["status"], "blocked")
+        self.assertIn("network:read", payload["permission_sensitive_operations"])
+        self.assertTrue(payload["requires_confirmation"])
+
     def test_fake_graphify_success_records_artifacts_and_graph_stats(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
