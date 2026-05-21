@@ -25,6 +25,33 @@
         {"name": "handoff", "type": "path", "required": false, "description": "Repo-relative path for downstream Ouroboros handoff JSON."},
         {"name": "no_fail_on_validation_fail", "type": "boolean", "required": false, "description": "Return exit 0 for validation failures after writing evidence."}
       ]
+    },
+    {
+      "namespace": "guardrails",
+      "name": "validate-artifact",
+      "summary": "Validate an Ouroboros artifact against a Guardrails spec and emit handoff evidence.",
+      "usage": "ooo guardrails validate-artifact --spec <path> --artifact <path> [--report <path>] [--handoff <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "spec", "type": "path", "required": true, "description": "Repo-relative Guardrails RAIL or JSON guard spec path."},
+        {"name": "artifact", "type": "path", "required": true, "description": "Repo-relative Ouroboros artifact to validate."},
+        {"name": "metadata", "type": "path", "required": false, "description": "Repo-relative JSON metadata passed to Guardrails validators."},
+        {"name": "report", "type": "path", "required": false, "description": "Repo-relative path for normalized report JSON."},
+        {"name": "handoff", "type": "path", "required": false, "description": "Repo-relative path for downstream Ouroboros handoff JSON."},
+        {"name": "no_fail_on_validation_fail", "type": "boolean", "required": false, "description": "Return exit 0 for validation failures after writing evidence."}
+      ]
+    },
+    {
+      "namespace": "guardrails",
+      "name": "summarize-report",
+      "summary": "Read a Guardrails/Ouroboros validation report and print a concise human summary.",
+      "usage": "ooo guardrails summarize-report --report <path>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "report", "type": "path", "required": true, "description": "Repo-relative Guardrails/Ouroboros validation report JSON."}
+      ]
     }
   ],
   "capabilities": [

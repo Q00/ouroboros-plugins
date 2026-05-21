@@ -274,7 +274,7 @@ def build_report(
             "handoff_path": handoff_path.display if handoff_path else None,
         },
         "handoff": {
-            "consumer_hint": "Use this report as validation evidence for the associated output.",
+            "consumer_hint": "Use this report as validation evidence for the associated artifact.",
             "artifact_status": "accepted" if passed else "rejected",
             "report_path": report_path.display if report_path else None,
         },
@@ -367,6 +367,16 @@ def validate_command(args: argparse.Namespace, *, command_name: str) -> int:
     return 0 if args.no_fail_on_validation_fail else 1
 
 
+def summarize_command(args: argparse.Namespace) -> int:
+    root = Path.cwd().resolve()
+    report_path = bounded_path(root, args.report, "--report")
+    report = load_json_file(report_path.path, "--report")
+    if not isinstance(report, dict):
+        raise UserError("--report must contain a JSON object")
+    sys.stdout.write(summary_for_report(report) + "\n")
+    return 0
+
+
 def add_common_validation_args(parser: argparse.ArgumentParser, *, target: str) -> None:
     parser.add_argument("--spec", required=True)
     if target == "output":
@@ -388,6 +398,11 @@ def build_parser() -> argparse.ArgumentParser:
     validate_output = sub.add_parser("validate-output")
     add_common_validation_args(validate_output, target="output")
 
+    validate_artifact = sub.add_parser("validate-artifact")
+    add_common_validation_args(validate_artifact, target="artifact")
+
+    summarize = sub.add_parser("summarize-report")
+    summarize.add_argument("--report", required=True)
     return parser
 
 
@@ -397,6 +412,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "validate-output":
             return validate_command(args, command_name="validate-output")
+        if args.command == "validate-artifact":
+            return validate_command(args, command_name="validate-artifact")
+        if args.command == "summarize-report":
+            return summarize_command(args)
         parser.error(f"unknown command: {args.command}")
     except UserError as exc:
         sys.stderr.write(f"guardrails-eval: {exc}\n")
