@@ -16,7 +16,6 @@ DEFAULT_CAPABILITIES = [
     {"name": "ledger", "access": "write", "reason": "Record workflow decisions, constraints, and evidence."},
     {"name": "state", "access": "write", "reason": "Persist resumable command state under .omx/superpowers/."},
     {"name": "provenance", "access": "write", "reason": "Record upstream Superpowers source and command mapping."},
-    {"name": "runtime", "access": "execute", "reason": "Describe safe Ouroboros runtime continuation stages."},
     {"name": "handoff", "access": "attach", "reason": "Attach prepared handoffs to Ouroboros execution."},
     {"name": "progress", "access": "write", "reason": "Report resumable command progress."},
 ]
@@ -39,15 +38,6 @@ def _permissions_for(skill: str) -> list[dict[str, object]]:
             "reason": "Write .omx/superpowers handoff, state, provenance, and evidence artifacts.",
         }
     )
-    if skill in {"dispatching-parallel-agents", "subagent-driven-development", "executing-plans"}:
-        perms.append(
-            {
-                "scope": "shell:execute",
-                "risk": "write",
-                "required": False,
-                "reason": "Future controlled execution may launch bounded Ouroboros runtime or team stages; v0 handoff generation does not execute them.",
-            }
-        )
     return perms
 
 

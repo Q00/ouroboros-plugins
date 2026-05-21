@@ -9,6 +9,11 @@ from pathlib import Path
 from .skill_index import PLUGIN_ROOT, SkillRecord
 from .upstream import SOURCE_PLATFORM, UPSTREAM_COMMIT, UPSTREAM_LICENSE, UPSTREAM_REPO, UPSTREAM_VERSION
 
+PLUGIN_NAME = "superpowers"
+PLUGIN_VERSION = "0.1.0"
+PLUGIN_SOURCE_TYPE = "local_path"
+TRUST_STATE = "trusted"
+
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -183,21 +188,54 @@ def prepare_handoff(skill: SkillRecord, *, goal: str, user_input: str, output_ro
         ],
         "next_step": _continuation(skill.name),
     }
+    command = {"namespace": "superpowers", "name": skill.name, "argv": [skill.name]}
+    plugin = {"name": PLUGIN_NAME, "version": PLUGIN_VERSION, "source_type": PLUGIN_SOURCE_TYPE}
+    provenance_for_audit = {
+        "upstream_repo": UPSTREAM_REPO,
+        "upstream_version": UPSTREAM_VERSION,
+        "upstream_commit": UPSTREAM_COMMIT,
+        "upstream_skill": skill.name,
+        "run_id": run_id,
+    }
+    capabilities_used = [f"{c['name']}:{c['access']}" for c in skill.capabilities]
+    permission_scopes_used = [p["scope"] for p in used_permissions]
     audit_events = [
         {
-            "event": "plugin.invoked",
-            "at": invocation["invoked_at"],
-            "run_id": run_id,
-            "skill": skill.name,
-            "arguments": argument_summary,
+            "schema_version": "0.1",
+            "event_type": "plugin.invoked",
+            "occurred_at": invocation["invoked_at"],
+            "plugin": plugin,
+            "command": command,
+            "trust_state": TRUST_STATE,
+            "capabilities_used": capabilities_used,
+            "permissions_used": [],
+            "provenance": provenance_for_audit,
+            "result": {"status": "success", "message": "Superpowers handoff preparation started."},
         },
         {
-            "event": "plugin.permission_used",
-            "at": invocation["invoked_at"],
-            "run_id": run_id,
-            "permissions": used_permissions,
+            "schema_version": "0.1",
+            "event_type": "plugin.permission_used",
+            "occurred_at": invocation["invoked_at"],
+            "plugin": plugin,
+            "command": command,
+            "trust_state": TRUST_STATE,
+            "capabilities_used": capabilities_used,
+            "permissions_used": permission_scopes_used,
+            "provenance": provenance_for_audit,
+            "result": {"status": "success", "message": "Prepared filesystem-backed handoff artifacts."},
         },
-        {"event": "plugin.completed", "at": _now(), "run_id": run_id, "artifact": str((run_dir / "handoff.md").as_posix())},
+        {
+            "schema_version": "0.1",
+            "event_type": "plugin.completed",
+            "occurred_at": _now(),
+            "plugin": plugin,
+            "command": command,
+            "trust_state": TRUST_STATE,
+            "capabilities_used": capabilities_used,
+            "permissions_used": permission_scopes_used,
+            "provenance": {**provenance_for_audit, "artifact_path": str((run_dir / "handoff.md").as_posix())},
+            "result": {"status": "success", "message": "Superpowers handoff artifacts prepared."},
+        },
     ]
     handoff = build_handoff_markdown(skill, goal=goal, user_input=user_input, run_id=run_id)
     seed = f"""# Seed preparation: Superpowers `{skill.name}`

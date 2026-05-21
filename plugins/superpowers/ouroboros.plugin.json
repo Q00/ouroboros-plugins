@@ -63,6 +63,34 @@
     },
     {
       "namespace": "superpowers",
+      "name": "run",
+      "summary": "Safe v0 alias that prepares an Ouroboros-native handoff without executing destructive actions.",
+      "usage": "ooo superpowers run <skill> --goal <goal>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "skill",
+          "type": "string",
+          "required": true,
+          "description": "Upstream Superpowers skill name."
+        },
+        {
+          "name": "goal",
+          "type": "string",
+          "required": false,
+          "description": "Goal to translate into the handoff."
+        },
+        {
+          "name": "input",
+          "type": "string",
+          "required": false,
+          "description": "Additional bounded user input."
+        }
+      ]
+    },
+    {
+      "namespace": "superpowers",
       "name": "brainstorming",
       "summary": "Prepare an Ouroboros-native handoff for upstream Superpowers skill 'brainstorming'.",
       "usage": "ooo superpowers brainstorming --goal <goal>",
@@ -392,11 +420,6 @@
       "reason": "Record upstream Superpowers version, commit, skill, and command mapping."
     },
     {
-      "name": "runtime",
-      "access": "execute",
-      "reason": "Describe controlled downstream Ouroboros runtime continuation without bypassing trust."
-    },
-    {
       "name": "handoff",
       "access": "attach",
       "reason": "Attach prepared handoff and Seed artifacts to downstream execution."
@@ -419,24 +442,6 @@
       "risk": "write",
       "required": true,
       "reason": "Write handoff, Seed-preparation, provenance, evidence, and audit artifacts."
-    },
-    {
-      "scope": "shell:execute",
-      "risk": "write",
-      "required": false,
-      "reason": "Future controlled execution may launch bounded Ouroboros runtime/team stages; v0 handoff generation does not execute them."
-    },
-    {
-      "scope": "network:read",
-      "risk": "read_only",
-      "required": false,
-      "reason": "Future update checks may compare the pinned upstream snapshot with obra/superpowers."
-    },
-    {
-      "scope": "github:read",
-      "risk": "read_only",
-      "required": false,
-      "reason": "Future code-review workflows may inspect PR metadata without mutation."
     }
   ],
   "entrypoint": {
