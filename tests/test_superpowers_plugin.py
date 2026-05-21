@@ -98,12 +98,26 @@ class SuperpowersPluginTests(unittest.TestCase):
             audit_lines = (run_dir / "audit.jsonl").read_text().splitlines()
 
         self.assertEqual(invocation["upstream_skill"], "test-driven-development")
+        self.assertNotIn("goal", invocation)
+        self.assertNotIn("input", invocation)
+        self.assertEqual(invocation["arguments"]["goal_length"], len("Add retry behavior"))
+        self.assertEqual(invocation["arguments"]["input_length"], len("network client"))
+        self.assertEqual(
+            {permission["scope"] for permission in invocation["used_permissions"]},
+            {"filesystem:read", "filesystem:write"},
+        )
         self.assertEqual(provenance["upstream_repo"], "https://github.com/obra/superpowers")
         self.assertEqual(provenance["upstream_skill"], "test-driven-development")
         self.assertIn("failing-test output", handoff)
         self.assertIn("Seed-preparation handoff", handoff)
         self.assertEqual(evidence["status"], "prepared")
-        self.assertEqual([json.loads(line)["event"] for line in audit_lines], ["plugin.invoked", "plugin.permission_used", "plugin.completed"])
+        audit_events = [json.loads(line) for line in audit_lines]
+        self.assertEqual([event["event"] for event in audit_events], ["plugin.invoked", "plugin.permission_used", "plugin.completed"])
+        permission_event = [event for event in audit_events if event["event"] == "plugin.permission_used"][0]
+        self.assertEqual(
+            {permission["scope"] for permission in permission_event["permissions"]},
+            {"filesystem:read", "filesystem:write"},
+        )
 
     def test_skill_command_alias_prepares_handoff_and_excludes_destructive_actions(self):
         with tempfile.TemporaryDirectory() as td:
@@ -117,8 +131,10 @@ class SuperpowersPluginTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stderr)
             payload = json.loads(proc.stdout)
             handoff = Path(payload["handoff_path"]).read_text()
+            invocation = json.loads(Path(payload["invocation_path"]).read_text())
         self.assertIn("Destructive upstream actions are report-only in v0", handoff)
         self.assertIn("no merge, push, branch deletion, discard, or PR mutation", handoff)
+        self.assertTrue(all(permission["risk"] != "destructive" for permission in invocation["planned_permissions"]))
 
     def test_unknown_skill_is_rejected(self):
         proc = self._run("inspect", "not-a-skill")
