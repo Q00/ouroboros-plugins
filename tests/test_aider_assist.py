@@ -58,6 +58,26 @@ class AiderAssistTests(unittest.TestCase):
             self.assertIn("Aider Assist Handoff", handoff)
             self.assertIn("src.py", handoff)
 
+    def test_ask_missing_aider_writes_failed_artifacts(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td) / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            env = os.environ.copy()
+            env["AIDER_ASSIST_AIDER_BIN"] = str(Path(td) / "does-not-exist")
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "ask", "--message", "Explain"],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 127)
+            artifact_dir = Path(completed.stdout.strip())
+            invocation = json.loads((artifact_dir / "invocation.json").read_text())
+            self.assertEqual(invocation["result"]["status"], "failed")
+            self.assertIn("executable not found", (artifact_dir / "stderr.txt").read_text())
+
 
 if __name__ == "__main__":
     unittest.main()
