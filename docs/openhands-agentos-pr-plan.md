@@ -4,6 +4,19 @@ Source epic: Q00/ouroboros-plugins#42. Related ecosystem boundary: Q00/ouroboros
 
 The implementation should be reviewed as **4 PRs**. Together they preserve the OpenHands UX while keeping OpenHands outside Ouroboros core and inside an audited UserLevel plugin boundary.
 
+## Issue #27 alignment
+
+Issue #27 defines `ouroboros-plugins` as the capability-assimilation layer, not a marketplace and not a dumping ground for shell wrappers. This stack follows that contract:
+
+| PR | #27 alignment |
+| --- | --- |
+| PR 1 | Defines OpenHands as a reference UserLevel capability with manifest identity, declared commands, capabilities, permissions, risk, and lifecycle documentation. |
+| PR 2 | Adds read-only discovery/inspection so the plugin can report readiness without invoking external authority or reading secrets. |
+| PR 3 | Translates OpenHands CLI execution into explicit trust, bounded filesystem authority, audit events, provenance, durable state, and progress semantics. |
+| PR 4 | Turns raw OpenHands output into handoff artifacts so downstream Ouroboros workflows consume evidence rather than tool-specific behavior. |
+
+The rejected shape is a trivial `python -m openhands` wrapper. The accepted shape is OpenHands capability assimilation: declared external authority, explicit risk, auditable execution, bounded side effects, durable artifacts, and handoff-compatible output while keeping `ooo auto` and core small.
+
 ## PR 1 — Design and contract foundation
 
 Scope: add the plugin manifest, README/product boundary, catalog/top-level README registration, and this PR sequence. No OpenHands invocation or dependency on SDK internals. Merge condition: manifest validation passes and the repo explains why OpenHands integration belongs in `ouroboros-plugins`, not core.

@@ -24,6 +24,10 @@ Dispatcher equivalents: `ooo openhands inspect`, `ooo openhands run`, `ooo openh
 - `--config-mode native` and `--sandbox process` are explicit operator choices.
 - Metadata records redacted command/environment provenance; raw secrets are not written by the plugin.
 
+## Why this satisfies the UserLevel plugin contract
+
+This is intentionally more than a command wrapper. It maps an external agent tool into the Issue #27 plugin contract by declaring capability/permission needs, requiring explicit trust for shell execution, bounding workspace writes, preserving provenance, emitting audit events, and producing handoff artifacts that can be reviewed or consumed by later Ouroboros workflows.
+
 ## Product boundary
 
 This plugin owns OpenHands CLI availability inspection, trust-gated `openhands --headless --json` invocation, durable JSONL/stdout/stderr/metadata/audit capture, and Markdown/JSON handoff generation.
