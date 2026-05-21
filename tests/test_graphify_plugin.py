@@ -35,6 +35,16 @@ class GraphifyPluginTests(unittest.TestCase):
         self.assertEqual(payload["plugin"]["name"], "graphify")
         self.assertEqual(payload["command"]["family"], "build")
 
+    def test_network_add_is_blocked_without_sensitive_allow(self):
+        with tempfile.TemporaryDirectory() as td:
+            proc = self._run("--no-handoff", "add", "https://example.com/doc", cwd=Path(td))
+
+        self.assertEqual(proc.returncode, 1)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["status"], "blocked")
+        self.assertIn("network:read", payload["permission_sensitive_operations"])
+        self.assertTrue(payload["requires_confirmation"])
+
     def test_fake_graphify_success_records_artifacts_and_graph_stats(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -98,6 +108,52 @@ class GraphifyPluginTests(unittest.TestCase):
             self.assertEqual(payload["risk"], "read_only")
             self.assertEqual(payload["permissions_used"], ["filesystem:read", "shell:execute"])
             self.assertIn("query-result", payload["stdout_excerpt"])
+
+    def test_sensitive_allow_flag_works_after_forwarded_args(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            fake = fake_bin / "graphify"
+            fake.write_text("#!/usr/bin/env sh\necho sensitive-ok\n", encoding="utf-8")
+            fake.chmod(0o755)
+
+            proc = self._run(
+                "add",
+                "https://example.com/doc",
+                "--allow-sensitive",
+                "--no-handoff",
+                cwd=root,
+                env={"PATH": f"{fake_bin}{os.pathsep}{os.environ.get('PATH', '')}"},
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["status"], "completed")
+            self.assertIn("sensitive-ok", payload["stdout_excerpt"])
+            self.assertIn("network:read", payload["permission_sensitive_operations"])
+
+    def test_local_paths_must_stay_inside_workspace(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            outside = root.parent / "outside-graphify-target"
+            outside.mkdir(exist_ok=True)
+            proc = self._run("--no-handoff", str(outside), cwd=root)
+
+        self.assertEqual(proc.returncode, 2)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["status"], "blocked")
+        self.assertIn("must stay inside", payload["message"])
+
+    def test_handoff_path_must_stay_inside_workspace(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            proc = self._run(".", "--handoff-out", "../handoff.json", cwd=root)
+
+        self.assertEqual(proc.returncode, 2)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["status"], "blocked")
+        self.assertIn("--handoff-out must stay inside", payload["message"])
 
 
 if __name__ == "__main__":

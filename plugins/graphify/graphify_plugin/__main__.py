@@ -33,6 +33,38 @@ STANDARD_ARTIFACTS = (
     "graphify-out/graph.cypher",
 )
 
+def split_adapter_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
+    """Parse adapter-owned flags wherever they appear in the argv.
+
+    Graphify commands have their own positional and flag surface. Users naturally
+    place plugin safety flags after the graphify subcommand, e.g.
+    `add <url> --allow-sensitive`, so a single argparse REMAINDER positional would
+    make the safety flag unreachable. This parser removes only adapter-owned
+    flags and forwards everything else unchanged to upstream Graphify.
+    """
+    allow_sensitive = False
+    no_handoff = False
+    handoff_out: str | None = None
+    forwarded: list[str] = []
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--allow-sensitive":
+            allow_sensitive = True
+            i += 1
+        elif arg == "--no-handoff":
+            no_handoff = True
+            i += 1
+        elif arg == "--handoff-out":
+            if i + 1 >= len(argv):
+                raise ValueError("--handoff-out requires a path value")
+            handoff_out = argv[i + 1]
+            i += 2
+        else:
+            forwarded.append(arg)
+            i += 1
+    return argparse.Namespace(allow_sensitive=allow_sensitive, no_handoff=no_handoff, handoff_out=handoff_out), forwarded
+
 
 @dataclass(frozen=True)
 class Resolution:
@@ -201,10 +233,38 @@ def write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
     tmp.replace(path)
 
 
+def ensure_inside_root(root: Path, raw_path: str, label: str) -> Path:
+    candidate = Path(raw_path)
+    resolved = candidate.resolve() if candidate.is_absolute() else (root / candidate).resolve()
+    try:
+        resolved.relative_to(root)
+    except ValueError as exc:
+        raise ValueError(f"{label} must stay inside the current repository/workspace") from exc
+    return resolved
+
+
+def validate_local_paths(root: Path, args: list[str], explicit_handoff: str | None) -> None:
+    family = command_family(args)
+    if explicit_handoff:
+        ensure_inside_root(root, explicit_handoff, "--handoff-out")
+
+    if "--graph" in args:
+        idx = args.index("--graph")
+        if idx + 1 >= len(args):
+            raise ValueError("--graph requires a path value")
+        ensure_inside_root(root, args[idx + 1], "--graph")
+
+    if family == "build":
+        for arg in args:
+            if not arg.startswith("-"):
+                if not is_url(arg):
+                    ensure_inside_root(root, arg, "graphify target path")
+                break
+
+
 def handoff_path(root: Path, family: str, explicit: str | None) -> Path:
     if explicit:
-        p = Path(explicit)
-        return p if p.is_absolute() else root / p
+        return ensure_inside_root(root, explicit, "--handoff-out")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     return root / HANDOFF_DIR / f"{stamp}-{family}.json"
 
@@ -309,16 +369,50 @@ def normalize_upstream_args(raw: list[str]) -> list[str]:
 
 
 def run(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="graphify_plugin", add_help=True)
-    parser.add_argument("args", nargs=argparse.REMAINDER, help="Arguments forwarded to upstream graphify.")
-    parser.add_argument("--handoff-out", help="Write handoff JSON to this path instead of .omx/handoffs/graphify/.")
-    parser.add_argument("--no-handoff", action="store_true", help="Do not write handoff JSON; still print result JSON.")
-    ns = parser.parse_args(argv)
+    raw_args = list(sys.argv[1:] if argv is None else argv)
+    if any(arg in {"-h", "--help"} for arg in raw_args):
+        print("usage: graphify_plugin [--allow-sensitive] [--handoff-out PATH] [--no-handoff] [graphify-args ...]")
+        print("Adapter-owned flags may appear before or after forwarded Graphify args.")
+        return 0
 
-    upstream_args = normalize_upstream_args(ns.args)
     root = Path.cwd().resolve()
+    try:
+        ns, forwarded_args = split_adapter_args(raw_args)
+        upstream_args = normalize_upstream_args(forwarded_args)
+        validate_local_paths(root, upstream_args, ns.handoff_out)
+    except ValueError as exc:
+        classification = classify_permissions(normalize_upstream_args(raw_args))
+        resolution = Resolution(None, None, graphify_version())
+        print(json.dumps(build_payload(
+            status="blocked",
+            argv=normalize_upstream_args(raw_args),
+            classification=classification,
+            resolution=resolution,
+            returncode=None,
+            message=str(exc),
+            root=root,
+        ), indent=2, sort_keys=True))
+        return 2
+
     classification = classify_permissions(upstream_args)
     resolution = resolve_graphify()
+
+    if classification["sensitive_operations"] and not ns.allow_sensitive:
+        payload = build_payload(
+            status="blocked",
+            argv=upstream_args,
+            classification=classification,
+            resolution=resolution,
+            returncode=None,
+            message="Sensitive Graphify operation blocked pending explicit trust/confirmation: " + ", ".join(classification["sensitive_operations"]),
+            root=root,
+        )
+        if not ns.no_handoff:
+            out = handoff_path(root, classification["family"], ns.handoff_out)
+            payload["handoff_path"] = str(out)
+            write_json_atomic(out, payload)
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
 
     if resolution.argv is None:
         payload = build_payload(
