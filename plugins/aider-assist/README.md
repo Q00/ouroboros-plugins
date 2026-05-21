@@ -70,3 +70,27 @@ keys, provider secrets, or raw sensitive environment values.
   provenance.
 - Interactive `session` mode is deferred until transcript capture, pre/post
   diff, trust boundary, and post-session handoff semantics are designed.
+
+## Alignment with issue #27
+
+`aider-assist` is included here as a contract-bearing reference plugin, not as
+marketplace inventory. It proves the #27 thesis for a high-authority external
+coding agent:
+
+- **External capability identity:** Aider remains the upstream AI pair-programmer
+  and is invoked through its public CLI.
+- **Ouroboros translation:** each run emits invocation, provenance, result, and
+  handoff artifacts under `.omx/artifacts/plugins/aider-assist/<run-id>/`.
+- **Boundary:** selected files are normalized to repository-relative paths;
+  write modes require explicit editable file bounds in later PRs.
+- **Capabilities vs permissions:** manifest capabilities describe Ouroboros
+  ledger/provenance/state/handoff/progress use, while permissions declare
+  filesystem, shell, and model-provider network authority separately.
+- **Risk clarity:** `ask` and `architect` are read-only with respect to the
+  repository, but still require trust for `network:write` because Aider may call
+  a configured model provider. `edit` and `fix` are write-risk commands.
+- **Core boundary:** `ooo auto` may consume the produced handoffs, but Aider
+  semantics stay in this plugin rather than becoming core routing branches.
+
+This keeps core small while allowing a serious external agent tool to become
+permissioned, auditable, and resumable inside the AgentOS ecosystem.
