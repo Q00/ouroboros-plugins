@@ -10,6 +10,7 @@ programs compose those primitives into domain-specific workflows.
 |                Installable UserLevel Programs                      |
 |                                                                   |
 |  autoresearch    gsd-agentos     target-capabilities  github-pr-ops |
+|  openai-skills-superpowers  openhands-agentos  merge-assistant       |
 |  openhands-agentos  merge-assistant  jira-sync  slack-incident      |
 |  release-coordinator  customer-debugger  ...                       |
 +-------------------------------+-----------------------------------+
@@ -46,6 +47,7 @@ The initial goal is a local-only contract MVP:
 - Provenance and audit requirements
 - Example UserLevel plugin packages, including external capability-assimilation adapters
 - Anthropic Agent Skills assimilation reference plugin for `anthropics/skills`
+- OpenAI/Agent Skills assimilation reference plugin for `openai/skills`
 - External repository capability assimilation reference package
 
 ## Core Boundary
@@ -66,6 +68,7 @@ Plugins own domain-specific workflows:
 - GitHub PR operations
 - Autoresearch experiment handoff
 - GSD AgentOS capability assimilation
+- OpenAI/Agent Skill superpower assimilation
 - Merge assistance
 - Jira/Linear synchronization
 - Slack incident workflows
@@ -87,6 +90,7 @@ ooo gsd plan-phase 1
 ooo gsd verify-work 1
 ooo github-pr review https://github.com/org/repo/pull/123
 ooo openhands agentos --workspace /path/to/repo --goal "Fix the failing test" --trusted-shell-execute
+ooo superpower run openai-docs -- "explain how to build a plugin"
 ooo github-pr merge --policy team-default
 ```
 
@@ -94,6 +98,11 @@ Ouroboros `v0.39.1+` prompts for non-destructive required permissions during
 `plugin add`, so `autoresearch` can grant `filesystem:read` and
 `filesystem:write` during install. Destructive scopes, including PR write
 scopes, still require an explicit `plugin trust` command.
+
+
+## OpenAI Skills Superpowers and AgentOS Capability Assimilation
+
+The `openai-skills-superpowers` reference plugin shows how Ouroboros can assimilate the OpenAI/Agent Skills catalog without becoming a central marketplace. It projects skills into `ooo superpower ...` commands with manifest-backed permissions, audit/provenance events, trust gates, and handoff artifacts. See `plugins/openai-skills-superpowers/README.md` and `docs/openai-skills-superpowers-pr-plan.md`.
 
 ## Layout
 
@@ -111,6 +120,7 @@ schemas/
     audit-event.schema.json  Draft JSON Schema for audit events (v0.1)
 plugins/
   anthropic-agent-skills/ Anthropic Agent Skills assimilation reference plugin
+  openai-skills-superpowers/ OpenAI/Agent Skills capability-assimilation adapter
   autoresearch/        Autoresearch-to-ooo-auto handoff plugin
   gsd-agentos/         GSD command-surface assimilation plugin
   target-capabilities/ Reference external-repo assimilation package
@@ -136,6 +146,8 @@ PYTHONPATH=plugins/gsd-agentos python3 -m gsd_agentos list
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 PYTHONPATH=plugins/openhands-agentos python3 -m openhands_agentos inspect
 PYTHONPATH=plugins/target-capabilities python3 -m target_capabilities list-commands
+PYTHONPATH=plugins/openai-skills-superpowers python3 -m ouroboros_superpowers catalog refresh --source-path tests/fixtures/openai-skills --ref fixture --out superpowers-catalog.json
+PYTHONPATH=plugins/openai-skills-superpowers python3 -m ouroboros_superpowers --catalog superpowers-catalog.json run openai-docs -- "explain plugins"
 ```
 
 During plugin development, install from the local checkout instead:

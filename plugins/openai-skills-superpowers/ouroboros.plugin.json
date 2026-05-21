@@ -1,0 +1,109 @@
+{
+  "schema_version": "0.1",
+  "name": "openai-skills-superpowers",
+  "version": "0.1.0",
+  "description": "Expose OpenAI/Agent Skills as Ouroboros-native command superpowers with permission, audit, provenance, and handoff semantics.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/openai-skills-superpowers"
+  },
+  "commands": [
+    {
+      "namespace": "superpower",
+      "name": "catalog-refresh",
+      "summary": "Refresh the pinned Agent Skill catalog projection.",
+      "usage": "ooo superpower catalog refresh --source openai/skills --ref <sha-or-ref>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "source", "type": "string", "required": false, "description": "Source repository slug or local source path."},
+        {"name": "ref", "type": "string", "required": false, "description": "Pinned ref or commit SHA to ingest."}
+      ]
+    },
+    {
+      "namespace": "superpower",
+      "name": "catalog-list",
+      "summary": "List cataloged Agent Skills and their command projections.",
+      "usage": "ooo superpower catalog list",
+      "risk": "read_only",
+      "requires_confirmation": false
+    },
+    {
+      "namespace": "superpower",
+      "name": "inspect",
+      "summary": "Inspect a cataloged skill and show inferred permissions, resources, and command exposure.",
+      "usage": "ooo superpower inspect <skill-name>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "skill_name", "type": "string", "required": true, "description": "Cataloged skill name or bucket-qualified name such as system/openai-docs."}
+      ]
+    },
+    {
+      "namespace": "superpower",
+      "name": "handoff",
+      "summary": "Generate an Ouroboros-readable handoff artifact for a skill invocation.",
+      "usage": "ooo superpower handoff <skill-name> --task <task> --out <path>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "skill_name", "type": "string", "required": true, "description": "Cataloged skill name."},
+        {"name": "task", "type": "string", "required": true, "description": "Task text for the skill handoff."},
+        {"name": "out", "type": "path", "required": true, "description": "Output JSON handoff path."}
+      ]
+    },
+    {
+      "namespace": "superpower",
+      "name": "run",
+      "summary": "Run a cataloged Agent Skill through the Ouroboros plugin firewall.",
+      "usage": "ooo superpower run <skill-name> -- <task>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "skill_name", "type": "string", "required": true, "description": "Cataloged skill name."},
+        {"name": "task", "type": "string", "required": true, "description": "Task text after --."}
+      ]
+    },
+    {
+      "namespace": "superpower",
+      "name": "trust-plan",
+      "summary": "Explain the exact permissions and trust decision needed before a skill can run.",
+      "usage": "ooo superpower trust-plan <skill-name>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "skill_name", "type": "string", "required": true, "description": "Cataloged skill name."}
+      ]
+    },
+    {
+      "namespace": "superpower",
+      "name": "doctor",
+      "summary": "Check the superpowers plugin catalog and trust-policy readiness.",
+      "usage": "ooo superpower doctor",
+      "risk": "read_only",
+      "requires_confirmation": false
+    }
+  ],
+  "capabilities": [
+    {"name": "handoff", "access": "attach", "reason": "Attach superpower invocation outputs to Ouroboros workflows."},
+    {"name": "provenance", "access": "write", "reason": "Record skill source, ref, loaded files, and execution evidence."},
+    {"name": "ledger", "access": "write", "reason": "Record superpower invocation and trust decisions."},
+    {"name": "state", "access": "write", "reason": "Cache the skill catalog and pinned refs."},
+    {"name": "progress", "access": "write", "reason": "Report blocked, failed, and completed superpower invocations."}
+  ],
+  "permissions": [
+    {"scope": "filesystem:read", "risk": "read_only", "required": true, "reason": "Read cached skill files and local resources."},
+    {"scope": "filesystem:write", "risk": "write", "required": false, "reason": "Write catalog cache, audit logs, and handoff artifacts."},
+    {"scope": "network:read", "risk": "read_only", "required": false, "reason": "Fetch or refresh skills from GitHub."},
+    {"scope": "shell:execute", "risk": "write", "required": false, "reason": "Run bundled skill scripts only after explicit trust."},
+    {"scope": "github:write", "risk": "destructive", "required": false, "reason": "Gate GitHub mutating skills."},
+    {"scope": "external:write", "risk": "destructive", "required": false, "reason": "Gate SaaS and deployment mutations."}
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m ouroboros_superpowers"
+  },
+  "audit": {
+    "events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"]
+  }
+}
