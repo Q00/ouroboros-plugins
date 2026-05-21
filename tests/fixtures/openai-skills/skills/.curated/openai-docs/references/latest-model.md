@@ -1,0 +1,1 @@
+Latest model fallback fixture.
