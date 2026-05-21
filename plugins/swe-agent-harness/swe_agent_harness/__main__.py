@@ -25,8 +25,8 @@ from .artifacts import (
 EXECUTE_PERMISSIONS = ["filesystem:read", "filesystem:write", "shell:execute", "runtime:execute"]
 WRITE_PERMISSIONS = ["filesystem:read", "filesystem:write"]
 NETWORK_HINTS = ("github_url", "http://", "https://")
-OPEN_PR_HINTS = ("open_pr", "pull_request", "push_gh", "github:pull_request")
-APPLY_PATCH_HINTS = ("apply_patch", "apply-patch", "apply_to_repo")
+OPEN_PR_HINTS = ("openpr", "openprhook", "pullrequest", "pushgh", "github:pullrequest")
+APPLY_PATCH_HINTS = ("applypatch", "applytorepo", "saveapplypatchhook")
 
 
 def emit(payload: dict[str, Any]) -> int:
@@ -36,6 +36,20 @@ def emit(payload: dict[str, Any]) -> int:
 
 def has_option(args: list[str], name: str) -> bool:
     return any(arg == name or arg.startswith(name + "=") for arg in args)
+
+
+def option_value(args: list[str], name: str) -> str | None:
+    prefix = name + "="
+    for index, arg in enumerate(args):
+        if arg.startswith(prefix):
+            return arg[len(prefix) :]
+        if arg == name and index + 1 < len(args):
+            return args[index + 1]
+    return None
+
+
+def normalized_policy_text(args: list[str]) -> str:
+    return " ".join(args).lower().replace("-", "").replace("_", "").replace(".", "")
 
 
 def required_permissions(upstream_args: list[str], execute: bool) -> list[str]:
@@ -80,7 +94,12 @@ def run_like(command: str, argv: list[str]) -> int:
     ns, upstream_args = parser.parse_known_args(argv)
     run_id = ns.agentos_run_id or make_run_id(f"swe-agent-{command}")
     bundle_dir = resolve_output_dir(ns.agentos_artifact_dir, run_id)
-    upstream_output = bundle_dir / "swe-agent-output"
+    upstream_output_arg = option_value(upstream_args, "--output_dir")
+    upstream_output = (
+        Path(upstream_output_arg).expanduser().resolve()
+        if upstream_output_arg
+        else bundle_dir / "swe-agent-output"
+    )
     upstream_command = [ns.agentos_sweagent_bin, command, *upstream_args]
     if command in {"run", "run-replay"} and not has_option(upstream_args, "--output_dir"):
         upstream_command.extend(["--output_dir", upstream_output.as_posix()])
@@ -93,11 +112,11 @@ def run_like(command: str, argv: list[str]) -> int:
         upstream_output_dir=upstream_output,
         agentos_flags={k: v for k, v in vars(ns).items() if k.startswith("agentos")},
     )
-    joined = " ".join(upstream_args).lower()
-    if any(hint in joined for hint in OPEN_PR_HINTS) and not ns.agentos_allow_open_pr:
-        return blocked(bundle_dir, run_spec=run_spec, reason="upstream args appear to request PR/GitHub mutation; require --agentos-allow-open-pr", permissions=permissions)
-    if any(hint in joined for hint in APPLY_PATCH_HINTS) and not ns.agentos_allow_host_patch:
-        return blocked(bundle_dir, run_spec=run_spec, reason="upstream args appear to request host patch application; require --agentos-allow-host-patch", permissions=permissions)
+    policy_text = normalized_policy_text(upstream_args)
+    if any(hint in policy_text for hint in OPEN_PR_HINTS):
+        return blocked(bundle_dir, run_spec=run_spec, reason="upstream args appear to request PR/GitHub mutation; this MVP defers PR creation to a dedicated destructive command", permissions=permissions)
+    if any(hint in policy_text for hint in APPLY_PATCH_HINTS):
+        return blocked(bundle_dir, run_spec=run_spec, reason="upstream args appear to request host patch application; this MVP defers host patch application to a dedicated trusted command", permissions=permissions)
     if not ns.agentos_allow_execute and not ns.agentos_dry_run:
         return blocked(bundle_dir, run_spec=run_spec, reason="missing shell/runtime trust; rerun with --agentos-allow-execute after plugin trust grants shell:execute/runtime:execute", permissions=permissions)
     ensure_dir(bundle_dir)
