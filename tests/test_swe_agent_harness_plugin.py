@@ -265,5 +265,45 @@ class SweAgentHarnessPluginTests(unittest.TestCase):
             self.assertEqual((apply_bundle / "stdout.log").read_text(encoding="utf-8"), "")
 
 
+    def test_real_run_redacts_argv_secrets_from_captured_logs(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake = root / "fake-sweagent-echo.py"
+            fake.write_text(
+                "#!/usr/bin/env python3\n"
+                "import pathlib, sys\n"
+                "args = sys.argv[1:]\n"
+                "output = pathlib.Path(args[args.index('--output_dir') + 1])\n"
+                "output.mkdir(parents=True, exist_ok=True)\n"
+                "print('STDOUT', sys.argv)\n"
+                "print('STDERR', sys.argv, file=sys.stderr)\n",
+                encoding="utf-8",
+            )
+            fake.chmod(0o755)
+            bundle = root / "bundle"
+
+            proc = self._run(
+                "run",
+                "--agentos-allow-execute",
+                "--agentos-sweagent-bin",
+                str(fake),
+                "--agentos-artifact-dir",
+                str(bundle),
+                "--api-key",
+                "sk-real-secret",
+                "--github-token=ghp_real_secret",
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            combined = "\n".join(
+                path.read_text(encoding="utf-8", errors="ignore")
+                for path in bundle.rglob("*")
+                if path.is_file()
+            )
+            self.assertNotIn("sk-real-secret", combined)
+            self.assertNotIn("ghp_real_secret", combined)
+            self.assertIn("<redacted>", combined)
+
+
 if __name__ == "__main__":
     unittest.main()
