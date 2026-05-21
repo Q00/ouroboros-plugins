@@ -10,6 +10,36 @@ preserves the Guardrails mental model (`Guard`, validators, specs,
 contract: declared commands, bounded permissions, audit/provenance-compatible
 payloads, durable reports, state references, and handoff artifacts.
 
+
+## Alignment with #27 capability assimilation SSOT
+
+Issue #27 defines `Q00/ouroboros-plugins` as a curated contract/reference
+repository, not a marketplace, and defines plugins as the capability
+assimilation layer for external OSS tools. The Guardrails work follows that
+contract in each PR:
+
+- **PR1** proves the reference-plugin justification before code: Guardrails is
+  an external validation/evaluation capability whose local validation workflow
+  should become auditable, permissioned, and handoff-capable without entering
+  Ouroboros core or `ooo auto` as a domain branch.
+- **PR2** avoids a trivial wrapper by declaring a named `guardrails
+  validate-output` command, a narrow entrypoint, explicit capabilities,
+  filesystem permissions, risk, and bounded path semantics instead of exposing
+  arbitrary Guardrails CLI passthrough.
+- **PR3** performs the Ouroboros translation required by #27: Guardrails
+  outcomes become normalized reports with provenance, ledger-event,
+  state-update, and handoff sections that downstream workflows can consume.
+- **PR4** keeps repository role boundaries intact: this reference plugin is
+  cataloged because it demonstrates an OSS validation/evaluation assimilation
+  pattern, not because this repository is a marketplace for every Guardrails
+  workflow. Tests use fake Guardrails to keep contract CI independent of Hub,
+  network, and package-install lifecycle concerns.
+
+This stack intentionally keeps Guardrails Hub installation, remote inference,
+server mode, and Python config execution out of the MVP because #27 requires
+new authority patterns to be justified as explicit plugin/lifecycle contracts,
+not hidden inside a broad wrapper.
+
 ## PR count and merge order
 
 The epic should be implemented as **4 PRs**. This keeps review boundaries small
