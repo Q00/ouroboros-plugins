@@ -1,0 +1,644 @@
+{
+  "schema_version": "0.1",
+  "name": "superclaude",
+  "version": "4.3.0",
+  "description": "Ouroboros-native adapter for SuperClaude Framework commands, skills, agents, modes, and MCP guidance.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/superclaude",
+    "repository": "https://github.com/SuperClaude-Org/SuperClaude_Framework"
+  },
+  "commands": [
+    {
+      "namespace": "superclaude",
+      "name": "agent",
+      "summary": "SC Agent Activation",
+      "usage": "ooo superclaude agent [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "analyze",
+      "summary": "Comprehensive code analysis across quality, security, performance, and architecture domains",
+      "usage": "ooo superclaude analyze [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "brainstorm",
+      "summary": "Interactive requirements discovery through Socratic dialogue and systematic exploration",
+      "usage": "ooo superclaude brainstorm [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "build",
+      "summary": "Build, compile, and package projects with intelligent error handling and optimization",
+      "usage": "ooo superclaude build [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "business-panel",
+      "summary": "/sc:business-panel - Business Panel Analysis System",
+      "usage": "ooo superclaude business-panel [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "cleanup",
+      "summary": "Systematically clean up code, remove dead code, and optimize project structure",
+      "usage": "ooo superclaude cleanup [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "design",
+      "summary": "Design system architecture, APIs, and component interfaces with comprehensive specifications",
+      "usage": "ooo superclaude design [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "document",
+      "summary": "Generate focused documentation for components, functions, APIs, and features",
+      "usage": "ooo superclaude document [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "estimate",
+      "summary": "Provide development estimates for tasks, features, or projects with intelligent analysis",
+      "usage": "ooo superclaude estimate [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "explain",
+      "summary": "Provide clear explanations of code, concepts, and system behavior with educational clarity",
+      "usage": "ooo superclaude explain [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "git",
+      "summary": "Git operations with intelligent commit messages and workflow optimization",
+      "usage": "ooo superclaude git [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "help",
+      "summary": "List all available /sc commands and their functionality",
+      "usage": "ooo superclaude help [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "implement",
+      "summary": "Feature and code implementation with intelligent persona activation and MCP integration",
+      "usage": "ooo superclaude implement [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "improve",
+      "summary": "Apply systematic improvements to code quality, performance, and maintainability",
+      "usage": "ooo superclaude improve [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "index-repo",
+      "summary": "Repository Indexing - 94% token reduction (58K \u2192 3K)",
+      "usage": "ooo superclaude index-repo [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "index",
+      "summary": "Generate comprehensive project documentation and knowledge base with intelligent organization",
+      "usage": "ooo superclaude index [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "load",
+      "summary": "Session lifecycle management with Serena MCP integration for project context loading",
+      "usage": "ooo superclaude load [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "pm",
+      "summary": "Project Manager Agent - Default orchestration agent that coordinates all sub-agents and manages workflows seamlessly",
+      "usage": "ooo superclaude pm [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "recommend",
+      "summary": "Ultra-intelligent command recommendation engine - recommends the most suitable SuperClaude commands for any user input",
+      "usage": "ooo superclaude recommend [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "reflect",
+      "summary": "Task reflection and validation using Serena MCP analysis capabilities",
+      "usage": "ooo superclaude reflect [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "research",
+      "summary": "Deep web research with adaptive planning and intelligent search",
+      "usage": "ooo superclaude research [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "save",
+      "summary": "Session lifecycle management with Serena MCP integration for session context persistence",
+      "usage": "ooo superclaude save [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "sc",
+      "summary": "SuperClaude command dispatcher - Use /sc [command] to access all SuperClaude features",
+      "usage": "ooo superclaude sc [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "select-tool",
+      "summary": "Intelligent MCP tool selection based on complexity scoring and operation analysis",
+      "usage": "ooo superclaude select-tool [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "spawn",
+      "summary": "Meta-system task orchestration with intelligent breakdown and delegation",
+      "usage": "ooo superclaude spawn [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "spec-panel",
+      "summary": "Multi-expert specification review and improvement using renowned specification and software engineering experts",
+      "usage": "ooo superclaude spec-panel [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "task",
+      "summary": "Execute complex tasks with intelligent workflow management and delegation",
+      "usage": "ooo superclaude task [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "test",
+      "summary": "Execute tests with coverage analysis and automated quality reporting",
+      "usage": "ooo superclaude test [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "troubleshoot",
+      "summary": "Diagnose and resolve issues in code, builds, deployments, and system behavior",
+      "usage": "ooo superclaude troubleshoot [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "workflow",
+      "summary": "Generate structured implementation workflows from PRDs and feature requirements",
+      "usage": "ooo superclaude workflow [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "SuperClaude-style command arguments and options passed to the adapter."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "skill",
+      "summary": "Invoke a concrete upstream SuperClaude SKILL.md by name; conservative write risk because some skills create artifacts or guide edits.",
+      "usage": "ooo superclaude skill <skill-name> [args...] [--agent <agent>] [--mode <mode>] [--artifact-dir <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "skill_name",
+          "type": "string",
+          "required": true,
+          "description": "One of the packaged SuperClaude skill folder names."
+        },
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Arguments applied to the skill instructions."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "confidence-check",
+      "summary": "Pre-implementation confidence assessment (\u226590% required). Use before starting any implementation to verify readiness with duplicate check, architecture compliance, official docs verification, OSS references, and root cause identification.",
+      "usage": "ooo superclaude confidence-check [args...] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Arguments applied to the skill instructions."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "deep-research",
+      "summary": "Activate deep research mode for systematic investigation. Use when the user asks to research, investigate, explore, or needs current information with citations.",
+      "usage": "ooo superclaude deep-research [args...] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Arguments applied to the skill instructions."
+        }
+      ]
+    },
+    {
+      "namespace": "superclaude",
+      "name": "token-efficiency",
+      "summary": "Activate ultra-compressed output mode for maximum token efficiency. Use when context is running low, user requests brevity, or dealing with large-scale operations.",
+      "usage": "ooo superclaude token-efficiency [args...] [--artifact-dir <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "Arguments applied to the skill instructions."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "state",
+      "access": "read",
+      "reason": "Read packaged SuperClaude prompt, skill, agent, mode, hook, and MCP metadata."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist optional adapter state and command context artifacts when requested."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report command progress and blocked execution states."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record upstream snapshot, selected assets, arguments, and result status."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach planning, research, workflow, and implementation handoff artifacts."
+    },
+    {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Dispatch SuperClaude-style commands through an isolated subprocess entrypoint."
+    },
+    {
+      "name": "mcp",
+      "access": "execute",
+      "reason": "Surface optional SuperClaude MCP recommendations and allow future explicit MCP-backed command execution only after trust."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read local repository context and packaged SuperClaude assets."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": false,
+      "reason": "Write explicit handoff/report artifacts and support implementation-style commands after trust."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": false,
+      "reason": "Run build/test/git helpers only for commands that explicitly require shell execution."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Perform current research only when web/MCP research is explicitly enabled."
+    },
+    {
+      "scope": "git:write",
+      "risk": "destructive",
+      "required": false,
+      "reason": "Reserved for confirmed Git operations such as push, reset, or merge; disabled by default in the MVP adapter."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m superclaude_ouroboros"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
