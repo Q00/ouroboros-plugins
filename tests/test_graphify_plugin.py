@@ -5,6 +5,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -23,13 +24,56 @@ class GraphifyPluginTests(unittest.TestCase):
             check=False,
         )
 
-    def test_missing_graphify_returns_blocked_result(self):
+    def test_missing_graphify_returns_blocked_handoff(self):
         with tempfile.TemporaryDirectory() as td:
-            proc = self._run(".", cwd=Path(td), env={"PATH": ""})
+            proc = self._run("--no-handoff", ".", cwd=Path(td), env={"PATH": ""})
+
         self.assertEqual(proc.returncode, 1)
         payload = json.loads(proc.stdout)
         self.assertEqual(payload["status"], "blocked")
         self.assertIn("Graphify is not installed", payload["message"])
+        self.assertEqual(payload["plugin"]["name"], "graphify")
+        self.assertEqual(payload["command"]["family"], "build")
+
+    def test_fake_graphify_success_records_artifacts_and_graph_stats(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            fake = fake_bin / "graphify"
+            fake.write_text(
+                textwrap.dedent(
+                    """\
+                    #!/usr/bin/env python3
+                    import json, pathlib, sys
+                    out = pathlib.Path('graphify-out')
+                    out.mkdir(exist_ok=True)
+                    (out / 'GRAPH_REPORT.md').write_text('# Report\\n')
+                    (out / 'graph.json').write_text(json.dumps({'nodes': [{'id': 'A'}, {'id': 'B'}], 'edges': [{'source': 'A', 'target': 'B'}]}))
+                    print('fake graphify ran', ' '.join(sys.argv[1:]))
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake.chmod(0o755)
+
+            proc = self._run(
+                "--handoff-out",
+                "handoff.json",
+                ".",
+                cwd=root,
+                env={"PATH": f"{fake_bin}{os.pathsep}{os.environ.get('PATH', '')}"},
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["status"], "completed")
+            self.assertEqual(payload["graph_stats"], {"nodes": 2, "edges": 1, "communities": 0})
+            artifact_paths = {a["path"] for a in payload["artifacts"]}
+            self.assertIn("graphify-out/GRAPH_REPORT.md", artifact_paths)
+            self.assertIn("graphify-out/graph.json", artifact_paths)
+            handoff = json.loads((root / "handoff.json").read_text(encoding="utf-8"))
+            self.assertEqual(handoff["status"], "completed")
 
     def test_fake_graphify_query_is_read_only(self):
         with tempfile.TemporaryDirectory() as td:
@@ -39,13 +83,21 @@ class GraphifyPluginTests(unittest.TestCase):
             fake = fake_bin / "graphify"
             fake.write_text("#!/usr/bin/env sh\necho query-result\n", encoding="utf-8")
             fake.chmod(0o755)
-            proc = self._run("query", "central modules?", cwd=root, env={"PATH": f"{fake_bin}{os.pathsep}{os.environ.get('PATH', '')}"})
-        self.assertEqual(proc.returncode, 0, proc.stderr)
-        payload = json.loads(proc.stdout)
-        self.assertEqual(payload["command"]["family"], "query")
-        self.assertEqual(payload["risk"], "read_only")
-        self.assertEqual(payload["permissions_used"], ["filesystem:read", "shell:execute"])
-        self.assertIn("query-result", payload["stdout_excerpt"])
+
+            proc = self._run(
+                "--no-handoff",
+                "query",
+                "central modules?",
+                cwd=root,
+                env={"PATH": f"{fake_bin}{os.pathsep}{os.environ.get('PATH', '')}"},
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["command"]["family"], "query")
+            self.assertEqual(payload["risk"], "read_only")
+            self.assertEqual(payload["permissions_used"], ["filesystem:read", "shell:execute"])
+            self.assertIn("query-result", payload["stdout_excerpt"])
 
 
 if __name__ == "__main__":
