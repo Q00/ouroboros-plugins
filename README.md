@@ -9,8 +9,8 @@ programs compose those primitives into domain-specific workflows.
 +-------------------------------------------------------------------+
 |                Installable UserLevel Programs                      |
 |                                                                   |
-|  autoresearch    github-pr-ops   openhands-agentos            |
-|  merge-assistant  jira-sync       slack-incident               |
+|  autoresearch    target-capabilities   github-pr-ops          |
+|  openhands-agentos  merge-assistant  jira-sync  slack-incident |
 |  release-coordinator  customer-debugger  ...                  |
 +-------------------------------+-----------------------------------+
                                 |
@@ -46,6 +46,7 @@ The initial goal is a local-only contract MVP:
 - Provenance and audit requirements
 - Example UserLevel plugin package
 - Anthropic Agent Skills assimilation reference plugin for `anthropics/skills`
+- External repository capability assimilation reference package
 
 ## Core Boundary
 
@@ -76,6 +77,7 @@ Plugins own domain-specific workflows:
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin autoresearch
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin openhands-agentos
+ouroboros plugin add https://github.com/<author>/<target>-ouroboros --plugin target-capabilities
 ouroboros plugin trust github-pr-ops --scope github:read --scope github:pull_request:write
 
 ooo auto-research prepare /path/to/autoresearch --goal "Improve validation bpb"
@@ -106,6 +108,7 @@ schemas/
 plugins/
   anthropic-agent-skills/ Anthropic Agent Skills assimilation reference plugin
   autoresearch/        Autoresearch-to-ooo-auto handoff plugin
+  target-capabilities/ Reference external-repo assimilation package
   github-pr-ops/       Reference plugin skeleton
   openhands-agentos/   OpenHands-to-AgentOS audited handoff plugin
 catalog/
@@ -124,6 +127,7 @@ PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch inspect /path/
 PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch prepare /path/to/autoresearch --goal "Improve validation bpb"
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 PYTHONPATH=plugins/openhands-agentos python3 -m openhands_agentos inspect
+PYTHONPATH=plugins/target-capabilities python3 -m target_capabilities list-commands
 ```
 
 During plugin development, install from the local checkout instead:
@@ -140,3 +144,7 @@ exit `2` with a "jsonschema is required" message.
 
 Draft. This repository is for shaping the contract before committing to a
 full package registry or marketplace.
+
+## External Repository Assimilation
+
+Issue #29 is captured in `docs/assimilation.md`, and the broader #27 authoring consensus is captured in `docs/rfc/plugin-authoring-and-capability-assimilation.md`. The short version: `ouroboros-plugins` is the contract/reference substrate, while an external target repository is assimilated as a permissioned, auditable, continuable plugin package. The `target-capabilities` package is the v0 reference fixture for that boundary.
