@@ -8,10 +8,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from jsonschema import Draft202012Validator
+
 
 REPO = Path(__file__).resolve().parents[1]
 PLUGIN_PATH = REPO / "plugins" / "agent-skills"
 MANIFEST = PLUGIN_PATH / "ouroboros.plugin.json"
+AUDIT_SCHEMA = REPO / "schemas" / "0.1" / "audit-event.schema.json"
 EXPECTED_SKILLS = {
     "api-and-interface-design",
     "browser-testing-with-devtools",
@@ -94,6 +97,12 @@ class AgentSkillsPluginTests(unittest.TestCase):
             self.assertEqual(payload["provenance"]["commit"], "f17c6e88c904dc747381c374312c2d58e10647ae")
             self.assertIn("filesystem:write", payload["permissions_used"])
             self.assertTrue(payload["result"]["suitable_for_ooo_auto_handoff"])
+            schema = json.loads(AUDIT_SCHEMA.read_text(encoding="utf-8"))
+            errors = sorted(
+                Draft202012Validator(schema).iter_errors(event),
+                key=lambda err: list(err.absolute_path),
+            )
+            self.assertEqual(errors, [])
             self.assertEqual(event["event_type"], "plugin.completed")
             self.assertEqual(event["result"]["status"], "success")
 
