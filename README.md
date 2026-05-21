@@ -9,9 +9,9 @@ programs compose those primitives into domain-specific workflows.
 +-------------------------------------------------------------------+
 |                Installable UserLevel Programs                      |
 |                                                                   |
-|  autoresearch    target-capabilities   github-pr-ops          |
-|  openhands-agentos  merge-assistant  jira-sync  slack-incident |
-|  release-coordinator  customer-debugger  ...                  |
+|  autoresearch    gsd-agentos     target-capabilities  github-pr-ops |
+|  openhands-agentos  merge-assistant  jira-sync  slack-incident      |
+|  release-coordinator  customer-debugger  ...                       |
 +-------------------------------+-----------------------------------+
                                 |
                                 | plugin contract / declared scopes
@@ -44,7 +44,7 @@ The initial goal is a local-only contract MVP:
 - Core capability declaration
 - External permission declaration
 - Provenance and audit requirements
-- Example UserLevel plugin package
+- Example UserLevel plugin packages, including external capability-assimilation adapters
 - Anthropic Agent Skills assimilation reference plugin for `anthropics/skills`
 - External repository capability assimilation reference package
 
@@ -65,6 +65,7 @@ Plugins own domain-specific workflows:
 
 - GitHub PR operations
 - Autoresearch experiment handoff
+- GSD AgentOS capability assimilation
 - Merge assistance
 - Jira/Linear synchronization
 - Slack incident workflows
@@ -76,11 +77,14 @@ Plugins own domain-specific workflows:
 ```bash
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin autoresearch
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin github-pr-ops
+ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin gsd-agentos
 ouroboros plugin add https://github.com/Q00/ouroboros-plugins --plugin openhands-agentos
 ouroboros plugin add https://github.com/<author>/<target>-ouroboros --plugin target-capabilities
 ouroboros plugin trust github-pr-ops --scope github:read --scope github:pull_request:write
 
 ooo auto-research prepare /path/to/autoresearch --goal "Improve validation bpb"
+ooo gsd plan-phase 1
+ooo gsd verify-work 1
 ooo github-pr review https://github.com/org/repo/pull/123
 ooo openhands agentos --workspace /path/to/repo --goal "Fix the failing test" --trusted-shell-execute
 ooo github-pr merge --policy team-default
@@ -108,6 +112,7 @@ schemas/
 plugins/
   anthropic-agent-skills/ Anthropic Agent Skills assimilation reference plugin
   autoresearch/        Autoresearch-to-ooo-auto handoff plugin
+  gsd-agentos/         GSD command-surface assimilation plugin
   target-capabilities/ Reference external-repo assimilation package
   github-pr-ops/       Reference plugin skeleton
   openhands-agentos/   OpenHands-to-AgentOS audited handoff plugin
@@ -125,6 +130,8 @@ pip install -r requirements-dev.txt
 python3 scripts/validate_contract.py
 PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch inspect /path/to/autoresearch
 PYTHONPATH=plugins/autoresearch python3 -m ouroboros_autoresearch prepare /path/to/autoresearch --goal "Improve validation bpb"
+PYTHONPATH=plugins/gsd-agentos python3 -m gsd_agentos validate-catalog
+PYTHONPATH=plugins/gsd-agentos python3 -m gsd_agentos list
 PYTHONPATH=plugins/github-pr-ops python3 -m github_pr_ops review https://github.com/Q00/ouroboros/pull/1
 PYTHONPATH=plugins/openhands-agentos python3 -m openhands_agentos inspect
 PYTHONPATH=plugins/target-capabilities python3 -m target_capabilities list-commands
