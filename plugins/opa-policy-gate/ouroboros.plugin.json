@@ -1,0 +1,136 @@
+{
+  "schema_version": "0.1",
+  "name": "opa-policy-gate",
+  "version": "0.1.0",
+  "description": "Reference Open Policy Agent policy gate that preserves OPA UX while adding Ouroboros audit, provenance, and handoff semantics.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/opa-policy-gate",
+    "repository": "https://github.com/open-policy-agent/opa"
+  },
+  "commands": [
+    {
+      "namespace": "opa",
+      "name": "eval",
+      "summary": "Evaluate a bounded OPA Rego query and attach decision evidence.",
+      "usage": "ooo opa eval --config .ouroboros/opa/policy-gate.json",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "config",
+          "type": "path",
+          "required": true,
+          "description": "Repo-relative JSON config describing query, policies, data, input, bundle, and safe eval flags."
+        }
+      ]
+    },
+    {
+      "namespace": "opa",
+      "name": "test",
+      "summary": "Run bounded OPA Rego tests and attach validation evidence.",
+      "usage": "ooo opa test --config .ouroboros/opa/policy-tests.json",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "config",
+          "type": "path",
+          "required": true,
+          "description": "Repo-relative JSON config describing policy/test files, data, and safe test flags."
+        }
+      ]
+    },
+    {
+      "namespace": "opa",
+      "name": "check",
+      "summary": "Run bounded OPA static checks before policy execution.",
+      "usage": "ooo opa check --config .ouroboros/opa/policy-check.json",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "config",
+          "type": "path",
+          "required": true,
+          "description": "Repo-relative JSON config describing Rego, schema, and capability files for static checking."
+        }
+      ]
+    },
+    {
+      "namespace": "opa",
+      "name": "build-handoff",
+      "summary": "Build a bounded OPA bundle and AgentOS handoff artifact.",
+      "usage": "ooo opa build-handoff --config .ouroboros/opa/policy-bundle.json",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "config",
+          "type": "path",
+          "required": true,
+          "description": "Repo-relative JSON config describing bundle sources and optional output name."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record policy gate invocation, normalized decision status, and validation outcomes."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record OPA version, command, query, input hashes, policy paths, and result artifact paths."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist policy gate state and resumable handoff metadata between invocations."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach OPA decisions and validation evidence to downstream Ouroboros execution."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report completed, failed, and blocked policy gate states."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read repo-relative Rego, data, input, bundle, schema, and config files."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Invoke the installed OPA CLI with bounded arguments and no arbitrary passthrough."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write bounded raw-result, normalized-result, provenance, and handoff artifacts under .omx/artifacts/opa/."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m opa_policy_gate"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}

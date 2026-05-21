@@ -78,6 +78,12 @@
       "version": "0.1.0",
       "path": "../plugins/target-capabilities",
       "description": "Reference AgentOS assimilation package for external target repositories."
+    },
+    {
+      "name": "opa-policy-gate",
+      "version": "0.1.0",
+      "path": "../plugins/opa-policy-gate",
+      "description": "Reference Open Policy Agent policy gate with AgentOS audit and handoff semantics."
     }
   ]
 }

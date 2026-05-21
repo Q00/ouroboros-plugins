@@ -1,0 +1,7 @@
+{
+  "query": "data.example.allow",
+  "data": ["plugins/opa-policy-gate/examples/allow.rego", "plugins/opa-policy-gate/examples/data.json"],
+  "input": "plugins/opa-policy-gate/examples/input.json",
+  "fail": true,
+  "timeout": "10s"
+}
