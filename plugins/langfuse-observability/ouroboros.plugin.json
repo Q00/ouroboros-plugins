@@ -1,0 +1,116 @@
+{
+  "schema_version": "0.1",
+  "name": "langfuse-observability",
+  "version": "0.1.0",
+  "description": "Assimilate Langfuse observability and evaluation evidence into Ouroboros handoff/provenance workflows.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/langfuse-observability"
+  },
+  "commands": [
+    {
+      "namespace": "langfuse",
+      "name": "inspect",
+      "summary": "Fetch Langfuse trace evidence and emit an Ouroboros handoff artifact.",
+      "usage": "ooo langfuse inspect <trace-url-or-id>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "trace_url_or_id",
+          "type": "string",
+          "required": true,
+          "description": "Langfuse trace URL or trace ID to inspect."
+        }
+      ]
+    },
+    {
+      "namespace": "langfuse",
+      "name": "score",
+      "summary": "Publish an Ouroboros evaluation score to Langfuse and record provenance.",
+      "usage": "ooo langfuse score <artifact-path> --name <metric> --value <value>",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "artifact_path",
+          "type": "path",
+          "required": true,
+          "description": "Ouroboros artifact containing trace or observation context."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Score metric name."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "description": "Score value; parsed as numeric, boolean, or categorical by the plugin."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record Langfuse evidence summaries and plugin decisions."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record remote Langfuse trace and score source references."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist resumable fetch and publish status."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach Langfuse evidence to downstream Ouroboros execution."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Fetch traces, observations, scores, and metrics from the Langfuse Public API."
+    },
+    {
+      "scope": "network:write",
+      "risk": "write",
+      "required": false,
+      "reason": "Publish scores or evaluation results to Langfuse when the score command is invoked."
+    },
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Read local Ouroboros artifacts for score publication or offline fixtures."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write local handoff and provenance artifacts."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m langfuse_observability"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
