@@ -14,11 +14,16 @@ PLUGIN_PATH = REPO / "plugins" / "autoresearch"
 
 
 class AutoresearchPluginTests(unittest.TestCase):
-    def _run(self, *args: str) -> subprocess.CompletedProcess:
+    def _run(
+        self, *args: str, env_extra: dict[str, str] | None = None
+    ) -> subprocess.CompletedProcess:
+        env = {**os.environ, "PYTHONPATH": str(PLUGIN_PATH)}
+        if env_extra:
+            env.update(env_extra)
         return subprocess.run(
             [sys.executable, "-m", "ouroboros_autoresearch", *args],
             cwd=REPO,
-            env={**os.environ, "PYTHONPATH": str(PLUGIN_PATH)},
+            env=env,
             capture_output=True,
             text=True,
             check=False,
@@ -83,6 +88,15 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn("autoresearch path with spaces", payload["ooo_auto"]["recommended_command"])
             self.assertIn("'", payload["ooo_auto"]["recommended_command"])
             self.assertEqual(payload["ooo_auto"]["editable_files"], ["train.py"])
+            provenance = payload["provenance"]
+            self.assertEqual(provenance["upstream"], "https://github.com/karpathy/autoresearch")
+            self.assertFalse(provenance["git"]["is_git_repository"])
+            self.assertEqual(provenance["files"]["program"]["path"], "program.md")
+            self.assertEqual(provenance["files"]["target"]["path"], "train.py")
+            self.assertEqual(provenance["files"]["support"]["path"], "prepare.py")
+            for file_record in provenance["files"].values():
+                self.assertEqual(len(file_record["sha256"]), 64)
+                self.assertGreater(file_record["bytes"], 0)
 
     def test_prepare_records_custom_declared_options(self):
         with tempfile.TemporaryDirectory() as td:
@@ -125,6 +139,28 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn("Treat `setup.py` as fixed data prep", seed)
             self.assertIn("Use `loss` as the primary comparison metric", seed)
             self.assertIn("Verification command: `uv run python model.py`", auto_goal)
+            self.assertEqual(payload["provenance"]["files"]["program"]["path"], "brief.md")
+            self.assertEqual(payload["provenance"]["files"]["support"]["path"], "setup.py")
+            self.assertEqual(payload["provenance"]["files"]["target"]["path"], "model.py")
+
+    def test_prepare_handles_missing_git_executable(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "program.md").write_text("Improve the model.\n", encoding="utf-8")
+            (root / "prepare.py").write_text("MAX_SEQ_LEN = 1024\n", encoding="utf-8")
+            (root / "train.py").write_text("print('val_bpb=1.0')\n", encoding="utf-8")
+
+            proc = self._run(
+                "prepare",
+                str(root),
+                "--goal",
+                "Improve the model.",
+                env_extra={"PATH": ""},
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertFalse(payload["provenance"]["git"]["is_git_repository"])
 
     def test_prepare_requires_autoresearch_files(self):
         with tempfile.TemporaryDirectory() as td:
