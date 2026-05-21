@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "name": "hermes-agent-runner",
+  "version": "0.1.0",
+  "description": "Run Hermes Agent as a bounded external runtime with Ouroboros session state, provenance, and handoff artifacts.",
+  "source": {"type": "local_path", "path": "plugins/hermes-agent-runner"},
+  "commands": [
+    {"namespace": "hermes", "name": "run", "summary": "Run a bounded non-interactive Hermes task under Ouroboros supervision.", "usage": "ooo hermes run <prompt>", "risk": "destructive", "requires_confirmation": true, "arguments": [{"name": "prompt", "type": "string", "required": true, "description": "Prompt to pass to Hermes."}]},
+    {"namespace": "hermes", "name": "chat", "summary": "Prepare an auditable Hermes interactive attach session.", "usage": "ooo hermes chat", "risk": "destructive", "requires_confirmation": true},
+    {"namespace": "hermes", "name": "resume", "summary": "Show resume information for a Hermes-backed Ouroboros session.", "usage": "ooo hermes resume <session-id>", "risk": "read_only", "requires_confirmation": false, "arguments": [{"name": "session_id", "type": "string", "required": true, "description": "Session id to resume."}]},
+    {"namespace": "hermes", "name": "status", "summary": "Inspect saved Hermes session state.", "usage": "ooo hermes status <session-id>", "risk": "read_only", "requires_confirmation": false, "arguments": [{"name": "session_id", "type": "string", "required": true, "description": "Session id to inspect."}]},
+    {"namespace": "hermes", "name": "stop", "summary": "Mark a Hermes session stopped/cancelled under Ouroboros state.", "usage": "ooo hermes stop <session-id>", "risk": "write", "requires_confirmation": false, "arguments": [{"name": "session_id", "type": "string", "required": true, "description": "Session id to stop."}]},
+    {"namespace": "hermes", "name": "export", "summary": "Export Hermes session state and transcripts into a handoff directory.", "usage": "ooo hermes export <session-id> --out <handoff-dir>", "risk": "write", "requires_confirmation": false, "arguments": [{"name": "session_id", "type": "string", "required": true, "description": "Session id to export."}, {"name": "out", "type": "path", "required": true, "description": "Handoff output directory."}]}
+  ],
+  "capabilities": [
+    {"name": "runtime", "access": "execute", "reason": "Launch bounded Hermes subprocesses or attach sessions."},
+    {"name": "ledger", "access": "write", "reason": "Record runtime decisions, permission usage, and completion state."},
+    {"name": "state", "access": "write", "reason": "Persist session state for resume/status/stop/export."},
+    {"name": "provenance", "access": "write", "reason": "Record invocation metadata, transcripts, and artifact paths."},
+    {"name": "handoff", "access": "attach", "reason": "Attach final or partial Hermes outputs to downstream Ouroboros workflows."},
+    {"name": "progress", "access": "write", "reason": "Report lifecycle status."}
+  ],
+  "permissions": [
+    {"scope": "shell:execute", "risk": "destructive", "required": true, "reason": "Launch Hermes as an external runtime under a bounded subprocess/session."},
+    {"scope": "filesystem:read", "risk": "read_only", "required": true, "reason": "Read workspace context and saved session state."},
+    {"scope": "filesystem:write", "risk": "write", "required": true, "reason": "Write transcripts, session state, and handoff artifacts."},
+    {"scope": "network:read", "risk": "read_only", "required": false, "reason": "Hermes model providers or web tools may need network reads when explicitly trusted."},
+    {"scope": "network:write", "risk": "write", "required": false, "reason": "Hermes messaging gateways may perform external delivery only when explicitly trusted."}
+  ],
+  "entrypoint": {"type": "command", "command": "python -m ouroboros_hermes_runner"},
+  "audit": {"events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"]}
+}
