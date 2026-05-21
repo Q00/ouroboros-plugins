@@ -2,6 +2,12 @@
   "schema_version": "0.1",
   "plugins": [
     {
+      "name": "agent-skills",
+      "version": "0.1.0",
+      "path": "../plugins/agent-skills",
+      "description": "AgentOS/Ouroboros assimilation adapter for Addy Osmani's agent-skills."
+    },
+    {
       "name": "anthropic-agent-skills",
       "version": "0.1.0",
       "path": "../plugins/anthropic-agent-skills",
@@ -14,10 +20,10 @@
       "description": "Ouroboros integration for Karpathy-style autoresearch experiment loops."
     },
     {
-      "name": "agent-skills",
+      "name": "github-pr-ops",
       "version": "0.1.0",
-      "path": "../plugins/agent-skills",
-      "description": "AgentOS/Ouroboros assimilation adapter for Addy Osmani's agent-skills."
+      "path": "../plugins/github-pr-ops",
+      "description": "Reference skeleton for GitHub PR operational workflows."
     },
     {
       "name": "graphify",
@@ -26,10 +32,10 @@
       "description": "AgentOS adapter for Graphify knowledge-graph workflows with permissioned audit and handoff semantics."
     },
     {
-      "name": "github-pr-ops",
+      "name": "guardrails-eval",
       "version": "0.1.0",
-      "path": "../plugins/github-pr-ops",
-      "description": "Reference skeleton for GitHub PR operational workflows."
+      "path": "../plugins/guardrails-eval",
+      "description": "Assimilate Guardrails AI validation into Ouroboros audit and handoff artifacts."
     },
     {
       "name": "openhands-agentos",
