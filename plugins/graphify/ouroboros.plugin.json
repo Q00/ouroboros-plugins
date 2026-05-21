@@ -1,0 +1,103 @@
+{
+  "schema_version": "0.1",
+  "name": "graphify",
+  "version": "0.1.0",
+  "description": "Assimilate Graphify knowledge-graph capabilities into AgentOS through auditable Ouroboros plugin commands.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/graphify"
+  },
+  "commands": [
+    {
+      "namespace": "graphify",
+      "name": "build",
+      "summary": "Build or update a Graphify knowledge graph for a repo-bounded local path.",
+      "usage": "ooo graphify [path] [--update] [--mode deep]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "path", "type": "path", "required": false, "description": "Repo-bounded local target path to graph."}
+      ]
+    },
+    {
+      "namespace": "graphify",
+      "name": "query",
+      "summary": "Query an existing Graphify graph and emit reusable evidence.",
+      "usage": "ooo graphify query <question> [--graph <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {"name": "question", "type": "string", "required": true, "description": "Question to answer from the graph."}
+      ]
+    },
+    {
+      "namespace": "graphify",
+      "name": "path",
+      "summary": "Return the shortest path between two graph concepts or nodes.",
+      "usage": "ooo graphify path <source> <target> [--graph <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false
+    },
+    {
+      "namespace": "graphify",
+      "name": "explain",
+      "summary": "Explain a graph node and its important connections.",
+      "usage": "ooo graphify explain <node> [--graph <path>]",
+      "risk": "read_only",
+      "requires_confirmation": false
+    },
+    {
+      "namespace": "graphify",
+      "name": "add",
+      "summary": "Fetch a URL into a Graphify corpus after explicit network trust.",
+      "usage": "ooo graphify add <url> [--author <name>] [--contributor <name>]",
+      "risk": "write",
+      "requires_confirmation": true,
+      "arguments": [
+        {"name": "url", "type": "url", "required": true, "description": "Network URL to ingest."}
+      ]
+    },
+    {
+      "namespace": "graphify",
+      "name": "serve",
+      "summary": "Start long-running Graphify MCP/watch surfaces only after explicit trust.",
+      "usage": "ooo graphify --mcp | --watch",
+      "risk": "write",
+      "requires_confirmation": true
+    },
+    {
+      "namespace": "graphify",
+      "name": "neo4j-push",
+      "summary": "Push graph data to Neo4j only after explicit external-write trust.",
+      "usage": "ooo graphify --neo4j-push <bolt-url>",
+      "risk": "write",
+      "requires_confirmation": true
+    }
+  ],
+  "capabilities": [
+    {"name": "ledger", "access": "write", "reason": "Record invocation intent, selected command, graph stats, and result summary."},
+    {"name": "state", "access": "write", "reason": "Persist graph build/query state and resumable metadata."},
+    {"name": "provenance", "access": "write", "reason": "Record input roots, generated artifacts, backend/model hints, and source evidence."},
+    {"name": "handoff", "access": "attach", "reason": "Attach Graphify reports, graph JSON, and query outputs to downstream AgentOS workflows."},
+    {"name": "progress", "access": "write", "reason": "Surface extraction/chunking/build progress and blocked prerequisites."},
+    {"name": "runtime", "access": "execute", "reason": "Launch the upstream graphify CLI in a bounded subprocess."},
+    {"name": "mcp", "access": "execute", "reason": "Expose Graphify MCP stdio server only when explicitly trusted."}
+  ],
+  "permissions": [
+    {"scope": "filesystem:read", "risk": "read_only", "required": true, "reason": "Read target project, corpus files, and existing graph artifacts."},
+    {"scope": "filesystem:write", "risk": "write", "required": true, "reason": "Write graphify-out, cache files, reports, graph files, wiki/Obsidian/export outputs, and handoffs."},
+    {"scope": "shell:execute", "risk": "write", "required": true, "reason": "Execute the upstream graphify command or python -m graphify."},
+    {"scope": "network:read", "risk": "read_only", "required": false, "reason": "Fetch URLs, clone GitHub repositories, or resolve remote resources when requested."},
+    {"scope": "network:write", "risk": "write", "required": false, "reason": "Call configured model APIs, push to Neo4j, or use external API-backed features when requested."},
+    {"scope": "github:read", "risk": "read_only", "required": false, "reason": "Support Graphify PR dashboard or PR impact analysis if enabled."},
+    {"scope": "mcp:execute", "risk": "write", "required": false, "reason": "Start or expose the Graphify MCP server."},
+    {"scope": "database:write", "risk": "write", "required": false, "reason": "Push graph data to Neo4j; documented as a schema pressure point for richer future database scopes."}
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m graphify_plugin"
+  },
+  "audit": {
+    "events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"]
+  }
+}
