@@ -44,6 +44,12 @@
       "description": "Reference adapter for safe AgentOS assimilation of K-Dense Scientific Agent Skills."
     },
     {
+      "name": "semgrep-static-analysis",
+      "version": "0.1.0",
+      "path": "../plugins/semgrep-static-analysis",
+      "description": "Semgrep local static-analysis scans as Ouroboros audit, provenance, and handoff artifacts."
+    },
+    {
       "name": "superclaude",
       "version": "4.3.0",
       "path": "../plugins/superclaude",
