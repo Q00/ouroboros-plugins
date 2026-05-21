@@ -15,3 +15,20 @@ def snapshot(repo_root: Path) -> dict[str, str]:
         "branch": git(["rev-parse", "--abbrev-ref", "HEAD"], repo_root),
         "status_short": git(["status", "--short"], repo_root),
     }
+
+
+def diff(repo_root: Path) -> str:
+    return git(["diff", "--binary"], repo_root)
+
+
+def touched_files(repo_root: Path) -> list[str]:
+    status = git(["status", "--short"], repo_root)
+    files: list[str] = []
+    for line in status.splitlines():
+        if not line.strip():
+            continue
+        path = line[2:].strip()
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1]
+        files.append(path)
+    return files

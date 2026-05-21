@@ -52,3 +52,11 @@ def ask_args(message: str, read_only_paths: list[str]) -> list[str]:
     for path in read_only_paths:
         args.extend(["--read", path])
     return args
+
+
+def edit_args(message: str, editable_paths: list[str], read_only_paths: list[str] | None = None) -> list[str]:
+    args = [aider_bin(), "--no-auto-commits", "--message", message]
+    for path in read_only_paths or []:
+        args.extend(["--read", path])
+    args.extend(editable_paths)
+    return args
