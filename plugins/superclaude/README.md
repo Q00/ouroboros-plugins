@@ -89,6 +89,33 @@ MCP recommendations are stored in `assets/mcp/mcp.json` and documented only. The
 
 Upstream Claude Code hooks are stored in `assets/hooks/hooks.json`. The MVP maps them to documented lifecycle expectations; it does not execute hidden hooks outside the Ouroboros firewall.
 
+## Alignment with #27 capability assimilation
+
+This plugin is a reference capability-assimilation plugin under the direction of issue #27. It is not a marketplace listing and not a request to add SuperClaude-specific branches to Ouroboros core.
+
+It preserves the #27 boundary by translating SuperClaude into:
+
+- explicit manifest commands instead of implicit slash-command routing,
+- declared core capabilities distinct from external permissions,
+- conservative shared risk tiers,
+- trust-gated runtime behavior,
+- audit event payloads and upstream provenance,
+- handoff artifacts for planning/research/workflow commands,
+- documented MCP/hook guidance without hidden execution, and
+- follow-up contract questions where schema/runtime support is required.
+
+The intended AgentOS path is:
+
+```text
+SuperClaude Framework assets
+        ↓
+Ouroboros plugin manifest + command firewall
+        ↓
+permissioned, auditable, handoff-capable adapter
+        ↓
+AgentOS-level capability without core expansion
+```
+
 ## Runtime behavior
 
 The adapter returns structured JSON. Read-only commands run without write trust:
