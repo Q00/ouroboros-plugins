@@ -125,6 +125,23 @@ def write_mode(ns: argparse.Namespace, command_name: str) -> int:
 
     before = snapshot(repo_root)
     pre_verification = run_verifications(ns.test_cmd, ns.lint_cmd, repo_root, timeout=ns.timeout)
+    if command_name == "fix" and all_passed(pre_verification):
+        write_json(out / "invocation.json", {
+            "schema_version": "0.1",
+            "plugin": {"name": "aider-assist", "version": __version__},
+            "command": command_name,
+            "message": ns.message,
+            "editable_files": editable,
+            "read_only_context": read_only,
+            "repo_state_before": before,
+            "verification_before": serialize(pre_verification),
+            "result": {"status": "blocked", "message": "fix requires a failing --test-cmd or --lint-cmd before invoking Aider"},
+        })
+        write_json(out / "verification.json", {"before": serialize(pre_verification), "after": [], "status": "blocked"})
+        write_handoff(out / "handoff.md", command=command_name, message=ns.message, selected_context=[*editable, *read_only], status="blocked", aider_version=version(repo_root), summary="Verification already passes; Aider repair was not invoked.")
+        print(str(out))
+        return 2
+
     message = ns.message
     if command_name == "fix":
         context = failure_context(pre_verification)
