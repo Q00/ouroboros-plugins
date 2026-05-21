@@ -111,17 +111,17 @@
     {
       "name": "seed",
       "access": "write",
-      "reason": "Generate a concrete Seed handoff for ooo auto execution."
+      "reason": "Prepare a Seed-shaped Markdown brief that ooo auto can consume from the generated handoff."
     },
     {
       "name": "ledger",
       "access": "write",
-      "reason": "Record research constraints, evaluation metric, and handoff output."
+      "reason": "Preserve experiment constraints and handoff evidence in files that can be attached to the Ouroboros ledger by the caller."
     },
     {
       "name": "provenance",
       "access": "write",
-      "reason": "Record upstream autoresearch repository assumptions and local checkout evidence."
+      "reason": "Record checkout and file evidence inside handoff.json for later Ouroboros provenance attachment."
     },
     {
       "name": "state",
@@ -131,12 +131,12 @@
     {
       "name": "handoff",
       "access": "attach",
-      "reason": "Prepare generated Seed artifacts for an ooo auto handoff."
+      "reason": "Prepare seed.md, auto_goal.txt, and handoff.json as explicit handoff artifacts for ooo auto."
     },
     {
       "name": "progress",
       "access": "write",
-      "reason": "Report readiness and missing prerequisites before ooo auto starts."
+      "reason": "Report readiness and missing prerequisites as structured JSON before ooo auto starts."
     }
   ],
   "permissions": [

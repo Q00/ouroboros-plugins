@@ -173,6 +173,41 @@ def provenance_payload(inspection: RepoInspection) -> dict:
     }
 
 
+def capability_mapping(seed_path: Path, auto_goal_path: Path, handoff_path: Path) -> dict:
+    """Describe how generated files map to declared Ouroboros capabilities.
+
+    The plugin prepares attachable artifacts; it does not directly call core
+    ledger/provenance APIs from this standalone entrypoint.
+    """
+    return {
+        "seed:write": {
+            "artifact": str(seed_path),
+            "meaning": "Seed-shaped Markdown brief prepared for ooo auto.",
+        },
+        "ledger:write": {
+            "artifact": str(handoff_path),
+            "meaning": "Experiment constraints and handoff evidence preserved for ledger attachment.",
+        },
+        "provenance:write": {
+            "artifact": str(handoff_path),
+            "json_pointer": "/provenance",
+            "meaning": "Checkout and file evidence captured for provenance attachment.",
+        },
+        "state:write": {
+            "artifact": str(handoff_path.parent),
+            "meaning": "Durable .ouroboros/autoresearch handoff directory written in the target repo.",
+        },
+        "handoff:attach": {
+            "artifacts": [str(seed_path), str(auto_goal_path), str(handoff_path)],
+            "meaning": "Artifacts a caller can attach to or feed into an Ouroboros run.",
+        },
+        "progress:write": {
+            "artifact": "stdout-json",
+            "meaning": "inspect/prepare emit structured readiness or handoff status.",
+        },
+    }
+
+
 def fenced_code_block(language: str, content: str) -> list[str]:
     """Return a Markdown code fence that cannot be closed by its content."""
     longest_run = 0
@@ -325,6 +360,9 @@ def write_handoff(
         "handoff_path": str(handoff_path),
         "upstream": UPSTREAM_REPOSITORY,
         "provenance": provenance_payload(inspection),
+        "ouroboros_capability_mapping": capability_mapping(
+            seed_path, auto_goal_path, handoff_path
+        ),
         "ooo_auto": {
             "recommended_command": (
                 f"ouroboros auto \"$(cat {shlex.quote(str(auto_goal_path))})\""
