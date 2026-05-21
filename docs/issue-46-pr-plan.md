@@ -17,7 +17,7 @@ The epic should be delivered as **4 reviewable PRs**. The scopes are cumulative 
 - Catalog entry.
 - Contract validation coverage.
 
-**Done when:** manifest validates, command namespace is `langfuse`, `score` is declared `write` with confirmation, and no destructive/self-host/prompt/dataset behavior is included.
+**Done when:** manifest validates, command namespace is `langfuse`, `inspect` is declared bounded `write` because it writes local handoff artifacts, `score` is declared `write` with confirmation, and no destructive/self-host/prompt/dataset behavior is included.
 
 ### PR 2 — `inspect` evidence import loop
 
@@ -63,3 +63,9 @@ The epic should be delivered as **4 reviewable PRs**. The scopes are cumulative 
 ## Deferred follow-up PR families
 
 These remain out of scope for issue 46 Phase 1 and should become new epics/issues: `langfuse-prompts`, `langfuse-datasets-evals`, and `langfuse-selfhost`.
+
+## Alignment with issue #27
+
+This PR family is contract-aligned with #27 because Langfuse is treated as an external capability assimilated into Ouroboros, not as a marketplace entry or thin shell wrapper. The Phase 1 plugin preserves Langfuse concepts (`trace`, `observation`, `score`) while adding explicit command risks, core capabilities, external permissions, audit/provenance records, redacted local handoff artifacts, and a confirmation boundary for network writes.
+
+Risk classification follows #27's taxonomy: `inspect` uses read-only Langfuse access but is still command-risk `write` because it writes bounded local artifacts; `score` is `write` and requires confirmation for real network publication. Prompt, dataset/eval, and self-host lifecycle work remains deferred so this reference plugin proves one observability/evaluation handoff boundary without turning `Q00/ouroboros-plugins` into a marketplace or moving domain-specific Langfuse behavior into core/`ooo auto`.

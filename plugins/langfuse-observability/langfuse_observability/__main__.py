@@ -110,7 +110,7 @@ def write_score_result(args: argparse.Namespace, *, payload: dict[str, Any], res
         "status": status,
         "score": redact(payload),
         "response": redact(response or {}),
-        "error": error,
+        "error": redact(error) if error else None,
         "provenance": {"recorded_at": now, "plugin": f"{PLUGIN_NAME}@{PLUGIN_VERSION}"},
         "audit": [
             {"event": "plugin.invoked", "at": now, "command": "score"},
@@ -199,10 +199,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         return args.func(args)
     except ValueError as exc:
-        sys.stderr.write(f"error: {exc}\n")
+        sys.stderr.write(f"error: {redact(str(exc))}\n")
         return 2
     except Exception as exc:
-        sys.stderr.write(f"error: {exc}\n")
+        sys.stderr.write(f"error: {redact(str(exc))}\n")
         return 1
 
 

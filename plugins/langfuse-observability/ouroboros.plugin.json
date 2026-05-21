@@ -13,7 +13,7 @@
       "name": "inspect",
       "summary": "Fetch Langfuse trace evidence and emit an Ouroboros handoff artifact.",
       "usage": "ooo langfuse inspect <trace-url-or-id>",
-      "risk": "read_only",
+      "risk": "write",
       "requires_confirmation": false,
       "arguments": [
         {

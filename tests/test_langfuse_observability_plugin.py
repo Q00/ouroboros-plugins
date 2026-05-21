@@ -31,6 +31,18 @@ class LangfuseObservabilityPluginTests(unittest.TestCase):
             check=False,
         )
 
+    def test_manifest_risks_match_issue_27_contract_boundary(self):
+        manifest = json.loads((PLUGIN_PATH / "ouroboros.plugin.json").read_text(encoding="utf-8"))
+        commands = {command["name"]: command for command in manifest["commands"]}
+        self.assertEqual(commands["inspect"]["risk"], "write")
+        self.assertFalse(commands["inspect"].get("requires_confirmation", False))
+        self.assertEqual(commands["score"]["risk"], "write")
+        self.assertTrue(commands["score"]["requires_confirmation"])
+        permissions = {(permission["scope"], permission["risk"]) for permission in manifest["permissions"]}
+        self.assertIn(("network:read", "read_only"), permissions)
+        self.assertIn(("filesystem:write", "write"), permissions)
+        self.assertIn(("network:write", "write"), permissions)
+
     def test_parse_trace_url_and_raw_id(self):
         self.assertEqual(
             parse_trace_reference("https://cloud.langfuse.com/project/p/traces/trace_123")[:2],
@@ -42,6 +54,19 @@ class LangfuseObservabilityPluginTests(unittest.TestCase):
         payload = redact({"secret_key": "sk-lf-secret", "text": "x" * 600})
         self.assertEqual(payload["secret_key"], "[REDACTED]")
         self.assertIn("[TRUNCATED]", payload["text"])
+
+    def test_redaction_removes_langfuse_key_values_inside_strings(self):
+        payload = redact(
+            {
+                "comment": "do not leak sk-lf-super-secret or pk-lf-public",
+                "error": "Authorization failed for Bearer abc.def.ghi",
+            }
+        )
+        serialized = json.dumps(payload)
+        self.assertNotIn("sk-lf-super-secret", serialized)
+        self.assertNotIn("pk-lf-public", serialized)
+        self.assertNotIn("Bearer abc.def.ghi", serialized)
+        self.assertIn("[REDACTED]", serialized)
 
     def test_inspect_fixture_writes_json_and_markdown_artifacts(self):
         with tempfile.TemporaryDirectory() as td:
@@ -96,6 +121,17 @@ class LangfuseObservabilityPluginTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 2)
             self.assertIn("LANGFUSE_BASE_URL", proc.stderr)
             self.assertNotIn("sk-lf-super-secret", proc.stderr)
+
+    def test_cli_errors_are_redacted_before_stderr(self):
+        proc = self._run(
+            "inspect",
+            "trace_123",
+            "--offline-fixture",
+            "sk-lf-secret-missing.json",
+        )
+        self.assertEqual(proc.returncode, 2)
+        self.assertNotIn("sk-lf-secret", proc.stderr)
+        self.assertIn("[REDACTED]", proc.stderr)
 
     def test_score_value_coercion(self):
         self.assertEqual(coerce_score_value("1"), 1)

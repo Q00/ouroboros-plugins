@@ -24,7 +24,9 @@ Secrets are never written to terminal output, artifacts, audit events, or Markdo
 
 ## AgentOS boundary
 
-- `inspect` is read-only and writes redacted local handoff artifacts under `.omx/handoffs/langfuse/`.
+This plugin follows the capability-assimilation contract described in Q00/ouroboros-plugins#27: it is not a thin dashboard wrapper or marketplace listing; it translates Langfuse observability concepts into permissioned, auditable, handoff-capable Ouroboros artifacts while preserving Langfuse trace/observation/score vocabulary.
+
+- `inspect` performs read-only Langfuse API access but is command-risk `write` because it creates bounded local handoff/provenance artifacts under `.omx/handoffs/langfuse/`.
 - `score --dry-run` writes a local provenance artifact and performs no network write.
 - Real `score` publication requires credentials and explicit `--confirm`.
 - Prompt management, datasets/evals, and self-host lifecycle commands are intentionally deferred.

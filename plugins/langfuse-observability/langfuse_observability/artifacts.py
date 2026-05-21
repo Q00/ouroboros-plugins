@@ -13,6 +13,10 @@ from . import PLUGIN_NAME, PLUGIN_VERSION
 
 DEFAULT_OUTPUT_DIR = Path(".omx") / "handoffs" / "langfuse"
 SECRET_KEY_RE = re.compile(r"(secret|api[_-]?key|token|password|authorization|credential)", re.I)
+SECRET_VALUE_RE = re.compile(
+    r"(sk-lf-[A-Za-z0-9_-]+|pk-lf-[A-Za-z0-9_-]+|bearer\s+[A-Za-z0-9._~+/=-]+)",
+    re.I,
+)
 LARGE_TEXT_LIMIT = 500
 
 
@@ -67,10 +71,10 @@ def redact(value: Any, *, key: str = "") -> Any:
     if isinstance(value, list):
         return [redact(item, key=key) for item in value]
     if isinstance(value, str):
-        if SECRET_KEY_RE.search(value):
-            return "[REDACTED]"
-        if len(value) > LARGE_TEXT_LIMIT:
-            return value[:LARGE_TEXT_LIMIT].rstrip() + "… [TRUNCATED]"
+        redacted = SECRET_VALUE_RE.sub("[REDACTED]", value)
+        if len(redacted) > LARGE_TEXT_LIMIT:
+            return redacted[:LARGE_TEXT_LIMIT].rstrip() + "… [TRUNCATED]"
+        return redacted
     return value
 
 
