@@ -1,0 +1,88 @@
+{
+  "schema_version": "0.1",
+  "name": "semgrep-static-analysis",
+  "version": "0.1.0",
+  "description": "Assimilates Semgrep local static-analysis scans into Ouroboros audit, provenance, and handoff artifacts while preserving Semgrep CLI UX.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/semgrep-static-analysis"
+  },
+  "commands": [
+    {
+      "namespace": "semgrep",
+      "name": "scan",
+      "summary": "Run a bounded read-only Semgrep scan and attach normalized findings as Ouroboros evidence.",
+      "usage": "ooo semgrep scan <target-path> --config <local-rule-or-explicitly-approved-remote-config>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "target_path",
+          "type": "path",
+          "required": true,
+          "description": "Repo-relative file or directory to scan."
+        },
+        {
+          "name": "config",
+          "type": "string",
+          "required": true,
+          "description": "Local Semgrep config path by default, or a registry/URL config only when remote configs are explicitly enabled."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record scan invocation, policy inputs, and summary verdict."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record Semgrep version, config source, target paths, and output hashes."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach normalized findings for downstream review or automated remediation."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report scan progress and completion status."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read target source files and local Semgrep rule files."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Invoke the installed Semgrep CLI with bounded arguments."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Only needed when using Semgrep registry, URL, or remote configs."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m semgrep_static_analysis"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
