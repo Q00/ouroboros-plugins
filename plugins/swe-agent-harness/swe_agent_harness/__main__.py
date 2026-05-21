@@ -10,16 +10,17 @@ from pathlib import Path
 from typing import Any
 
 from .artifacts import (
-    build_run_spec,
     collect_bundle,
     discover_artifacts,
     ensure_dir,
     make_run_id,
     resolve_output_dir,
+    summarize_hits,
     verify_bundle,
     write_audit,
     write_handoff,
     write_json,
+    build_run_spec,
 )
 
 EXECUTE_PERMISSIONS = ["filesystem:read", "filesystem:write", "shell:execute", "runtime:execute"]
@@ -94,6 +95,7 @@ def blocked(bundle_dir: Path, *, run_spec: dict[str, Any], reason: str, permissi
     run_spec["required_permissions"] = permissions
     run_spec["blocked_reason"] = reason
     write_json(bundle_dir / "run-spec.json", run_spec)
+    (bundle_dir / "upstream-command.txt").write_text(" ".join(run_spec.get("upstream_command", [])) + "\n", encoding="utf-8")
     (bundle_dir / "upstream-command.txt").write_text(" ".join(run_spec.get("upstream_command", [])) + "\n", encoding="utf-8")
     (bundle_dir / "stdout.log").write_text("", encoding="utf-8")
     (bundle_dir / "stderr.log").write_text(reason + "\n", encoding="utf-8")
@@ -204,10 +206,30 @@ def verify(argv: list[str]) -> int:
     return emit(payload)
 
 
+def inspect(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(prog="swe_agent_harness inspect")
+    parser.add_argument("artifact_path")
+    ns, _ = parser.parse_known_args(argv)
+    path = Path(ns.artifact_path).expanduser().resolve()
+    root = path if path.is_dir() else path.parent
+    hits = discover_artifacts(root)
+    return emit({"status": "completed", "risk": "read_only", "artifact_root": root.as_posix(), "artifacts": summarize_hits(hits)})
+
+
+def quick_stats(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(prog="swe_agent_harness quick-stats")
+    parser.add_argument("artifact_dir")
+    ns, _ = parser.parse_known_args(argv)
+    root = Path(ns.artifact_dir).expanduser().resolve()
+    hits = discover_artifacts(root)
+    summary = summarize_hits(hits)
+    return emit({"status": "completed", "risk": "read_only", "artifact_root": root.as_posix(), "counts": summary["counts"], "total_artifacts": sum(summary["counts"].values())})
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if not argv or argv[0] in {"-h", "--help"}:
-        print("usage: python -m swe_agent_harness {run,run-replay,collect-artifacts,handoff,verify-artifacts} ...")
+        print("usage: python -m swe_agent_harness {run,run-replay,inspect,quick-stats,collect-artifacts,handoff,verify-artifacts} ...")
         return 0
     command, rest = argv[0], argv[1:]
     if command in {"run", "run-replay"}:
@@ -218,7 +240,11 @@ def main(argv: list[str] | None = None) -> int:
         return handoff(rest)
     if command == "verify-artifacts":
         return verify(rest)
-    print(f"command not implemented in this PR: {command}", file=sys.stderr)
+    if command == "inspect":
+        return inspect(rest)
+    if command == "quick-stats":
+        return quick_stats(rest)
+    print(f"unknown command: {command}", file=sys.stderr)
     return 2
 
 
