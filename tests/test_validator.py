@@ -86,6 +86,27 @@ class ReferenceManifestTest(unittest.TestCase):
         self.assertEqual(errs, [], f"reference manifest invalid: {errs}")
 
 
+class AssimilationMetadataSchemaTest(unittest.TestCase):
+    """Issue #29 command metadata must be expressible without breaking v0.1."""
+
+    def test_assimilation_command_metadata_fixture_validates(self):
+        m = json.loads(
+            (REPO / "tests" / "fixtures" / "good-assimilation-command-metadata.json").read_text()
+        )
+        errs = list(VALIDATOR.iter_errors(m))
+        self.assertEqual(errs, [], f"assimilation metadata fixture invalid: {errs}")
+
+    def test_unknown_command_metadata_still_rejected(self):
+        m = json.loads(
+            (REPO / "tests" / "fixtures" / "good-assimilation-command-metadata.json").read_text()
+        )
+        m["commands"][0]["opaque_shell_wrapper"] = True
+        err = first_error(m)
+        self.assertIsNotNone(err)
+        self.assertEqual(pointer(err), "/commands/0")
+        self.assertIn("Additional properties", err.message)
+
+
 class SchemaVersionRoutingTests(unittest.TestCase):
     """Exercise scripts/validate_contract.py via subprocess to cover the
     pre-schema gate added in PR #20: manifest's schema_version must be a
