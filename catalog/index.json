@@ -2,6 +2,12 @@
   "schema_version": "0.1",
   "plugins": [
     {
+      "name": "anthropic-agent-skills",
+      "version": "0.1.0",
+      "path": "../plugins/anthropic-agent-skills",
+      "description": "Ouroboros reference adapter for assimilating anthropics/skills through command, provenance, audit, and handoff contracts."
+    },
+    {
       "name": "autoresearch",
       "version": "0.1.0",
       "path": "../plugins/autoresearch",

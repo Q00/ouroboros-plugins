@@ -45,6 +45,7 @@ The initial goal is a local-only contract MVP:
 - External permission declaration
 - Provenance and audit requirements
 - Example UserLevel plugin package
+- Anthropic Agent Skills assimilation reference plugin for `anthropics/skills`
 
 ## Core Boundary
 
@@ -103,6 +104,7 @@ schemas/
     plugin.schema.json       Draft JSON Schema for plugin manifests (v0.1)
     audit-event.schema.json  Draft JSON Schema for audit events (v0.1)
 plugins/
+  anthropic-agent-skills/ Anthropic Agent Skills assimilation reference plugin
   autoresearch/        Autoresearch-to-ooo-auto handoff plugin
   github-pr-ops/       Reference plugin skeleton
   openhands-agentos/   OpenHands-to-AgentOS audited handoff plugin
