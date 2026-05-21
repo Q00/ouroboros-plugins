@@ -141,6 +141,7 @@ class AiderAssistTests(unittest.TestCase):
             self.assertEqual(invocation["editable_files"], ["src.py"])
 
     def test_edit_fails_when_aider_touches_undeclared_file(self):
+    def test_edit_captures_verification_output(self):
         import tempfile
 
         with tempfile.TemporaryDirectory() as td:
@@ -184,6 +185,32 @@ class AiderAssistTests(unittest.TestCase):
             self.assertIn("secret.py", (artifact_dir / "handoff.md").read_text())
 
     def test_edit_fails_when_aider_touches_unlisted_file(self):
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "edit", "--message", "Change", "--file", "src.py", "--test-cmd", "python -c \"print('tests ok')\""],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            artifact_dir = Path(completed.stdout.strip())
+            verification = json.loads((artifact_dir / "verification.json").read_text())
+            self.assertEqual(verification["status"], "passed")
+            self.assertIn("tests ok", verification["after"][0]["stdout"])
+
+    def test_fix_requires_verification_command(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td) / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "fix", "--file", "src.py"],
+                cwd=REPO, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 2)
+            self.assertIn("fix requires --test-cmd or --lint-cmd", completed.stderr)
+
+    def test_fix_reports_failed_post_verification(self):
         import tempfile
 
         with tempfile.TemporaryDirectory() as td:
@@ -198,6 +225,7 @@ class AiderAssistTests(unittest.TestCase):
                 "else:\n"
                 "    Path('other.py').write_text(\"print('oops')\\n\")\n"
                 "    print('edited outside bounds')\n"
+                "    print('attempted repair')\n"
             )
             fake.chmod(0o755)
             repo = tmp / "repo"
@@ -212,6 +240,7 @@ class AiderAssistTests(unittest.TestCase):
             env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
             completed = subprocess.run(
                 [sys.executable, "-m", "aider_assist", "--repo", str(repo), "edit", "--message", "Change", "--file", "src.py"],
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "fix", "--file", "src.py", "--test-cmd", "python -c \"import sys; sys.exit(3)\""],
                 cwd=REPO, env=env, text=True, capture_output=True, check=False,
             )
             self.assertEqual(completed.returncode, 1)
@@ -219,6 +248,9 @@ class AiderAssistTests(unittest.TestCase):
             invocation = json.loads((artifact_dir / "invocation.json").read_text())
             self.assertEqual(invocation["result"]["status"], "failed")
             self.assertEqual(invocation["unauthorized_touched_files"], ["other.py"])
+            verification = json.loads((artifact_dir / "verification.json").read_text())
+            self.assertEqual(verification["status"], "failed")
+            self.assertEqual(verification["after"][0]["exit_code"], 3)
 
 
 if __name__ == "__main__":
