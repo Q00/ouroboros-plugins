@@ -1,0 +1,1062 @@
+{
+  "schema_version": "0.1",
+  "name": "gsd-agentos",
+  "version": "0.1.0",
+  "description": "AgentOS-native adapter for the gsd-build/get-shit-done command surface.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/gsd-agentos",
+    "repository": "https://github.com/Q00/ouroboros-plugins"
+  },
+  "commands": [
+    {
+      "namespace": "gsd",
+      "name": "add-tests",
+      "summary": "Generate tests for a completed phase based on UAT criteria and implementation",
+      "usage": "ooo gsd add-tests <phase> [additional instructions]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase> [additional instructions]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "ai-integration-phase",
+      "summary": "Generate an AI-SPEC.md design contract for phases that involve building AI systems.",
+      "usage": "ooo gsd ai-integration-phase [phase number]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase number]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "audit-fix",
+      "summary": "Autonomous audit-to-fix pipeline \u2014 find issues, classify, fix, test, commit",
+      "usage": "ooo gsd audit-fix --source <audit-uat> [--severity <medium|high|all>] [--max N] [--dry-run]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: --source <audit-uat> [--severity <medium|high|all>] [--max N] [--dry-run]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "audit-milestone",
+      "summary": "Audit milestone completion against original intent before archiving",
+      "usage": "ooo gsd audit-milestone [version]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [version]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "audit-uat",
+      "summary": "Cross-phase audit of all outstanding UAT and verification items",
+      "usage": "ooo gsd audit-uat",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "autonomous",
+      "summary": "Run all remaining phases autonomously \u2014 discuss\u2192plan\u2192execute per phase",
+      "usage": "ooo gsd autonomous [--from N] [--to N] [--only N] [--interactive]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--from N] [--to N] [--only N] [--interactive]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "capture",
+      "summary": "Capture ideas, tasks, notes, and seeds to their destination",
+      "usage": "ooo gsd capture [--note | --backlog | --seed | --list] [text]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--note | --backlog | --seed | --list] [text]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "cleanup",
+      "summary": "Archive accumulated phase directories from completed milestones",
+      "usage": "ooo gsd cleanup",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "code-review",
+      "summary": "Review source files changed during a phase for bugs, security issues, and code quality problems",
+      "usage": "ooo gsd code-review <phase-number> [--depth=quick|standard|deep] [--files file1,file2,...] [--fix [--all] [--auto]]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase-number> [--depth=quick|standard|deep] [--files file1,file2,...] [--fix [--all] [--auto]]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "complete-milestone",
+      "summary": "Archive completed milestone and prepare for next version",
+      "usage": "ooo gsd complete-milestone <version>",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <version>"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "config",
+      "summary": "Configure GSD settings \u2014 workflow toggles, advanced knobs, integrations, and model profile",
+      "usage": "ooo gsd config [--advanced | --integrations | --profile <name>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--advanced | --integrations | --profile <name>]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "debug",
+      "summary": "Systematic debugging with persistent state across context resets",
+      "usage": "ooo gsd debug [list | status <slug> | continue <slug> | --diagnose] [issue description]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [list | status <slug> | continue <slug> | --diagnose] [issue description]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "discuss-phase",
+      "summary": "Gather phase context through adaptive questioning before planning.",
+      "usage": "ooo gsd discuss-phase <phase> [--all] [--auto] [--chain] [--batch] [--analyze] [--text] [--power] [--assumptions]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase> [--all] [--auto] [--chain] [--batch] [--analyze] [--text] [--power] [--assumptions]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "docs-update",
+      "summary": "Generate or update project documentation verified against the codebase",
+      "usage": "ooo gsd docs-update [--force] [--verify-only]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--force] [--verify-only]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "eval-review",
+      "summary": "Audit an executed AI phase's evaluation coverage and produce an EVAL-REVIEW.md remediation plan.",
+      "usage": "ooo gsd eval-review [phase number]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase number]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "execute-phase",
+      "summary": "Execute all plans in a phase with wave-based parallelization",
+      "usage": "ooo gsd execute-phase <phase-number> [--wave N] [--gaps-only] [--interactive] [--tdd]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase-number> [--wave N] [--gaps-only] [--interactive] [--tdd]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "explore",
+      "summary": "Socratic ideation and idea routing \u2014 think through ideas before committing to plans",
+      "usage": "ooo gsd explore",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "extract-learnings",
+      "summary": "Extract decisions, lessons, patterns, and surprises from completed phase artifacts",
+      "usage": "ooo gsd extract-learnings <phase-number>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase-number>"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "fast",
+      "summary": "Execute a trivial task inline \u2014 no subagents, no planning overhead",
+      "usage": "ooo gsd fast [task description]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [task description]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "forensics",
+      "summary": "Post-mortem investigation for failed GSD workflows \u2014 diagnoses what went wrong.",
+      "usage": "ooo gsd forensics [problem description]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [problem description]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "graphify",
+      "summary": "Build, query, and inspect the project knowledge graph in .planning/graphs/",
+      "usage": "ooo gsd graphify [build|query <term>|status|diff]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [build|query <term>|status|diff]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "health",
+      "summary": "Diagnose planning directory health and optionally repair issues",
+      "usage": "ooo gsd health [--repair] [--context]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--repair] [--context]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "help",
+      "summary": "Show available GSD commands and usage guide",
+      "usage": "ooo gsd help [--brief | --full | <topic> | --brief <topic>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--brief | --full | <topic> | --brief <topic>]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "import",
+      "summary": "Ingest external plans with conflict detection against project decisions before writing anything.",
+      "usage": "ooo gsd import --from <filepath> | --from-gsd2",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: --from <filepath> | --from-gsd2"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "inbox",
+      "summary": "Triage and review open GitHub issues and PRs against project templates and contribution guidelines.",
+      "usage": "ooo gsd inbox [--issues] [--prs] [--label] [--close-incomplete] [--repo owner/repo]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--issues] [--prs] [--label] [--close-incomplete] [--repo owner/repo]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "ingest-docs",
+      "summary": "Bootstrap or merge a .planning/ setup from existing ADRs, PRDs, SPECs, and docs in a repo.",
+      "usage": "ooo gsd ingest-docs [path] [--mode new|merge] [--manifest <file>] [--resolve auto|interactive]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [path] [--mode new|merge] [--manifest <file>] [--resolve auto|interactive]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "manager",
+      "summary": "Interactive command center for managing multiple phases from one terminal",
+      "usage": "ooo gsd manager [--analyze-deps]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--analyze-deps]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "map-codebase",
+      "summary": "Analyze codebase with parallel mapper agents to produce .planning/codebase/ documents",
+      "usage": "ooo gsd map-codebase [--fast [--focus tech|arch|quality|concerns]] [--query <term>|status|diff|refresh] [area]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--fast [--focus tech|arch|quality|concerns]] [--query <term>|status|diff|refresh] [area]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "milestone-summary",
+      "summary": "Generate a comprehensive project summary from milestone artifacts for team onboarding and review",
+      "usage": "ooo gsd milestone-summary [version]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [version]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "mvp-phase",
+      "summary": "Plan a phase as a vertical MVP slice \u2014 user story, SPIDR splitting, then plan-phase",
+      "usage": "ooo gsd mvp-phase <phase-number>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase-number>"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "new-milestone",
+      "summary": "Start a new milestone cycle \u2014 update PROJECT.md and route to requirements",
+      "usage": "ooo gsd new-milestone [milestone name, e.g., 'v1.1 Notifications']",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [milestone name, e.g., 'v1.1 Notifications']"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "new-project",
+      "summary": "Initialize a new project with deep context gathering and PROJECT.md",
+      "usage": "ooo gsd new-project [--auto]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--auto]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "gsd-context",
+      "summary": "codebase intelligence | map graphify docs learnings",
+      "usage": "ooo gsd gsd-context",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "gsd-ideate",
+      "summary": "exploration capture | explore sketch spike spec capture",
+      "usage": "ooo gsd gsd-ideate",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "gsd-manage",
+      "summary": "config workspace | workstreams thread update ship inbox",
+      "usage": "ooo gsd gsd-manage",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "gsd-project",
+      "summary": "project lifecycle | milestones audits summary",
+      "usage": "ooo gsd gsd-project",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "gsd-quality",
+      "summary": "quality gates | code review debug audit security eval ui",
+      "usage": "ooo gsd gsd-quality",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "gsd-workflow",
+      "summary": "workflow | discuss plan execute verify phase progress",
+      "usage": "ooo gsd gsd-workflow",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "pause-work",
+      "summary": "Create context handoff when pausing work mid-phase",
+      "usage": "ooo gsd pause-work [--report]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--report]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "phase",
+      "summary": "CRUD for phases in ROADMAP.md \u2014 add, insert, remove, or edit phases",
+      "usage": "ooo gsd phase [--insert | --remove | --edit] <phase-name-or-number>",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--insert | --remove | --edit] <phase-name-or-number>"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "plan-phase",
+      "summary": "Create detailed phase plan (PLAN.md) with verification loop",
+      "usage": "ooo gsd plan-phase [phase] [--auto] [--research] [--skip-research] [--research-phase <N>] [--view] [--gaps] [--skip-verify] [--prd <file>] [--ingest <path-or-glob>] [--ingest-format <auto|nygard|madr|narrative>] [--reviews] [--text] [--tdd] [--mvp]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase] [--auto] [--research] [--skip-research] [--research-phase <N>] [--view] [--gaps] [--skip-verify] [--prd <file>] [--ingest <path-or-glob>] [--ingest-format <auto|nygard|madr|narrative>] [--reviews] [--text] [--tdd] [--mvp]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "plan-review-convergence",
+      "summary": "Cross-AI plan convergence loop \u2014 replan with review feedback until no HIGH concerns remain.",
+      "usage": "ooo gsd plan-review-convergence <phase> [--codex] [--gemini] [--claude] [--opencode] [--ollama] [--lm-studio] [--llama-cpp] [--text] [--ws <name>] [--all] [--max-cycles N]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase> [--codex] [--gemini] [--claude] [--opencode] [--ollama] [--lm-studio] [--llama-cpp] [--text] [--ws <name>] [--all] [--max-cycles N]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "pr-branch",
+      "summary": "Create a clean PR branch by filtering out .planning/ commits \u2014 ready for code review",
+      "usage": "ooo gsd pr-branch [target branch, default: main]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [target branch, default: main]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "profile-user",
+      "summary": "Generate developer behavioral profile and create Claude-discoverable artifacts",
+      "usage": "ooo gsd profile-user [--questionnaire] [--refresh]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--questionnaire] [--refresh]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "progress",
+      "summary": "Check progress, advance workflow, or dispatch freeform intent \u2014 the unified GSD situational command",
+      "usage": "ooo gsd progress [--forensic | --next | --do \\\"task description\\\"]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--forensic | --next | --do \\\"task description\\\"]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "quick",
+      "summary": "Execute a quick task with GSD guarantees (atomic commits, state tracking) but skip optional agents",
+      "usage": "ooo gsd quick [list | status <slug> | resume <slug> | --full] [--validate] [--discuss] [--research] [task description]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [list | status <slug> | resume <slug> | --full] [--validate] [--discuss] [--research] [task description]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "resume-work",
+      "summary": "Resume work from previous session with full context restoration",
+      "usage": "ooo gsd resume-work",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "review-backlog",
+      "summary": "Review and promote backlog items to active milestone",
+      "usage": "ooo gsd review-backlog",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "review",
+      "summary": "Request cross-AI peer review of phase plans from external AI CLIs",
+      "usage": "ooo gsd review --phase N [--gemini] [--claude] [--codex] [--opencode] [--qwen] [--cursor] [--all]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: --phase N [--gemini] [--claude] [--codex] [--opencode] [--qwen] [--cursor] [--all]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "secure-phase",
+      "summary": "Retroactively verify threat mitigations for a completed phase",
+      "usage": "ooo gsd secure-phase [phase number]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase number]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "settings",
+      "summary": "Configure GSD workflow toggles and model profile",
+      "usage": "ooo gsd settings",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "ship",
+      "summary": "Create PR, run review, and prepare for merge after verification passes",
+      "usage": "ooo gsd ship [phase number or milestone, e.g., '4' or 'v1.0']",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase number or milestone, e.g., '4' or 'v1.0']"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "sketch",
+      "summary": "Sketch UI/design ideas with throwaway HTML mockups, or propose what to sketch next (frontier mode)",
+      "usage": "ooo gsd sketch [design idea to explore] [--quick] [--text] [--wrap-up] or [frontier]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [design idea to explore] [--quick] [--text] [--wrap-up] or [frontier]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "spec-phase",
+      "summary": "Clarify WHAT a phase delivers with ambiguity scoring; produces a SPEC.md before discuss-phase.",
+      "usage": "ooo gsd spec-phase <phase> [--auto] [--text]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: <phase> [--auto] [--text]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "spike",
+      "summary": "Spike an idea through experiential exploration, or propose what to spike next (frontier mode)",
+      "usage": "ooo gsd spike [idea to validate] [--quick] [--text] [--wrap-up] or [frontier]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [idea to validate] [--quick] [--text] [--wrap-up] or [frontier]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "stats",
+      "summary": "Display project statistics \u2014 phases, plans, requirements, git metrics, and timeline",
+      "usage": "ooo gsd stats",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    },
+    {
+      "namespace": "gsd",
+      "name": "surface",
+      "summary": "Toggle which skills are surfaced \u2014 apply a profile, list, or disable a cluster without reinstall",
+      "usage": "ooo gsd surface [list|status|profile <name>|disable <cluster>|enable <cluster>|reset]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [list|status|profile <name>|disable <cluster>|enable <cluster>|reset]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "thread",
+      "summary": "Manage persistent context threads for cross-session work",
+      "usage": "ooo gsd thread [list [--open | --resolved] | close <slug> | status <slug> | name | description]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [list [--open | --resolved] | close <slug> | status <slug> | name | description]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "ui-phase",
+      "summary": "Generate UI design contract (UI-SPEC.md) for frontend phases",
+      "usage": "ooo gsd ui-phase [phase]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "ui-review",
+      "summary": "Retroactive 6-pillar visual audit of implemented frontend code",
+      "usage": "ooo gsd ui-review [phase]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "ultraplan-phase",
+      "summary": "[BETA] Offload plan phase to Claude Code's ultraplan cloud; review in browser and import back.",
+      "usage": "ooo gsd ultraplan-phase [phase-number]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase-number]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "undo",
+      "summary": "Safe git revert. Roll back phase or plan commits using the phase manifest with dependency checks.",
+      "usage": "ooo gsd undo --last N | --phase NN | --plan NN-MM",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: --last N | --phase NN | --plan NN-MM"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "update",
+      "summary": "Update GSD to latest version with changelog display",
+      "usage": "ooo gsd update [--sync | --reapply]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--sync | --reapply]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "validate-phase",
+      "summary": "Retroactively audit and fill Nyquist validation gaps for a completed phase",
+      "usage": "ooo gsd validate-phase [phase number]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase number]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "verify-work",
+      "summary": "Validate built features through conversational UAT",
+      "usage": "ooo gsd verify-work [phase number, e.g., '4'] [--ws <name>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [phase number, e.g., '4'] [--ws <name>]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "workspace",
+      "summary": "Manage GSD workspaces \u2014 create, list, or remove isolated workspace environments",
+      "usage": "ooo gsd workspace [--new | --list | --remove] [name]",
+      "risk": "destructive",
+      "requires_confirmation": true,
+      "arguments": [
+        {
+          "name": "args",
+          "type": "string",
+          "required": false,
+          "description": "GSD-compatible argument string: [--new | --list | --remove] [name]"
+        }
+      ]
+    },
+    {
+      "namespace": "gsd",
+      "name": "workstreams",
+      "summary": "Manage parallel workstreams \u2014 list, create, switch, status, progress, complete, and resume",
+      "usage": "ooo gsd workstreams",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": []
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "seed",
+      "access": "write",
+      "reason": "Project, plan, and import commands can project GSD planning artifacts into Ouroboros Seed context."
+    },
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Every invocation records audit/provenance evidence under the target repository."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Write resumable GSD-to-AgentOS handoff state under .ouroboros/handoffs/gsd/."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Capture upstream GSD command source, version, argv, target repo, outputs, and status."
+    },
+    {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Optionally run bounded upstream GSD command adapters when shell execution is explicitly trusted."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach planning, execution, verification, and review outputs as AgentOS-readable handoff bundles."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Preserve GSD progress/status semantics in durable AgentOS artifacts."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Inspect upstream command catalog, target repository, and planning files."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write handoff, state, provenance, and converted planning artifacts into the target repository."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": false,
+      "reason": "Run bounded upstream GSD machinery or project verification commands only when explicitly trusted."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Some upstream GSD research/design commands may consult external documentation."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m gsd_agentos"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}

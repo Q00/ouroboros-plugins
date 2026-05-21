@@ -1,0 +1,2783 @@
+{
+  "schema_version": "0.1",
+  "plugin": "gsd-agentos",
+  "namespace": "gsd",
+  "upstream": {
+    "repository": "https://github.com/gsd-build/get-shit-done",
+    "commit": "c1c8b0d10907b8e6db8fa90bc09b1608899df590",
+    "source_glob": "commands/gsd/*.md"
+  },
+  "commands": [
+    {
+      "upstream_file": "commands/gsd/add-tests.md",
+      "upstream_sha256": "56cc9f469483c9c21ed1d1674343e0a86bdb06b4e2654e2382b7a686d7d731e7",
+      "canonical_name": "add-tests",
+      "aliases": [],
+      "description": "Generate tests for a completed phase based on UAT criteria and implementation",
+      "argument_hint": "<phase> [additional instructions]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd add-tests <phase> [additional instructions]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/ai-integration-phase.md",
+      "upstream_sha256": "37f1098e31826a7c4081d7fa544c4f126b02077d1a8f314fcd5d63fc3de3f358",
+      "canonical_name": "ai-integration-phase",
+      "aliases": [],
+      "description": "Generate an AI-SPEC.md design contract for phases that involve building AI systems.",
+      "argument_hint": "[phase number]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "WebFetch",
+        "WebSearch",
+        "AskUserQuestion",
+        "mcp__context7__*"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd ai-integration-phase [phase number]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [
+        "network:read"
+      ],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/audit-fix.md",
+      "upstream_sha256": "2dd4bf52ab77147f97f7f56403de3ddfb707e1e137a0c248375b0aaa0727e56d",
+      "canonical_name": "audit-fix",
+      "aliases": [],
+      "description": "Autonomous audit-to-fix pipeline \u2014 find issues, classify, fix, test, commit",
+      "argument_hint": "--source <audit-uat> [--severity <medium|high|all>] [--max N] [--dry-run]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "audit-uat"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd audit-fix --source <audit-uat> [--severity <medium|high|all>] [--max N] [--dry-run]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/audit-milestone.md",
+      "upstream_sha256": "44f39690881c2f3ac6f6b2fb8d3a86b036cf2e6f6cb32bf7cb9feef5234c96bb",
+      "canonical_name": "audit-milestone",
+      "aliases": [],
+      "description": "Audit milestone completion against original intent before archiving",
+      "argument_hint": "[version]",
+      "required_tool_categories": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Bash",
+        "Agent",
+        "Write"
+      ],
+      "requires": [
+        "execute-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd audit-milestone [version]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/audit-uat.md",
+      "upstream_sha256": "7247b0bf386011506595e10d24eee7500729dedc6ed7cea348422b24adca1ea2",
+      "canonical_name": "audit-uat",
+      "aliases": [],
+      "description": "Cross-phase audit of all outstanding UAT and verification items",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Bash"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd audit-uat",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "inspection_report",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": false,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "inspection_report",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/autonomous.md",
+      "upstream_sha256": "ab9dfa8012540f4b7c4bb5d30d47cf678c2bc4b4b5d0353578beaec2d554d393",
+      "canonical_name": "autonomous",
+      "aliases": [],
+      "description": "Run all remaining phases autonomously \u2014 discuss\u2192plan\u2192execute per phase",
+      "argument_hint": "[--from N] [--to N] [--only N] [--interactive]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion",
+        "Agent"
+      ],
+      "requires": [
+        "cleanup",
+        "phase",
+        "progress"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd autonomous [--from N] [--to N] [--only N] [--interactive]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/capture.md",
+      "upstream_sha256": "4f3e28ead9e832de98582ee5a30fa06337d9eb0803cfe411707364f4e8180c92",
+      "canonical_name": "capture",
+      "aliases": [],
+      "description": "Capture ideas, tasks, notes, and seeds to their destination",
+      "argument_hint": "[--note | --backlog | --seed | --list] [text]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd capture [--note | --backlog | --seed | --list] [text]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/cleanup.md",
+      "upstream_sha256": "65e1717b04bb7c3fca73032ce3ed7c79a1258fa8f3e2a5f8c38f12523a68da1e",
+      "canonical_name": "cleanup",
+      "aliases": [],
+      "description": "Archive accumulated phase directories from completed milestones",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd cleanup",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/code-review.md",
+      "upstream_sha256": "c02eeeddb70f323e1415fc5c2ab18380a9b25a9d30d4061dcabe002b2acc7c17",
+      "canonical_name": "code-review",
+      "aliases": [],
+      "description": "Review source files changed during a phase for bugs, security issues, and code quality problems",
+      "argument_hint": "<phase-number> [--depth=quick|standard|deep] [--files file1,file2,...] [--fix [--all] [--auto]]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Write",
+        "Agent"
+      ],
+      "requires": [
+        "config",
+        "import",
+        "phase",
+        "quick",
+        "review"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd code-review <phase-number> [--depth=quick|standard|deep] [--files file1,file2,...] [--fix [--all] [--auto]]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/complete-milestone.md",
+      "upstream_sha256": "f88f00311a4f96b034d559cd3f88f5730fd992e1178d001e0b94565b2c23fbde",
+      "canonical_name": "complete-milestone",
+      "aliases": [],
+      "description": "Archive completed milestone and prepare for next version",
+      "argument_hint": "<version>",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash"
+      ],
+      "requires": [
+        "audit-milestone",
+        "discuss-phase",
+        "execute-phase",
+        "new-milestone",
+        "phase",
+        "plan-phase",
+        "stats",
+        "update"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd complete-milestone <version>",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": true,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/config.md",
+      "upstream_sha256": "55d454b8022dc44ab4462688c3afd4a56965f61a73316a275b2cb0407ab8f370",
+      "canonical_name": "config",
+      "aliases": [],
+      "description": "Configure GSD settings \u2014 workflow toggles, advanced knobs, integrations, and model profile",
+      "argument_hint": "[--advanced | --integrations | --profile <name>]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "code-review",
+        "review",
+        "settings"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd config [--advanced | --integrations | --profile <name>]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/debug.md",
+      "upstream_sha256": "e7807b7411dadd80954b2461aa36e1bfee26fb9bb45557f648f20df38325c5e1",
+      "canonical_name": "debug",
+      "aliases": [],
+      "description": "Systematic debugging with persistent state across context resets",
+      "argument_hint": "[list | status <slug> | continue <slug> | --diagnose] [issue description]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd debug [list | status <slug> | continue <slug> | --diagnose] [issue description]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/discuss-phase.md",
+      "upstream_sha256": "14bb8f156c5a46e9d3ee66431d364a8e1d2ccbfdcc14621217e305bb6ec038a4",
+      "canonical_name": "discuss-phase",
+      "aliases": [],
+      "description": "Gather phase context through adaptive questioning before planning.",
+      "argument_hint": "<phase> [--all] [--auto] [--chain] [--batch] [--analyze] [--text] [--power] [--assumptions]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion",
+        "Agent",
+        "mcp__context7__resolve-library-id",
+        "mcp__context7__query-docs"
+      ],
+      "requires": [
+        "config",
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd discuss-phase <phase> [--all] [--auto] [--chain] [--batch] [--analyze] [--text] [--power] [--assumptions]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/docs-update.md",
+      "upstream_sha256": "a8bfb73a0ca719e838212a918d88533744b47ddc2bd7705fea4e26cbec0f46cd",
+      "canonical_name": "docs-update",
+      "aliases": [],
+      "description": "Generate or update project documentation verified against the codebase",
+      "argument_hint": "[--force] [--verify-only]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "update"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd docs-update [--force] [--verify-only]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/eval-review.md",
+      "upstream_sha256": "206bfe62149ad12afdd7c536bb8ccabc5f94d4f62642c8fcc6f9007f6de727ae",
+      "canonical_name": "eval-review",
+      "aliases": [],
+      "description": "Audit an executed AI phase's evaluation coverage and produce an EVAL-REVIEW.md remediation plan.",
+      "argument_hint": "[phase number]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd eval-review [phase number]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/execute-phase.md",
+      "upstream_sha256": "de622a63cac38732b217b88d87e9f56d05c405f7a4e13971a722558b0c8e4a00",
+      "canonical_name": "execute-phase",
+      "aliases": [],
+      "description": "Execute all plans in a phase with wave-based parallelization",
+      "argument_hint": "<phase-number> [--wave N] [--gaps-only] [--interactive] [--tdd]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "Bash",
+        "Agent",
+        "TodoWrite",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase",
+        "verify-work"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd execute-phase <phase-number> [--wave N] [--gaps-only] [--interactive] [--tdd]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/explore.md",
+      "upstream_sha256": "44c43f0fe2b5a98fd6e709f808ac540d40c5226dd0fa3a78a229d17ed25c4999",
+      "canonical_name": "explore",
+      "aliases": [],
+      "description": "Socratic ideation and idea routing \u2014 think through ideas before committing to plans",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Grep",
+        "Glob",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd explore",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/extract-learnings.md",
+      "upstream_sha256": "0df51df6102a81d42129e04f43b7d18a23f3b1a74172265e0c9d8836400fcb76",
+      "canonical_name": "extract-learnings",
+      "aliases": [],
+      "description": "Extract decisions, lessons, patterns, and surprises from completed phase artifacts",
+      "argument_hint": "<phase-number>",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Grep",
+        "Glob",
+        "Agent"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd extract-learnings <phase-number>",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/fast.md",
+      "upstream_sha256": "7da6950760dd8043b333822eca79b58e57f2f3f70060016f4a6f148f522aee59",
+      "canonical_name": "fast",
+      "aliases": [],
+      "description": "Execute a trivial task inline \u2014 no subagents, no planning overhead",
+      "argument_hint": "[task description]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob"
+      ],
+      "requires": [
+        "config",
+        "quick"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd fast [task description]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": true,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/forensics.md",
+      "upstream_sha256": "0fac0f384c7f2f9fe30c003c88315b84705c786c6329c7e67c1536e3b8ca7883",
+      "canonical_name": "forensics",
+      "aliases": [],
+      "description": "Post-mortem investigation for failed GSD workflows \u2014 diagnoses what went wrong.",
+      "argument_hint": "[problem description]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Grep",
+        "Glob"
+      ],
+      "requires": [
+        "phase",
+        "progress",
+        "update"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd forensics [problem description]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/graphify.md",
+      "upstream_sha256": "d210688d80c7884cbcc19902f2dc3cf154c5e6f3204e5e4730fd352bad20fc5e",
+      "canonical_name": "graphify",
+      "aliases": [],
+      "description": "Build, query, and inspect the project knowledge graph in .planning/graphs/",
+      "argument_hint": "[build|query <term>|status|diff]",
+      "required_tool_categories": [
+        "Read",
+        "Bash"
+      ],
+      "requires": [
+        "config",
+        "fast",
+        "phase",
+        "update"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd graphify [build|query <term>|status|diff]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "inspection_report"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": false,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "inspection_report"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/health.md",
+      "upstream_sha256": "45d1b3b2b6cc1d38016c979880c477287a06c0d1c194091ca2275c8e713b440b",
+      "canonical_name": "health",
+      "aliases": [],
+      "description": "Diagnose planning directory health and optionally repair issues",
+      "argument_hint": "[--repair] [--context]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Write",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "thread"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd health [--repair] [--context]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/help.md",
+      "upstream_sha256": "2fea123d0368cb965bdf7d703e2e69db4feee6f7f9f84073a6e743c6e1f1ea04",
+      "canonical_name": "help",
+      "aliases": [],
+      "description": "Show available GSD commands and usage guide",
+      "argument_hint": "[--brief | --full | <topic> | --brief <topic>]",
+      "required_tool_categories": [
+        "Read"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd help [--brief | --full | <topic> | --brief <topic>]",
+      "risk": "read_only",
+      "required_permissions": [
+        "filesystem:read"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "inspection_report"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": false,
+        "remote_systems": false,
+        "shell_environment": false
+      },
+      "handoff_kinds": [
+        "inspection_report"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/import.md",
+      "upstream_sha256": "9551dc2d3a56ca279ec326b65089e3526816d11271be233ba18a1141a6769c26",
+      "canonical_name": "import",
+      "aliases": [],
+      "description": "Ingest external plans with conflict detection against project decisions before writing anything.",
+      "argument_hint": "--from <filepath> | --from-gsd2",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion",
+        "Agent"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd import --from <filepath> | --from-gsd2",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff",
+        "seed_projection"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff",
+        "seed_projection"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/inbox.md",
+      "upstream_sha256": "50e337136d2f38196981263af12bbd1959e8aa8f3f9292feb1b5b41a8a55e992",
+      "canonical_name": "inbox",
+      "aliases": [],
+      "description": "Triage and review open GitHub issues and PRs against project templates and contribution guidelines.",
+      "argument_hint": "[--issues] [--prs] [--label] [--close-incomplete] [--repo owner/repo]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Write",
+        "Grep",
+        "Glob",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "review"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd inbox [--issues] [--prs] [--label] [--close-incomplete] [--repo owner/repo]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute",
+        "network:read"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": true,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/ingest-docs.md",
+      "upstream_sha256": "108ca1cfb4e8d63286670b80c6282a939723e58ae63fb3b5229113558de74732",
+      "canonical_name": "ingest-docs",
+      "aliases": [],
+      "description": "Bootstrap or merge a .planning/ setup from existing ADRs, PRDs, SPECs, and docs in a repo.",
+      "argument_hint": "[path] [--mode new|merge] [--manifest <file>] [--resolve auto|interactive]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion",
+        "Agent"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd ingest-docs [path] [--mode new|merge] [--manifest <file>] [--resolve auto|interactive]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff",
+        "seed_projection"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff",
+        "seed_projection"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/manager.md",
+      "upstream_sha256": "f3d33125c462d411d3afb6c1025bc1f9dbd020128a3346ab0047cf8c8be5ec32",
+      "canonical_name": "manager",
+      "aliases": [],
+      "description": "Interactive command center for managing multiple phases from one terminal",
+      "argument_hint": "[--analyze-deps]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion",
+        "Skill",
+        "Agent"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd manager [--analyze-deps]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/map-codebase.md",
+      "upstream_sha256": "6c97d2b1bc848d957b1226d24b6133bf4c301d49dda52688c4460b918dc68dc0",
+      "canonical_name": "map-codebase",
+      "aliases": [],
+      "description": "Analyze codebase with parallel mapper agents to produce .planning/codebase/ documents",
+      "argument_hint": "[--fast [--focus tech|arch|quality|concerns]] [--query <term>|status|diff|refresh] [area]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Write",
+        "Agent"
+      ],
+      "requires": [
+        "config",
+        "new-project",
+        "plan-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd map-codebase [--fast [--focus tech|arch|quality|concerns]] [--query <term>|status|diff|refresh] [area]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/milestone-summary.md",
+      "upstream_sha256": "9566ebc9dff7786b99b586f97733e79deaf7b694cd33fe4060682fc7150923cf",
+      "canonical_name": "milestone-summary",
+      "aliases": [],
+      "description": "Generate a comprehensive project summary from milestone artifacts for team onboarding and review",
+      "argument_hint": "[version]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Grep",
+        "Glob"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd milestone-summary [version]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/mvp-phase.md",
+      "upstream_sha256": "6d2971996800fdecdea71fc8cb2717e91b582f8959a4974a46c6cc704dbdde28",
+      "canonical_name": "mvp-phase",
+      "aliases": [],
+      "description": "Plan a phase as a vertical MVP slice \u2014 user story, SPIDR splitting, then plan-phase",
+      "argument_hint": "<phase-number>",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "new-project",
+        "phase",
+        "plan-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd mvp-phase <phase-number>",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff",
+        "seed_projection"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff",
+        "seed_projection"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/new-milestone.md",
+      "upstream_sha256": "524d1503692122397399caaff69e576be7497772e19838e7c9a2c08cc5a2f39a",
+      "canonical_name": "new-milestone",
+      "aliases": [],
+      "description": "Start a new milestone cycle \u2014 update PROJECT.md and route to requirements",
+      "argument_hint": "[milestone name, e.g., 'v1.1 Notifications']",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "new-project",
+        "phase",
+        "plan-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd new-milestone [milestone name, e.g., 'v1.1 Notifications']",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/new-project.md",
+      "upstream_sha256": "0d2665fcfd02b50dc3850405829380ff2e4b81ea6a0aa944d4bab6df7e1952c3",
+      "canonical_name": "new-project",
+      "aliases": [],
+      "description": "Initialize a new project with deep context gathering and PROJECT.md",
+      "argument_hint": "[--auto]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Write",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "config",
+        "phase",
+        "plan-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd new-project [--auto]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "seed_projection",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "seed_projection",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/ns-context.md",
+      "upstream_sha256": "f94baf3f81ec19108e5dcddd4eef9aec012b8767b87f4ec6e7854a192a67342a",
+      "canonical_name": "gsd-context",
+      "aliases": [
+        "gsd-context"
+      ],
+      "description": "codebase intelligence | map graphify docs learnings",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Skill"
+      ],
+      "requires": [
+        "map-codebase",
+        "graphify",
+        "docs-update",
+        "extract-learnings"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd gsd-context",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": false
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/ns-ideate.md",
+      "upstream_sha256": "edc5e543512dd48abe79b85db54294ec86b692a3e911e76334fe43e4086d60c0",
+      "canonical_name": "gsd-ideate",
+      "aliases": [
+        "gsd-ideate"
+      ],
+      "description": "exploration capture | explore sketch spike spec capture",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Skill"
+      ],
+      "requires": [
+        "capture",
+        "explore",
+        "sketch",
+        "spike",
+        "spec-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd gsd-ideate",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": false
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/ns-manage.md",
+      "upstream_sha256": "99e4540905aa2162eb81480dd9e40f266e0a07ab076e7aa62cfc60349a1a3003",
+      "canonical_name": "gsd-manage",
+      "aliases": [
+        "gsd-manage"
+      ],
+      "description": "config workspace | workstreams thread update ship inbox",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Skill"
+      ],
+      "requires": [
+        "config",
+        "workspace",
+        "workstreams",
+        "thread",
+        "pause-work",
+        "resume-work",
+        "update",
+        "ship",
+        "inbox",
+        "pr-branch",
+        "undo"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd gsd-manage",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/ns-project.md",
+      "upstream_sha256": "2aec370ce2e8c271de618b9530c852dac93a077a68b2324942889828867f2a20",
+      "canonical_name": "gsd-project",
+      "aliases": [
+        "gsd-project"
+      ],
+      "description": "project lifecycle | milestones audits summary",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Skill"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd gsd-project",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": false
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/ns-review.md",
+      "upstream_sha256": "19d9f1fbcf6778142a664658595445027f59dfdbd129c850636979df577cabee",
+      "canonical_name": "gsd-quality",
+      "aliases": [
+        "gsd-quality"
+      ],
+      "description": "quality gates | code review debug audit security eval ui",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Skill"
+      ],
+      "requires": [
+        "code-review",
+        "audit-uat",
+        "secure-phase",
+        "eval-review",
+        "ui-review",
+        "validate-phase",
+        "debug",
+        "forensics"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd gsd-quality",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": false
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/ns-workflow.md",
+      "upstream_sha256": "448ff24d1d9aaede2df827e8eee6dfbbd615d864f520c200d290d8ce03d3f0a6",
+      "canonical_name": "gsd-workflow",
+      "aliases": [
+        "gsd-workflow"
+      ],
+      "description": "workflow | discuss plan execute verify phase progress",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Skill"
+      ],
+      "requires": [
+        "discuss-phase",
+        "spec-phase",
+        "plan-phase",
+        "execute-phase",
+        "verify-work",
+        "phase",
+        "progress",
+        "ultraplan-phase",
+        "plan-review-convergence"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd gsd-workflow",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": false
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/pause-work.md",
+      "upstream_sha256": "82dedce26fd1af7ebd03cf2b432658ca45fc491b4c2a0a1e8dfa2c7fa136b62f",
+      "canonical_name": "pause-work",
+      "aliases": [],
+      "description": "Create context handoff when pausing work mid-phase",
+      "argument_hint": "[--report]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash"
+      ],
+      "requires": [
+        "phase",
+        "progress"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd pause-work [--report]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": true,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/phase.md",
+      "upstream_sha256": "65c06eec0474a6f190a1c37e13822489e007276e83065d7e4f49ba44b9299f32",
+      "canonical_name": "phase",
+      "aliases": [],
+      "description": "CRUD for phases in ROADMAP.md \u2014 add, insert, remove, or edit phases",
+      "argument_hint": "[--insert | --remove | --edit] <phase-name-or-number>",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd phase [--insert | --remove | --edit] <phase-name-or-number>",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/plan-phase.md",
+      "upstream_sha256": "0be581962a06bebab0b718dd21d4ff62525b1e58914ecec1453212362654c13b",
+      "canonical_name": "plan-phase",
+      "aliases": [],
+      "description": "Create detailed phase plan (PLAN.md) with verification loop",
+      "argument_hint": "[phase] [--auto] [--research] [--skip-research] [--research-phase <N>] [--view] [--gaps] [--skip-verify] [--prd <file>] [--ingest <path-or-glob>] [--ingest-format <auto|nygard|madr|narrative>] [--reviews] [--text] [--tdd] [--mvp]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion",
+        "WebFetch",
+        "mcp__context7__*"
+      ],
+      "requires": [
+        "discuss-phase",
+        "phase",
+        "review",
+        "update"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd plan-phase [phase] [--auto] [--research] [--skip-research] [--research-phase <N>] [--view] [--gaps] [--skip-verify] [--prd <file>] [--ingest <path-or-glob>] [--ingest-format <auto|nygard|madr|narrative>] [--reviews] [--text] [--tdd] [--mvp]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [
+        "network:read"
+      ],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "seed_projection",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "seed_projection",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/plan-review-convergence.md",
+      "upstream_sha256": "5176125d10a7cf93f894d7115fcc0a24717bdc2fd30dad8e99db9a0e61118e18",
+      "canonical_name": "plan-review-convergence",
+      "aliases": [],
+      "description": "Cross-AI plan convergence loop \u2014 replan with review feedback until no HIGH concerns remain.",
+      "argument_hint": "<phase> [--codex] [--gemini] [--claude] [--opencode] [--ollama] [--lm-studio] [--llama-cpp] [--text] [--ws <name>] [--all] [--max-cycles N]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase",
+        "review"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd plan-review-convergence <phase> [--codex] [--gemini] [--claude] [--opencode] [--ollama] [--lm-studio] [--llama-cpp] [--text] [--ws <name>] [--all] [--max-cycles N]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/pr-branch.md",
+      "upstream_sha256": "6e4bb7e7866d3b815f6b863d58f25a477fec88463c84ca4df3d79538633bafed",
+      "canonical_name": "pr-branch",
+      "aliases": [],
+      "description": "Create a clean PR branch by filtering out .planning/ commits \u2014 ready for code review",
+      "argument_hint": "[target branch, default: main]",
+      "required_tool_categories": [
+        "Bash",
+        "Read",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "review"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd pr-branch [target branch, default: main]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": true,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/profile-user.md",
+      "upstream_sha256": "dd0a27a046ea6413748d6c26ae2f758383534979e797054250bacc36bd7c47be",
+      "canonical_name": "profile-user",
+      "aliases": [],
+      "description": "Generate developer behavioral profile and create Claude-discoverable artifacts",
+      "argument_hint": "[--questionnaire] [--refresh]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion",
+        "Agent"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd profile-user [--questionnaire] [--refresh]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/progress.md",
+      "upstream_sha256": "3e4236615580030f3fa842f9103464adcb218789e974e6076ea965377f615152",
+      "canonical_name": "progress",
+      "aliases": [],
+      "description": "Check progress, advance workflow, or dispatch freeform intent \u2014 the unified GSD situational command",
+      "argument_hint": "[--forensic | --next | --do \\\"task description\\\"]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Grep",
+        "Glob",
+        "SlashCommand",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd progress [--forensic | --next | --do \\\"task description\\\"]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/quick.md",
+      "upstream_sha256": "4413fc770b5c8cddc7ff8b0c5923c3648241eb633a1542349947255575bb40ad",
+      "canonical_name": "quick",
+      "aliases": [],
+      "description": "Execute a quick task with GSD guarantees (atomic commits, state tracking) but skip optional agents",
+      "argument_hint": "[list | status <slug> | resume <slug> | --full] [--validate] [--discuss] [--research] [task description]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "Bash",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd quick [list | status <slug> | resume <slug> | --full] [--validate] [--discuss] [--research] [task description]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": true,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/resume-work.md",
+      "upstream_sha256": "48faec81255e33fe35d13f1e0d3c3e0bd9b9b908a59413cdf27e8337c548d38e",
+      "canonical_name": "resume-work",
+      "aliases": [],
+      "description": "Resume work from previous session with full context restoration",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Write",
+        "AskUserQuestion",
+        "SlashCommand"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd resume-work",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/review-backlog.md",
+      "upstream_sha256": "39e538f69ac261254d77ee181437e000b7833089e820e3db3d4189099f089da0",
+      "canonical_name": "review-backlog",
+      "aliases": [],
+      "description": "Review and promote backlog items to active milestone",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase",
+        "review"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd review-backlog",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/review.md",
+      "upstream_sha256": "6b46a87be7d432bb5c94ff8b9e089651d026dcc6bd8131ac02d14e81a32425ec",
+      "canonical_name": "review",
+      "aliases": [],
+      "description": "Request cross-AI peer review of phase plans from external AI CLIs",
+      "argument_hint": "--phase N [--gemini] [--claude] [--codex] [--opencode] [--qwen] [--cursor] [--all]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep"
+      ],
+      "requires": [
+        "config",
+        "phase",
+        "plan-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd review --phase N [--gemini] [--claude] [--codex] [--opencode] [--qwen] [--cursor] [--all]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/secure-phase.md",
+      "upstream_sha256": "19c9e164d11796983646f5f5f7b891c3abe84bf40b51d8408c938df26af64429",
+      "canonical_name": "secure-phase",
+      "aliases": [],
+      "description": "Retroactively verify threat mitigations for a completed phase",
+      "argument_hint": "[phase number]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd secure-phase [phase number]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/settings.md",
+      "upstream_sha256": "89cf0389262a5cb63b8308b78e73aedbccf151fe51b78238ebdfd09537c92fdd",
+      "canonical_name": "settings",
+      "aliases": [],
+      "description": "Configure GSD workflow toggles and model profile",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "quick"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd settings",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/ship.md",
+      "upstream_sha256": "b00351e21b5d93c532577d09abd7d5cbfa57cde1bb62cfd46ffe59d8ff2caeb1",
+      "canonical_name": "ship",
+      "aliases": [],
+      "description": "Create PR, run review, and prepare for merge after verification passes",
+      "argument_hint": "[phase number or milestone, e.g., '4' or 'v1.0']",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Grep",
+        "Glob",
+        "Write",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "review",
+        "verify-work"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd ship [phase number or milestone, e.g., '4' or 'v1.0']",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute",
+        "network:read"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": true,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": true,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/sketch.md",
+      "upstream_sha256": "be6a7f7d2309b2a899c2c2f9977e68e7279fd808ce7bbe65033b91d03381a995",
+      "canonical_name": "sketch",
+      "aliases": [],
+      "description": "Sketch UI/design ideas with throwaway HTML mockups, or propose what to sketch next (frontier mode)",
+      "argument_hint": "[design idea to explore] [--quick] [--text] [--wrap-up] or [frontier]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob",
+        "AskUserQuestion",
+        "WebSearch",
+        "WebFetch",
+        "mcp__context7__resolve-library-id",
+        "mcp__context7__query-docs"
+      ],
+      "requires": [
+        "spike"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd sketch [design idea to explore] [--quick] [--text] [--wrap-up] or [frontier]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [
+        "network:read"
+      ],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/spec-phase.md",
+      "upstream_sha256": "c62637c4a39ff180c6a270dfaf4562236d89efb0c6b3ea6d80f2eb075639a9b3",
+      "canonical_name": "spec-phase",
+      "aliases": [],
+      "description": "Clarify WHAT a phase delivers with ambiguity scoring; produces a SPEC.md before discuss-phase.",
+      "argument_hint": "<phase> [--auto] [--text]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "discuss-phase",
+        "execute-phase",
+        "phase",
+        "plan-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd spec-phase <phase> [--auto] [--text]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "seed_projection",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "seed_projection",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/spike.md",
+      "upstream_sha256": "83653f72e8967438f81ef1cf8bb0eefbcb0831fff44cd8c071ad031459dfe1b9",
+      "canonical_name": "spike",
+      "aliases": [],
+      "description": "Spike an idea through experiential exploration, or propose what to spike next (frontier mode)",
+      "argument_hint": "[idea to validate] [--quick] [--text] [--wrap-up] or [frontier]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob",
+        "AskUserQuestion",
+        "WebSearch",
+        "WebFetch",
+        "mcp__context7__resolve-library-id",
+        "mcp__context7__query-docs"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd spike [idea to validate] [--quick] [--text] [--wrap-up] or [frontier]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [
+        "network:read"
+      ],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/stats.md",
+      "upstream_sha256": "c22c20febc5af14ca180457e1289b2c8036b3793f9ec009e43f9fc7790cc61ee",
+      "canonical_name": "stats",
+      "aliases": [],
+      "description": "Display project statistics \u2014 phases, plans, requirements, git metrics, and timeline",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Bash"
+      ],
+      "requires": [
+        "phase",
+        "progress"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd stats",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "inspection_report"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "inspection_report"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/surface.md",
+      "upstream_sha256": "f12d282208d280821dbd230016923767e855d9ed4d8e07cff87e97c2b90b6471",
+      "canonical_name": "surface",
+      "aliases": [],
+      "description": "Toggle which skills are surfaced \u2014 apply a profile, list, or disable a cluster without reinstall",
+      "argument_hint": "[list|status|profile <name>|disable <cluster>|enable <cluster>|reset]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash"
+      ],
+      "requires": [
+        "config",
+        "update"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd surface [list|status|profile <name>|disable <cluster>|enable <cluster>|reset]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/thread.md",
+      "upstream_sha256": "4d384663f2e535853f5fa15ed1ede9a6f20665c6f9b80c044b1f0a5a9ac77310",
+      "canonical_name": "thread",
+      "aliases": [],
+      "description": "Manage persistent context threads for cross-session work",
+      "argument_hint": "[list [--open | --resolved] | close <slug> | status <slug> | name | description]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd thread [list [--open | --resolved] | close <slug> | status <slug> | name | description]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/ui-phase.md",
+      "upstream_sha256": "aeeda67dca286cf13cfd1dbb5a19caae094a5c13ac566637618badc852ce2888",
+      "canonical_name": "ui-phase",
+      "aliases": [],
+      "description": "Generate UI design contract (UI-SPEC.md) for frontend phases",
+      "argument_hint": "[phase]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "WebFetch",
+        "AskUserQuestion",
+        "mcp__context7__*"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd ui-phase [phase]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [
+        "network:read"
+      ],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/ui-review.md",
+      "upstream_sha256": "91e1ecbc3174425213a63d168daa2bef88b657c84a181ab46d414631a9aa8b9f",
+      "canonical_name": "ui-review",
+      "aliases": [],
+      "description": "Retroactive 6-pillar visual audit of implemented frontend code",
+      "argument_hint": "[phase]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd ui-review [phase]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/ultraplan-phase.md",
+      "upstream_sha256": "b543d90d84de69989fe4c53ea0ef11bdc55000bdd9fc24c3eadd266095e06007",
+      "canonical_name": "ultraplan-phase",
+      "aliases": [],
+      "description": "[BETA] Offload plan phase to Claude Code's ultraplan cloud; review in browser and import back.",
+      "argument_hint": "[phase-number]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Glob",
+        "Grep"
+      ],
+      "requires": [
+        "import",
+        "phase",
+        "plan-phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd ultraplan-phase [phase-number]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute",
+        "network:read"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff",
+        "inspection_report"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": false,
+        "remote_systems": true,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff",
+        "inspection_report"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/undo.md",
+      "upstream_sha256": "4ac15db05e2d69701c82a099331bf3d4634bd456eae41d9fdf8e06a76db0adc5",
+      "canonical_name": "undo",
+      "aliases": [],
+      "description": "Safe git revert. Roll back phase or plan commits using the phase manifest with dependency checks.",
+      "argument_hint": "--last N | --phase NN | --plan NN-MM",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd undo --last N | --phase NN | --plan NN-MM",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": true,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/update.md",
+      "upstream_sha256": "370083b914c0a90b4322a9096773035c8a7da108addb60f656ec3e175e746637",
+      "canonical_name": "update",
+      "aliases": [],
+      "description": "Update GSD to latest version with changelog display",
+      "argument_hint": "[--sync | --reapply]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "AskUserQuestion"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd update [--sync | --reapply]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute",
+        "network:read"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": true,
+        "shell_environment": true
+      },
+      "handoff_kinds": []
+    },
+    {
+      "upstream_file": "commands/gsd/validate-phase.md",
+      "upstream_sha256": "7f44d444ebf409919e1e624e251ebead617fbae7c2c46bd8428eab6f756c58bc",
+      "canonical_name": "validate-phase",
+      "aliases": [],
+      "description": "Retroactively audit and fill Nyquist validation gaps for a completed phase",
+      "argument_hint": "[phase number]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Agent",
+        "AskUserQuestion"
+      ],
+      "requires": [
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd validate-phase [phase number]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/verify-work.md",
+      "upstream_sha256": "e51c337793b20f922c398a30a7036b616b8e1d2de48692093875c4e886ba8a7a",
+      "canonical_name": "verify-work",
+      "aliases": [],
+      "description": "Validate built features through conversational UAT",
+      "argument_hint": "[phase number, e.g., '4'] [--ws <name>]",
+      "required_tool_categories": [
+        "Read",
+        "Bash",
+        "Glob",
+        "Grep",
+        "Edit",
+        "Write",
+        "Agent"
+      ],
+      "requires": [
+        "execute-phase",
+        "phase"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd verify-work [phase number, e.g., '4'] [--ws <name>]",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "evidence",
+        "handoff",
+        "state_update"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/workspace.md",
+      "upstream_sha256": "09a2ce9cfefc8d6dade2946459d1a5b1a2c3dacaebf98cbdd6b88ce9915cfb5c",
+      "canonical_name": "workspace",
+      "aliases": [],
+      "description": "Manage GSD workspaces \u2014 create, list, or remove isolated workspace environments",
+      "argument_hint": "[--new | --list | --remove] [name]",
+      "required_tool_categories": [
+        "Read",
+        "Write",
+        "Bash",
+        "AskUserQuestion"
+      ],
+      "requires": [],
+      "namespace": "gsd",
+      "usage": "ooo gsd workspace [--new | --list | --remove] [name]",
+      "risk": "destructive",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "handoff"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": true,
+        "planning_files": true,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "handoff"
+      ]
+    },
+    {
+      "upstream_file": "commands/gsd/workstreams.md",
+      "upstream_sha256": "575d6cca6a631d8542aaaabde9cd21a9fe624539fdc7e4db838da8349d5519ca",
+      "canonical_name": "workstreams",
+      "aliases": [],
+      "description": "Manage parallel workstreams \u2014 list, create, switch, status, progress, complete, and resume",
+      "argument_hint": "",
+      "required_tool_categories": [
+        "Read",
+        "Bash"
+      ],
+      "requires": [
+        "new-milestone",
+        "phase",
+        "progress",
+        "resume-work"
+      ],
+      "namespace": "gsd",
+      "usage": "ooo gsd workstreams",
+      "risk": "write",
+      "required_permissions": [
+        "filesystem:read",
+        "filesystem:write",
+        "shell:execute"
+      ],
+      "optional_permissions": [],
+      "expected_output_artifacts": [
+        "inspection_report"
+      ],
+      "mutates": {
+        "git": false,
+        "project_files": false,
+        "planning_files": false,
+        "remote_systems": false,
+        "shell_environment": true
+      },
+      "handoff_kinds": [
+        "inspection_report"
+      ]
+    }
+  ]
+}
