@@ -8,10 +8,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from jsonschema import Draft202012Validator
+
 REPO = Path(__file__).resolve().parents[1]
 PLUGIN_PATH = REPO / "plugins" / "superpowers"
 MANIFEST = json.loads((PLUGIN_PATH / "ouroboros.plugin.json").read_text())
 SKILLS_ROOT = PLUGIN_PATH / "vendor" / "superpowers" / "skills"
+AUDIT_SCHEMA = json.loads((REPO / "schemas" / "0.1" / "audit-event.schema.json").read_text())
+AUDIT_VALIDATOR = Draft202012Validator(AUDIT_SCHEMA)
 
 EXPECTED_SKILLS = {
     "brainstorming",
@@ -51,6 +55,7 @@ class SuperpowersPluginTests(unittest.TestCase):
         self.assertIn(("superpowers", "list"), commands)
         self.assertIn(("superpowers", "inspect"), commands)
         self.assertIn(("superpowers", "prepare-handoff"), commands)
+        self.assertIn(("superpowers", "run"), commands)
 
     def test_list_writes_skill_index_with_upstream_provenance(self):
         with tempfile.TemporaryDirectory() as td:
@@ -112,12 +117,14 @@ class SuperpowersPluginTests(unittest.TestCase):
         self.assertIn("Seed-preparation handoff", handoff)
         self.assertEqual(evidence["status"], "prepared")
         audit_events = [json.loads(line) for line in audit_lines]
-        self.assertEqual([event["event"] for event in audit_events], ["plugin.invoked", "plugin.permission_used", "plugin.completed"])
-        permission_event = [event for event in audit_events if event["event"] == "plugin.permission_used"][0]
+        for event in audit_events:
+            self.assertEqual(list(AUDIT_VALIDATOR.iter_errors(event)), [])
         self.assertEqual(
-            {permission["scope"] for permission in permission_event["permissions"]},
-            {"filesystem:read", "filesystem:write"},
+            [event["event_type"] for event in audit_events],
+            ["plugin.invoked", "plugin.permission_used", "plugin.completed"],
         )
+        permission_event = [event for event in audit_events if event["event_type"] == "plugin.permission_used"][0]
+        self.assertEqual(set(permission_event["permissions_used"]), {"filesystem:read", "filesystem:write"})
 
     def test_skill_command_alias_prepares_handoff_and_excludes_destructive_actions(self):
         with tempfile.TemporaryDirectory() as td:
