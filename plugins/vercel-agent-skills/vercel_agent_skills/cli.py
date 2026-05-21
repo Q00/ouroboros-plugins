@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 
-from . import audits, optimize
+from . import audits, deploy, optimize, tokens
 
 COMMANDS = [
     "optimize", "react-best-practices", "web-design-guidelines", "react-native-skills",
@@ -23,6 +23,12 @@ def main(argv: list[str] | None = None) -> int:
         return audits.run(ns.command, ns.args)
     if ns.command == "optimize":
         return optimize.run(ns.args)
+    if ns.command == "cli-with-tokens":
+        return tokens.run(ns.args)
+    if ns.command == "deploy-preview":
+        return deploy.preview(ns.args)
+    if ns.command == "deploy-production":
+        return deploy.production(ns.args)
     print(f"vercel-agent-skills command skeleton: {ns.command}")
     if ns.args:
         print("arguments:", " ".join(ns.args))
