@@ -1,0 +1,198 @@
+{
+  "schema_version": "0.1",
+  "name": "target-capabilities",
+  "version": "0.1.0",
+  "description": "Reference AgentOS assimilation package for mapping an external target repository into bounded Ouroboros commands.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/target-capabilities",
+    "repository": "https://github.com/Q00/ouroboros-plugins"
+  },
+  "commands": [
+    {
+      "namespace": "target",
+      "name": "list-commands",
+      "summary": "Emit a bounded artifact listing the command adapters exposed by the target capabilities reference package.",
+      "usage": "ooo target list-commands [--target-root <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "upstream": {
+        "capability": "command-inventory",
+        "mode": "pinned_checkout"
+      },
+      "artifacts": {
+        "writes": [
+          "result.json",
+          "report.md",
+          "stdout.txt",
+          "stderr.txt",
+          "provenance.json",
+          "handoff.json"
+        ],
+        "bounded": true
+      },
+      "handoff": {
+        "produces": true,
+        "consumer": "ooo auto",
+        "description": "Continue from command inventory artifacts."
+      },
+      "timeout_seconds": 30,
+      "result_states": [
+        "completed",
+        "blocked",
+        "failed"
+      ],
+      "redaction": {
+        "rules": [
+          "no secrets",
+          "bounded metadata only"
+        ]
+      }
+    },
+    {
+      "namespace": "target",
+      "name": "inspect",
+      "summary": "Inspect a configured external target repository and produce assimilation readiness evidence.",
+      "usage": "ooo target inspect --target-root <path> [--target-repository owner/name]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "upstream": {
+        "capability": "repository-inspection",
+        "mode": "pinned_checkout"
+      },
+      "artifacts": {
+        "writes": [
+          "result.json",
+          "report.md",
+          "stdout.txt",
+          "stderr.txt",
+          "provenance.json",
+          "handoff.json"
+        ],
+        "bounded": true
+      },
+      "handoff": {
+        "produces": true,
+        "consumer": "ooo auto",
+        "description": "Continue from inspection evidence."
+      },
+      "timeout_seconds": 30,
+      "result_states": [
+        "completed",
+        "blocked",
+        "failed"
+      ],
+      "redaction": {
+        "rules": [
+          "no raw secrets",
+          "file samples limited to path metadata"
+        ]
+      }
+    },
+    {
+      "namespace": "target",
+      "name": "doctor",
+      "summary": "Check whether the target dependency is configured and trust gates are explicit.",
+      "usage": "ooo target doctor [--target-root <path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write"
+      ],
+      "upstream": {
+        "capability": "dependency-readiness",
+        "mode": "pinned_checkout"
+      },
+      "artifacts": {
+        "writes": [
+          "result.json",
+          "report.md",
+          "stdout.txt",
+          "stderr.txt",
+          "provenance.json",
+          "handoff.json"
+        ],
+        "bounded": true
+      },
+      "handoff": {
+        "produces": true,
+        "consumer": "ooo auto",
+        "description": "Continue after dependency readiness check."
+      },
+      "timeout_seconds": 30,
+      "result_states": [
+        "completed",
+        "blocked",
+        "failed"
+      ],
+      "redaction": {
+        "rules": [
+          "no environment dump",
+          "only named configuration keys"
+        ]
+      }
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record invocation summaries and command decisions."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record external target repository version/path evidence."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist bounded artifacts under .ouroboros."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Produce continuation handoffs for Ouroboros workflows."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report readiness, blocked states, and next actions."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Inspect target repository layout and command source metadata."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": false,
+      "reason": "Write bounded plans, reports, artifacts, and handoffs under .ouroboros."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m target_capabilities"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
