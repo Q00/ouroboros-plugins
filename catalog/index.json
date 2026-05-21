@@ -26,6 +26,12 @@
       "description": "Ouroboros integration for Karpathy-style autoresearch experiment loops."
     },
     {
+      "name": "compound-engineering",
+      "version": "0.1.0",
+      "path": "../plugins/compound-engineering",
+      "description": "AgentOS/Ouroboros adapter for Compound Engineering workflows."
+    },
+    {
       "name": "github-pr-ops",
       "version": "0.1.0",
       "path": "../plugins/github-pr-ops",
