@@ -54,3 +54,20 @@ These fixtures exercise the assimilation contract without copying the full Herme
 ## Completion mapping to #40
 
 Merging all five PRs resolves the epic acceptance criteria: safe inspection, skill conversion, cron import, bounded runtime supervision, resumable/auditable state, contract validation, and documentation that frames Hermes as an Ouroboros-native capability adapter rather than a generic command wrapper.
+
+## Issue #27 alignment checklist
+
+Hermes is included as a reference-grade capability adapter only because it exercises the #27 plugin-authoring consensus boundaries:
+
+| #27 principle | Hermes stack alignment |
+|---|---|
+| Curated contract/reference repository, not marketplace | The stack adds three reference adapters that prove read/import, automation, and runtime lifecycle boundaries; it does not add a Hermes plugin marketplace. |
+| Plugins are not thin wrappers | `hermes-agent-runner` records session state, transcripts, handoff artifacts, declared permissions, and resume/export paths instead of only spawning `hermes`. |
+| Core stays small; plugins assimilate capability | Hermes-specific skills, cron, provider, and runtime semantics stay in `ouroboros-plugins`, not in core or `ooo auto`. |
+| Capabilities and permissions stay distinct | Manifests declare Ouroboros capabilities (`state`, `provenance`, `handoff`, `progress`, `runtime`) separately from external authority (`filesystem:*`, `shell:execute`, `network:*`). |
+| Shared risk taxonomy | Manifest command/permission risks use the v0.1 taxonomy (`read_only`, `write`, `destructive`); detailed Hermes-specific classifications are emitted as review categories, not replacement risk values. |
+| Lifecycle, trust, and firewall are executable boundaries | Inspect/import phases never execute imported instructions; runtime execution is isolated in the runner and destructive/confirmation-gated. |
+| Audit, provenance, and handoff make assimilation safe | Every phase produces human-readable and machine-readable artifacts that identify source paths, generated outputs, permissions, and downstream review steps. |
+| Reference plugins prove contract pressure before schema expansion | Potential fields such as session lifecycle, secrets, network endpoints, and artifact schemas remain documented pressure until the reference implementation proves v0.1 cannot represent them. |
+
+The merge criterion for the full stack is therefore stronger than “Hermes can be launched.” The criterion is that Hermes capabilities are represented as permissioned, auditable, resumable, handoff-capable Ouroboros workflows without bypassing the plugin firewall or turning this repository into a marketplace.
