@@ -32,6 +32,16 @@ Install from this repository root:
 ouroboros plugin add . --plugin autoresearch
 ```
 
+For an isolated plugin-manager smoke test with temporary lock/trust state, run:
+
+```bash
+scripts/smoke_autoresearch_plugin.sh
+```
+
+The smoke script requires an `ouroboros` CLI on `PATH` and is intentionally not
+part of default contract validation because this repository remains the plugin
+contract/reference repo, not the core CLI test suite.
+
 With Ouroboros `v0.39.1+`, `plugin add` prints the required
 `filesystem:read` and `filesystem:write` permissions with their manifest
 reasons and asks whether to grant them immediately. Declining keeps the plugin
