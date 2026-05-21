@@ -5,36 +5,44 @@ This document scopes the implementation for
 assimilating `addyosmani/agent-skills` into the AgentOS/Ouroboros plugin
 contract.
 
+It is intentionally aligned with
+[Q00/ouroboros-plugins#27](https://github.com/Q00/ouroboros-plugins/issues/27):
+`Q00/ouroboros-plugins` is a curated contract/reference repository, not a
+marketplace; plugins are not unbounded command wrappers; and external
+capabilities become Ouroboros-native only when they are translated into explicit
+commands, permissions, capabilities, provenance, audit evidence, and handoff
+artifacts.
+
 ## PR breakdown
 
-The epic should land as five reviewable PRs. The implementation in this branch
-contains all five scopes so they can be split into stacked PRs or merged as a
-single integration if maintainers prefer.
+The epic should land as five reviewable stacked PRs. Each PR has a narrow merge
+unit and proves one part of the AgentOS capability-assimilation boundary.
 
-1. **PR 1 — contract mapping and MVP skeleton**
-   - Add this design document and `plugins/agent-skills/`.
-   - Add a schema-valid `ouroboros.plugin.json`.
+1. **PR 1 — contract mapping and stack scope**
+   - Add this design document.
+   - Lock the five-PR implementation plan before code lands.
+   - Record the #27 alignment rules that later PRs must preserve.
+
+2. **PR 2 — manifest and complete command inventory**
+   - Add `plugins/agent-skills/` with a schema-valid
+     `ouroboros.plugin.json`.
    - Lock upstream provenance: repository, observed commit
      `f17c6e88c904dc747381c374312c2d58e10647ae`, upstream plugin version, and
      license treatment.
-   - Add lifecycle MVP commands: `spec`, `plan`, `review`, `ship`, and
-     `using-agent-skills`.
-
-2. **PR 2 — complete command inventory**
    - Expose all seven upstream lifecycle aliases: `spec`, `plan`, `build`,
      `test`, `review`, `code-simplify`, and `ship`.
    - Expose all 23 upstream `skills/*/SKILL.md` directories as direct commands
      under the canonical `agent-skills` namespace.
    - Keep command names predictable from upstream skill names.
 
-3. **PR 3 — handoff, provenance, and audit-compatible artifacts**
+3. **PR 3 — handoff, provenance, and audit-compatible runtime**
    - Implement `python -m agent_skills_adapter` dispatch.
    - Generate `.omx/handoffs/agent-skills/<command>/<run-id>.md` and `.json`.
    - Generate an audit-event-shaped `.audit.json` beside each handoff.
    - Record arguments, scope, permissions used, capabilities used, upstream
      skill path, upstream commit, and suitability for `ooo auto` handoff.
 
-4. **PR 4 — command behavior and permission gates**
+4. **PR 4 — command behavior, permission gates, and regression tests**
    - Distinguish report, artifact-write, guarded-edit, and ship fan-out modes.
    - Record optional `shell:execute`, `network:read`, and `browser:devtools`
      authority only when explicit CLI flags are supplied by a trusted caller.
@@ -42,13 +50,38 @@ single integration if maintainers prefer.
      or mutate external systems by default.
    - Mark browser automation as blocked until `browser:devtools` authority is
      explicitly present.
-
-5. **PR 5 — documentation, examples, and validation**
-   - Document install/trust flow, command examples, risk classes, and why this is
-     an AgentOS-native assimilation adapter rather than a prompt-pack copy.
-   - Update the repository catalog.
    - Add tests for inventory completeness, manifest validation, handoff output,
-     audit shape, and guarded browser behavior.
+     audit shape, guarded browser behavior, and ship fan-out metadata.
+
+5. **PR 5 — catalog publication and final validation**
+   - Update the repository catalog only after the plugin exists and is tested.
+   - Run full repository validation for the completed stack.
+
+## #27 alignment checklist
+
+Each PR must preserve these contract rules:
+
+- **Core stays small.** The adapter prepares handoffs for `ooo auto` and future
+  Workflow IR consumers; it does not add agent-skills-specific branching to
+  Ouroboros core.
+- **This repository remains a contract/reference repository.** The adapter is
+  included because it proves external skill-pack assimilation, not because this
+  repository is becoming a general marketplace.
+- **The plugin is not a trivial wrapper.** It declares a command surface, risk
+  classes, bounded permissions, core capabilities, provenance, audit-compatible
+  events, and structured handoff artifacts.
+- **Capabilities and permissions stay distinct.** Core access such as Seed,
+  Ledger, State, Provenance, Handoff, Runtime, MCP, and Progress is declared
+  separately from external authority such as filesystem, shell, network, and
+  browser/devtools access.
+- **Install does not imply trust.** Optional shell, network, and browser/devtools
+  authority must remain explicit and guarded.
+- **No destructive defaults.** Push, merge, delete, deploy, and external system
+  mutation are excluded from the default command surface.
+- **Audit/provenance/handoff are mandatory evidence.** Every invocation should
+  produce bounded evidence explaining what was invoked, which upstream source it
+  came from, which authority was used or blocked, and what downstream action is
+  safe.
 
 ## Scope boundary
 
