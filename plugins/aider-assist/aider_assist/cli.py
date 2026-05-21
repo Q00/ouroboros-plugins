@@ -168,11 +168,8 @@ def write_mode(ns: argparse.Namespace, command_name: str) -> int:
         "repo_state_before": before,
         "repo_state_after": after,
         "aider_version": aider_version,
-<<<<<<< HEAD
-        "unauthorized_touched_files": unauthorized_touched,
-=======
         "model_metadata": safe_model_metadata(),
->>>>>>> 06a2d41 (Preserve Aider planning with redacted handoffs)
+        "unauthorized_touched_files": unauthorized_touched,
         "verification_before": serialize(pre_verification),
         "verification_after": serialize(post_verification),
         "result": {"status": status, "exit_code": result.returncode},

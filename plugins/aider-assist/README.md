@@ -82,7 +82,6 @@ keys, provider secrets, or raw sensitive environment values.
 - Interactive `session` mode is deferred until transcript capture, pre/post
   diff, trust boundary, and post-session handoff semantics are designed.
 
-<<<<<<< HEAD
 ## Alignment with issue #27
 
 `aider-assist` is included here as a contract-bearing reference plugin, not as
@@ -106,7 +105,7 @@ coding agent:
 
 This keeps core small while allowing a serious external agent tool to become
 permissioned, auditable, and resumable inside the AgentOS ecosystem.
-=======
+
 ## Issue #44 acceptance checklist
 
 Implemented by the PR1–PR4 stack:
@@ -132,4 +131,3 @@ can capture or summarize the transcript, pre/post git state, final diff,
 touched files, permission-use events, and a post-session handoff. The session
 must advertise an explicit trust boundary before launch and must not store raw
 provider secrets or environment values.
->>>>>>> 06a2d41 (Preserve Aider planning with redacted handoffs)
