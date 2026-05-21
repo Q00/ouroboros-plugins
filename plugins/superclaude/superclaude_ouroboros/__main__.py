@@ -47,7 +47,7 @@ WRITE_COMMANDS = {
     "workflow",
 }
 SHELL_COMMANDS = {"build", "git", "test"}
-NETWORK_COMMANDS = {"research"}
+NETWORK_COMMANDS = {"research", "deep-research"}
 DESTRUCTIVE_GIT_TERMS = {"push", "reset", "merge", "rebase", "clean", "tag", "release"}
 SKILL_ALIASES = {"research": "deep-research"}
 
