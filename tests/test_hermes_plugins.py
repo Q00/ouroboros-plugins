@@ -51,6 +51,37 @@ class HermesSkillAssimilatorTests(unittest.TestCase):
             self.assertEqual(shell_permission["risk"], "destructive")
 
 
+class HermesCronAdapterTests(unittest.TestCase):
+    def _run(self, *args: str) -> subprocess.CompletedProcess:
+        return subprocess.run([sys.executable, "-m", "ouroboros_hermes_cron", *args], cwd=REPO, env={**os.environ, "PYTHONPATH": str(CRON_PATH)}, capture_output=True, text=True, check=False)
+
+    def test_inspect_preserves_job_metadata_without_execution(self):
+        proc = self._run("inspect", str(FIXTURE / "cron" / "jobs.json"))
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["summary"]["job_count"], 1)
+        self.assertFalse(payload["safety"]["scheduled_jobs"])
+        self.assertFalse(payload["safety"]["executed_scripts"])
+        job = payload["jobs"][0]
+        self.assertEqual(job["id"], "daily-domain-intel")
+        self.assertEqual(job["schedule"], "0 9 * * *")
+        self.assertEqual(job["risk"], "destructive")
+        self.assertIn("shell_execution", job["risk_categories"])
+        self.assertIn("shell:execute", job["permissions"])
+        self.assertIn("network:write", job["permissions"])
+
+    def test_import_writes_seed_drafts_and_handoff(self):
+        with tempfile.TemporaryDirectory() as td:
+            proc = self._run("import", str(FIXTURE), "--out", td)
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["status"], "imported")
+            self.assertIn("daily-domain-intel.md", payload["seed_drafts"])
+            draft = (Path(td) / "seed-drafts" / "daily-domain-intel.md").read_text()
+            self.assertIn("Do not schedule it by default", draft)
+            self.assertTrue((Path(td) / "hermes-cron-risk-map.json").is_file())
+
+
 
 
 if __name__ == "__main__":

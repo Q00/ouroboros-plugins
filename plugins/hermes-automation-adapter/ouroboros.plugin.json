@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1",
+  "name": "hermes-automation-adapter",
+  "version": "0.1.0",
+  "description": "Convert Hermes cron jobs and automations into reviewable Ouroboros Seed handoff drafts.",
+  "source": {"type": "local_path", "path": "plugins/hermes-automation-adapter"},
+  "commands": [
+    {"namespace": "hermes-cron", "name": "inspect", "summary": "Inspect Hermes cron jobs without scheduling or running them.", "usage": "ooo hermes-cron inspect <jobs-json-or-hermes-home>", "risk": "read_only", "requires_confirmation": false, "arguments": [{"name": "jobs_path", "type": "path", "required": true, "description": "Hermes jobs JSON file or Hermes home directory."}]},
+    {"namespace": "hermes-cron", "name": "import", "summary": "Write Seed-compatible drafts and handoff artifacts for Hermes cron jobs.", "usage": "ooo hermes-cron import <jobs-json-or-hermes-home> --out <output-dir>", "risk": "write", "requires_confirmation": false, "arguments": [{"name": "jobs_path", "type": "path", "required": true, "description": "Hermes jobs JSON file or Hermes home directory."}, {"name": "out", "type": "path", "required": true, "description": "Artifact output directory."}]},
+    {"namespace": "hermes-cron", "name": "plan", "summary": "Create one Seed-compatible draft for a selected Hermes cron job.", "usage": "ooo hermes-cron plan <jobs-json-or-hermes-home> --job-id <job-id> --out <seed-draft>", "risk": "write", "requires_confirmation": false, "arguments": [{"name": "jobs_path", "type": "path", "required": true, "description": "Hermes jobs JSON file or Hermes home directory."}, {"name": "job_id", "type": "string", "required": true, "description": "Hermes job id to plan."}, {"name": "out", "type": "path", "required": true, "description": "Seed draft output path."}]}
+  ],
+  "capabilities": [
+    {"name": "seed", "access": "write", "reason": "Generate reviewable Seed drafts from scheduled Hermes automations."},
+    {"name": "provenance", "access": "write", "reason": "Record source job definitions and import decisions."},
+    {"name": "handoff", "access": "attach", "reason": "Attach generated cron import artifacts."},
+    {"name": "progress", "access": "write", "reason": "Report import progress and unresolved trust decisions."}
+  ],
+  "permissions": [
+    {"scope": "filesystem:read", "risk": "read_only", "required": true, "reason": "Read Hermes cron job definitions."},
+    {"scope": "filesystem:write", "risk": "write", "required": true, "reason": "Write reports, risk maps, Seed drafts, and handoff artifacts."}
+  ],
+  "entrypoint": {"type": "command", "command": "python -m ouroboros_hermes_cron"},
+  "audit": {"events": ["plugin.invoked", "plugin.permission_used", "plugin.completed", "plugin.failed"]}
+}
