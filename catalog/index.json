@@ -108,6 +108,12 @@
       "version": "0.1.0",
       "path": "../plugins/hermes-skill-assimilator",
       "description": "Inspect and convert Hermes Agent skills/plugin metadata into Ouroboros-native handoff artifacts."
+    },
+    {
+      "name": "hermes-automation-adapter",
+      "version": "0.1.0",
+      "path": "../plugins/hermes-automation-adapter",
+      "description": "Convert Hermes cron jobs and automations into reviewable Ouroboros Seed handoff drafts."
     }
   ]
 }
