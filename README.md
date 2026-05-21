@@ -114,6 +114,7 @@ plugins/
   autoresearch/        Autoresearch-to-ooo-auto handoff plugin
   gsd-agentos/         GSD command-surface assimilation plugin
   target-capabilities/ Reference external-repo assimilation package
+  opa-policy-gate/     OPA policy gate reference plugin
   github-pr-ops/       Reference plugin skeleton
   openhands-agentos/   OpenHands-to-AgentOS audited handoff plugin
 catalog/
@@ -146,6 +147,11 @@ ouroboros plugin add . --plugin autoresearch
 The first step is required: `validate_contract.py` imports `jsonschema` from
 `requirements-dev.txt`. On a clean checkout, skipping it makes the validator
 exit `2` with a "jsonschema is required" message.
+
+Issue #45 is captured in `docs/opa-policy-gate-pr-plan.md`. The short version:
+`opa-policy-gate` proves that a mature external policy engine can keep native
+OPA/Rego workflows while gaining Ouroboros permission, audit, provenance, and
+handoff semantics through the plugin contract.
 
 ## Status
 
