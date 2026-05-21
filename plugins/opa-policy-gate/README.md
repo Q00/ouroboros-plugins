@@ -107,3 +107,21 @@ This plugin implements the OPA epic in
 and follows the capability-assimilation direction from #27: mature OSS tools
 can become AgentOS-native through the plugin contract without moving domain
 branches into Ouroboros core.
+
+## Validation and schema pressure
+
+The v0 implementation intentionally does not expand `schemas/0.1/plugin.schema.json`.
+Repeatable OPA inputs, artifact declarations, upstream tool metadata, and handoff
+details are represented in this README plus the command config file instead of
+new manifest fields. Future schema work should be justified only by reference
+plugin evidence that cannot be expressed through the existing contract.
+
+Run the local test suite without a real OPA install:
+
+```bash
+python3 scripts/validate_contract.py
+python3 tests/test_opa_policy_gate_plugin.py
+```
+
+The tests use a fake `opa` binary to prove bridge behavior, blocked states, raw
+output preservation, and bounded artifact writes without network access.

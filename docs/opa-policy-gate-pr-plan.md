@@ -89,3 +89,13 @@ plugin-authoring SSOT constraints:
 A PR in this stack is not merge-ready if it weakens any of those #27
 boundaries, especially by adding arbitrary command passthrough, implicit network
 or server behavior, marketplace positioning, or OPA-specific core branching.
+
+## Final implemented branches
+
+- PR 1 branch: `feat/issue45-opa-pr1-contract` — docs, manifest, catalog, examples.
+- PR 2 branch: `feat/issue45-opa-pr2-bridge` — bounded bridge and artifacts.
+- PR 3 branch: `feat/issue45-opa-pr3-tests` — fake-OPA tests and final docs hardening.
+
+Merge order must be PR 1 → PR 2 → PR 3. After PR 3, issue #45 v0 acceptance
+criteria are covered without OPA-specific Ouroboros core changes and without
+manifest schema expansion.
