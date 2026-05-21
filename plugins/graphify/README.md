@@ -2,7 +2,7 @@
 
 Ouroboros plugin adapter for assimilating [`safishamsi/graphify`](https://github.com/safishamsi/graphify) into the AgentOS capability layer as a permissioned, auditable knowledge-graph workflow.
 
-Graphify remains the upstream implementation. This plugin provides the AgentOS-native surface: manifest, permission declarations, trust gates, provenance, state, and handoff artifacts.
+Graphify remains the upstream implementation. This plugin provides the AgentOS-native surface: manifest, permission declarations, trust gates, provenance, state, and handoff artifacts. This follows issue #27: reference plugins prove capability-assimilation boundaries and do not turn this repository into a marketplace or `ooo auto` into a domain-specific router.
 
 ## Install and trust
 

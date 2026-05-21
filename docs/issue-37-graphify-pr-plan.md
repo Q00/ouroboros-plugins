@@ -36,6 +36,25 @@ This epic should be implemented as **6 PRs**:
    - Scope: full manifest/test/docs validation, changed-file cleanup, and final review evidence.
    - Acceptance evidence must show that merging PRs 1–6 closes issue #37 without Ouroboros core changes except documented schema pressure points.
 
+## Issue #27 alignment
+
+Issue #27 defines `Q00/ouroboros-plugins` as a curated contract/reference repository, not a marketplace, and requires reference plugins to prove an assimilation boundary rather than merely wrap commands. The Graphify stack aligns as follows:
+
+| #27 criterion | Graphify PR coverage |
+| --- | --- |
+| Core stays small; plugins assimilate capability | Graphify remains under `plugins/graphify/`; no Ouroboros core or `ooo auto` Graphify-specific branches are added. |
+| Curated reference plugin, not marketplace growth | Graphify is justified as a contract-bearing knowledge-graph reference adapter, not as a generic third-party listing. |
+| Not just a shell wrapper | PR3 launches upstream Graphify, while PR4/PR5 add bounded inputs, permission classification, audit/provenance, handoff artifacts, and blocked states. |
+| Manifest is the minimum executable boundary | PR2 uses schema `0.1` with required identity, commands, capabilities, permissions, and entrypoint, without speculative fields. |
+| Capabilities and permissions stay distinct | Core access is declared as ledger/state/provenance/handoff/progress/runtime/MCP capabilities; external authority is declared as filesystem/shell/network/GitHub/MCP/database permissions. |
+| Risk taxonomy drives trust UX | Read-only query/path/explain are separated from write build/add/serve/push commands; sensitive surfaces remain optional and confirmation-gated. |
+| Lifecycle/trust/firewall are mandatory | The adapter never auto-installs Graphify and returns structured blocked results for missing dependency, untrusted sensitive operations, and out-of-bound paths. |
+| Audit/provenance/handoff make assimilation safe | PR4 emits reusable handoff JSON with plugin/upstream version, argv, permissions, target evidence, artifacts, graph stats, and excerpts. |
+| `ooo auto` remains generic | Graphify outputs are handoffs/evidence that `ooo auto` may consume; no domain-specific router logic is added. |
+| Schema expansion requires proof | The plan documents `mcp:execute`, `database:write`, and dynamic risk as pressure points while keeping v0 inside schema `0.1`. |
+
+Review rule for the stack: a PR is not merge-ready if it weakens any #27 boundary above, even if its local tests pass.
+
 ## Confirmed v0 command surface
 
 - `ooo graphify [path] [--update] [--mode deep] [--directed] [--no-viz] [--html] [--svg] [--graphml] [--neo4j] [--wiki] [--obsidian --obsidian-dir <path>]`
