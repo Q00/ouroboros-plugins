@@ -56,8 +56,14 @@ Every run writes a bounded run directory:
   handoff.md
 ```
 
-Later PRs add `diff.patch`, `touched-files.txt`, `git-state.json`, and
-`verification.json` for write-capable workflows.
+`edit` also writes:
+
+```text
+diff.patch
+touched-files.txt
+```
+
+Later PRs add `verification.json` for test/lint-backed workflows.
 
 Artifacts are intentionally local and auditable. They must not contain raw API
 keys, provider secrets, or raw sensitive environment values.
@@ -65,7 +71,8 @@ keys, provider secrets, or raw sensitive environment values.
 ## Safety defaults
 
 - `ask` treats both `--file` and `--read` as read-only context.
-- `edit` and `fix` require explicit editable file bounds.
+- `edit` requires explicit editable file bounds and refuses unbounded runs.
+- `fix` requires explicit editable file bounds when implemented in PR3.
 - Aider auto-commit is disabled by default in write modes so Ouroboros owns
   provenance.
 - Interactive `session` mode is deferred until transcript capture, pre/post

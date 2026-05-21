@@ -78,6 +78,68 @@ class AiderAssistTests(unittest.TestCase):
             self.assertEqual(invocation["result"]["status"], "failed")
             self.assertIn("executable not found", (artifact_dir / "stderr.txt").read_text())
 
+    def test_edit_refuses_missing_editable_file(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td) / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "edit", "--message", "Change safely"],
+                cwd=REPO,
+                env=env,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(completed.returncode, 2)
+            self.assertIn("requires at least one --file", completed.stderr)
+
+    def test_edit_writes_diff_and_touched_files_with_fake_aider(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            fake = tmp / "fake-aider"
+            fake.write_text(
+                "#!/usr/bin/env python3\n"
+                "from pathlib import Path\n"
+                "import sys\n"
+                "if '--version' in sys.argv:\n"
+                "    print('aider fake 0.0')\n"
+                "else:\n"
+                "    Path('src.py').write_text(\"print('changed')\\n\")\n"
+                "    print('edited by fake aider')\n"
+            )
+            fake.chmod(0o755)
+            repo = tmp / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+            (repo / "src.py").write_text("print('hi')\n")
+            subprocess.run(["git", "add", "src.py"], cwd=repo, check=True, capture_output=True)
+            subprocess.run(["git", "-c", "user.email=t@example.com", "-c", "user.name=T", "commit", "-m", "init"], cwd=repo, check=True, capture_output=True)
+
+            env = os.environ.copy()
+            env["AIDER_ASSIST_AIDER_BIN"] = str(fake)
+            env["PYTHONPATH"] = str(REPO / "plugins" / "aider-assist")
+            completed = subprocess.run(
+                [sys.executable, "-m", "aider_assist", "--repo", str(repo), "edit", "--message", "Change", "--file", "src.py"],
+                cwd=REPO,
+                env=env,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            artifact_dir = Path(completed.stdout.strip())
+            self.assertIn("src.py", (artifact_dir / "touched-files.txt").read_text())
+            self.assertIn("changed", (artifact_dir / "diff.patch").read_text())
+            invocation = json.loads((artifact_dir / "invocation.json").read_text())
+            self.assertEqual(invocation["editable_files"], ["src.py"])
+
 
 if __name__ == "__main__":
     unittest.main()
