@@ -1,0 +1,220 @@
+{
+  "plugin_name": "agent-skills",
+  "plugin_version": "0.1.0",
+  "upstream_repository": "https://github.com/addyosmani/agent-skills",
+  "upstream_commit": "f17c6e88c904dc747381c374312c2d58e10647ae",
+  "upstream_license": "MIT",
+  "upstream_plugin_version": "1.0.0",
+  "skills": [
+    {
+      "name": "api-and-interface-design",
+      "summary": "Design APIs and interfaces with compatibility and implementation handoff boundaries.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/api-and-interface-design/SKILL.md"
+    },
+    {
+      "name": "browser-testing-with-devtools",
+      "summary": "Plan browser testing with DevTools evidence and explicit browser/MCP authority.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/browser-testing-with-devtools/SKILL.md"
+    },
+    {
+      "name": "ci-cd-and-automation",
+      "summary": "Design CI/CD automation changes with explicit shell and external-system boundaries.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/ci-cd-and-automation/SKILL.md"
+    },
+    {
+      "name": "code-review-and-quality",
+      "summary": "Run a structured code review and quality report without mutating code.",
+      "risk": "read_only",
+      "mode": "report",
+      "path": "skills/code-review-and-quality/SKILL.md"
+    },
+    {
+      "name": "code-simplification",
+      "summary": "Prepare behavior-preserving code simplification guidance or guarded edits.",
+      "risk": "write",
+      "mode": "artifact_write",
+      "path": "skills/code-simplification/SKILL.md"
+    },
+    {
+      "name": "context-engineering",
+      "summary": "Analyze and package project context for an agent workflow.",
+      "risk": "read_only",
+      "mode": "report",
+      "path": "skills/context-engineering/SKILL.md"
+    },
+    {
+      "name": "debugging-and-error-recovery",
+      "summary": "Investigate failures and prepare a bounded debugging/recovery handoff.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/debugging-and-error-recovery/SKILL.md"
+    },
+    {
+      "name": "deprecation-and-migration",
+      "summary": "Plan migrations and deprecations with compatibility and rollback boundaries.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/deprecation-and-migration/SKILL.md"
+    },
+    {
+      "name": "documentation-and-adrs",
+      "summary": "Create documentation and ADR handoff artifacts.",
+      "risk": "write",
+      "mode": "artifact_write",
+      "path": "skills/documentation-and-adrs/SKILL.md"
+    },
+    {
+      "name": "doubt-driven-development",
+      "summary": "Challenge assumptions and record uncertainty-driven verification tasks.",
+      "risk": "read_only",
+      "mode": "report",
+      "path": "skills/doubt-driven-development/SKILL.md"
+    },
+    {
+      "name": "frontend-ui-engineering",
+      "summary": "Plan or hand off frontend UI engineering changes with verification gates.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/frontend-ui-engineering/SKILL.md"
+    },
+    {
+      "name": "git-workflow-and-versioning",
+      "summary": "Prepare git workflow/versioning guidance without pushing or merging by default.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/git-workflow-and-versioning/SKILL.md"
+    },
+    {
+      "name": "idea-refine",
+      "summary": "Refine an idea into a clearer scope and next action artifact.",
+      "risk": "write",
+      "mode": "artifact_write",
+      "path": "skills/idea-refine/SKILL.md"
+    },
+    {
+      "name": "incremental-implementation",
+      "summary": "Break implementation into small tested slices and guarded execution handoffs.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/incremental-implementation/SKILL.md"
+    },
+    {
+      "name": "interview-me",
+      "summary": "Generate interview questions and capture requirements as a handoff artifact.",
+      "risk": "write",
+      "mode": "artifact_write",
+      "path": "skills/interview-me/SKILL.md"
+    },
+    {
+      "name": "performance-optimization",
+      "summary": "Assess performance opportunities and evidence requirements.",
+      "risk": "read_only",
+      "mode": "report",
+      "path": "skills/performance-optimization/SKILL.md"
+    },
+    {
+      "name": "planning-and-task-breakdown",
+      "summary": "Break work into ordered, verifiable tasks.",
+      "risk": "write",
+      "mode": "artifact_write",
+      "path": "skills/planning-and-task-breakdown/SKILL.md"
+    },
+    {
+      "name": "security-and-hardening",
+      "summary": "Run a security and hardening review without mutating code.",
+      "risk": "read_only",
+      "mode": "report",
+      "path": "skills/security-and-hardening/SKILL.md"
+    },
+    {
+      "name": "shipping-and-launch",
+      "summary": "Produce launch readiness, rollback, and go/no-go handoff output.",
+      "risk": "read_only",
+      "mode": "fanout",
+      "path": "skills/shipping-and-launch/SKILL.md"
+    },
+    {
+      "name": "source-driven-development",
+      "summary": "Plan source-backed development and documentation lookup boundaries.",
+      "risk": "read_only",
+      "mode": "report",
+      "path": "skills/source-driven-development/SKILL.md"
+    },
+    {
+      "name": "spec-driven-development",
+      "summary": "Create a spec-first development handoff.",
+      "risk": "write",
+      "mode": "artifact_write",
+      "path": "skills/spec-driven-development/SKILL.md"
+    },
+    {
+      "name": "test-driven-development",
+      "summary": "Prepare a TDD/prove-it workflow with optional test command evidence.",
+      "risk": "write",
+      "mode": "guarded_edit",
+      "path": "skills/test-driven-development/SKILL.md"
+    },
+    {
+      "name": "using-agent-skills",
+      "summary": "Explain available upstream Agent Skills and select the right capability.",
+      "risk": "read_only",
+      "mode": "report",
+      "path": "skills/using-agent-skills/SKILL.md"
+    }
+  ],
+  "lifecycle_aliases": [
+    {
+      "name": "spec",
+      "target_skill": "spec-driven-development",
+      "summary": "Create a spec-driven development handoff from a goal.",
+      "risk": "write"
+    },
+    {
+      "name": "plan",
+      "target_skill": "planning-and-task-breakdown",
+      "summary": "Break a spec or goal into ordered, verifiable tasks.",
+      "risk": "write"
+    },
+    {
+      "name": "build",
+      "target_skill": "incremental-implementation",
+      "summary": "Implement via small handoff-ready slices with verification gates.",
+      "risk": "write"
+    },
+    {
+      "name": "test",
+      "target_skill": "test-driven-development",
+      "summary": "Run the TDD / Prove-It workflow as a handoff.",
+      "risk": "write"
+    },
+    {
+      "name": "review",
+      "target_skill": "code-review-and-quality",
+      "summary": "Run the five-axis review workflow as a structured report.",
+      "risk": "read_only"
+    },
+    {
+      "name": "code-simplify",
+      "target_skill": "code-simplification",
+      "summary": "Simplify code while preserving behavior through a guarded handoff.",
+      "risk": "write"
+    },
+    {
+      "name": "ship",
+      "target_skill": "shipping-and-launch",
+      "summary": "Run launch-readiness fan-out synthesis with go/no-go output.",
+      "risk": "read_only"
+    }
+  ],
+  "personas": [
+    "code-reviewer",
+    "security-auditor",
+    "test-engineer"
+  ]
+}

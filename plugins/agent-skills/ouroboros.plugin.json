@@ -1,0 +1,759 @@
+{
+  "schema_version": "0.1",
+  "name": "agent-skills",
+  "version": "0.1.0",
+  "description": "AgentOS/Ouroboros assimilation adapter for Addy Osmani's production-grade engineering agent skills.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/agent-skills",
+    "repository": "https://github.com/addyosmani/agent-skills"
+  },
+  "commands": [
+    {
+      "namespace": "agent-skills",
+      "name": "spec",
+      "summary": "Create a spec-driven development handoff from a goal.",
+      "usage": "ooo agent-skills spec [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "plan",
+      "summary": "Break a spec or goal into ordered, verifiable tasks.",
+      "usage": "ooo agent-skills plan [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "build",
+      "summary": "Implement via small handoff-ready slices with verification gates.",
+      "usage": "ooo agent-skills build [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "test",
+      "summary": "Run the TDD / Prove-It workflow as a handoff.",
+      "usage": "ooo agent-skills test [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "review",
+      "summary": "Run the five-axis review workflow as a structured report.",
+      "usage": "ooo agent-skills review [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "code-simplify",
+      "summary": "Simplify code while preserving behavior through a guarded handoff.",
+      "usage": "ooo agent-skills code-simplify [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "ship",
+      "summary": "Run launch-readiness fan-out synthesis with go/no-go output.",
+      "usage": "ooo agent-skills ship [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "api-and-interface-design",
+      "summary": "Design APIs and interfaces with compatibility and implementation handoff boundaries.",
+      "usage": "ooo agent-skills api-and-interface-design [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "browser-testing-with-devtools",
+      "summary": "Plan browser testing with DevTools evidence and explicit browser/MCP authority.",
+      "usage": "ooo agent-skills browser-testing-with-devtools [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "ci-cd-and-automation",
+      "summary": "Design CI/CD automation changes with explicit shell and external-system boundaries.",
+      "usage": "ooo agent-skills ci-cd-and-automation [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "code-review-and-quality",
+      "summary": "Run a structured code review and quality report without mutating code.",
+      "usage": "ooo agent-skills code-review-and-quality [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "code-simplification",
+      "summary": "Prepare behavior-preserving code simplification guidance or guarded edits.",
+      "usage": "ooo agent-skills code-simplification [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "context-engineering",
+      "summary": "Analyze and package project context for an agent workflow.",
+      "usage": "ooo agent-skills context-engineering [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "debugging-and-error-recovery",
+      "summary": "Investigate failures and prepare a bounded debugging/recovery handoff.",
+      "usage": "ooo agent-skills debugging-and-error-recovery [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "deprecation-and-migration",
+      "summary": "Plan migrations and deprecations with compatibility and rollback boundaries.",
+      "usage": "ooo agent-skills deprecation-and-migration [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "documentation-and-adrs",
+      "summary": "Create documentation and ADR handoff artifacts.",
+      "usage": "ooo agent-skills documentation-and-adrs [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "doubt-driven-development",
+      "summary": "Challenge assumptions and record uncertainty-driven verification tasks.",
+      "usage": "ooo agent-skills doubt-driven-development [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "frontend-ui-engineering",
+      "summary": "Plan or hand off frontend UI engineering changes with verification gates.",
+      "usage": "ooo agent-skills frontend-ui-engineering [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "git-workflow-and-versioning",
+      "summary": "Prepare git workflow/versioning guidance without pushing or merging by default.",
+      "usage": "ooo agent-skills git-workflow-and-versioning [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "idea-refine",
+      "summary": "Refine an idea into a clearer scope and next action artifact.",
+      "usage": "ooo agent-skills idea-refine [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "incremental-implementation",
+      "summary": "Break implementation into small tested slices and guarded execution handoffs.",
+      "usage": "ooo agent-skills incremental-implementation [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "interview-me",
+      "summary": "Generate interview questions and capture requirements as a handoff artifact.",
+      "usage": "ooo agent-skills interview-me [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "performance-optimization",
+      "summary": "Assess performance opportunities and evidence requirements.",
+      "usage": "ooo agent-skills performance-optimization [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "planning-and-task-breakdown",
+      "summary": "Break work into ordered, verifiable tasks.",
+      "usage": "ooo agent-skills planning-and-task-breakdown [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "security-and-hardening",
+      "summary": "Run a security and hardening review without mutating code.",
+      "usage": "ooo agent-skills security-and-hardening [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "shipping-and-launch",
+      "summary": "Produce launch readiness, rollback, and go/no-go handoff output.",
+      "usage": "ooo agent-skills shipping-and-launch [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "source-driven-development",
+      "summary": "Plan source-backed development and documentation lookup boundaries.",
+      "usage": "ooo agent-skills source-driven-development [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "spec-driven-development",
+      "summary": "Create a spec-first development handoff.",
+      "usage": "ooo agent-skills spec-driven-development [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "test-driven-development",
+      "summary": "Prepare a TDD/prove-it workflow with optional test command evidence.",
+      "usage": "ooo agent-skills test-driven-development [--scope <goal-or-path>]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    },
+    {
+      "namespace": "agent-skills",
+      "name": "using-agent-skills",
+      "summary": "Explain available upstream Agent Skills and select the right capability.",
+      "usage": "ooo agent-skills using-agent-skills [--scope <goal-or-path>]",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Goal, path, diff, issue, or bounded work scope for the capability."
+        },
+        {
+          "name": "output_dir",
+          "type": "path",
+          "required": false,
+          "description": "Directory for structured handoff artifacts; defaults to .omx/handoffs/agent-skills."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "seed",
+      "access": "write",
+      "reason": "Create specs, plans, and execution briefs suitable for ooo auto."
+    },
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record decisions, verification evidence, command outcomes, and blocked states."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist multi-step invocation state and handoff artifacts."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record upstream repository, commit, skill path, license, and invocation context."
+    },
+    {
+      "name": "runtime",
+      "access": "execute",
+      "reason": "Prepare bounded runtime execution handoffs; direct execution remains permission-gated."
+    },
+    {
+      "name": "mcp",
+      "access": "execute",
+      "reason": "Represent browser/devtools and future MCP-backed skills without implicit authority."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach structured outputs for ooo auto or future Workflow IR consumers."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report phase progress and readiness during multi-step workflows."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Inspect repository files, diffs, docs, tests, and local upstream checkouts."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write structured handoff, provenance, audit-compatible, spec, plan, ADR, and verification artifacts."
+    },
+    {
+      "scope": "shell:execute",
+      "risk": "write",
+      "required": false,
+      "reason": "Optionally run tests, builds, linters, formatters, validators, or project commands when explicitly granted."
+    },
+    {
+      "scope": "network:read",
+      "risk": "read_only",
+      "required": false,
+      "reason": "Optionally fetch official documentation or upstream source metadata for source-driven work."
+    },
+    {
+      "scope": "browser:devtools",
+      "risk": "write",
+      "required": false,
+      "reason": "Optional browser automation authority for browser-testing-with-devtools; blocked unless explicitly granted."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m agent_skills_adapter"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
