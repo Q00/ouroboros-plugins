@@ -1,0 +1,16 @@
+{
+  "jobs": [
+    {
+      "id": "daily-domain-intel",
+      "schedule": "0 9 * * *",
+      "prompt": "Research the domain and send a digest.",
+      "skills": ["domain-intel"],
+      "scripts": ["python scripts/enrich.py"],
+      "delivery": {"type": "email", "target": "ops@example.com"},
+      "workdir": "/workspace/research",
+      "profile": "researcher",
+      "repeat": "daily",
+      "no_agent": false
+    }
+  ]
+}

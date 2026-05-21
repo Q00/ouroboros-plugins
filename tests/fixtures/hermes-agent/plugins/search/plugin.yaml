@@ -1,0 +1,6 @@
+name: search-gateway
+description: External web search gateway.
+permissions:
+  - network:read
+  - filesystem:write
+entrypoint: python -m search_gateway
