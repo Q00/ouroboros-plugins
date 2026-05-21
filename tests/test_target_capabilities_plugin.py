@@ -107,6 +107,39 @@ class TargetCapabilitiesPluginTests(unittest.TestCase):
             self.assertEqual(payload["status"], "blocked")
             self.assertEqual(payload["reason"], "target_dependency_not_found")
 
+    def test_plan_writes_bounded_assimilation_plan(self):
+        with tempfile.TemporaryDirectory() as td:
+            cwd = Path(td) / "caller"
+            cwd.mkdir()
+            target = Path(td) / "target"
+            target.mkdir()
+            (target / "README.md").write_text("# Target\n", encoding="utf-8")
+
+            proc = self._run("plan", "--target-root", str(target), "--target-repository", "owner/target", cwd=cwd)
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["status"], "completed")
+            self.assertEqual(payload["risk"], "write")
+            plan_paths = [Path(p) for p in payload["writes"]]
+            self.assertEqual(len(plan_paths), 1)
+            self.assertTrue((cwd / plan_paths[0]).is_file())
+            self.assertIn("Proposed command mapping", (cwd / plan_paths[0]).read_text(encoding="utf-8"))
+
+    def test_publish_is_destructive_and_blocked_without_mutation(self):
+        with tempfile.TemporaryDirectory() as td:
+            cwd = Path(td) / "caller"
+            cwd.mkdir()
+            target = Path(td) / "target"
+            target.mkdir()
+            proc = self._run("publish", "--target-root", str(target), cwd=cwd)
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["status"], "blocked")
+            self.assertEqual(payload["risk"], "destructive")
+            self.assertIn("network:write", payload["missing_scopes"])
+            self.assertIn("target:publish:write", payload["missing_scopes"])
 
 
 if __name__ == "__main__":

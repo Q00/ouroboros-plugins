@@ -53,6 +53,18 @@ COMMANDS: tuple[CommandSpec, ...] = (
         "write",
         ("filesystem:read", "filesystem:write"),
     ),
+    CommandSpec(
+        "plan",
+        "Generate an assimilation plan artifact.",
+        "write",
+        ("filesystem:read", "filesystem:write"),
+    ),
+    CommandSpec(
+        "publish",
+        "Reference destructive gate; never mutates remotely in v0.",
+        "destructive",
+        ("filesystem:write", "network:write", "target:publish:write"),
+    ),
 )
 
 
@@ -391,6 +403,120 @@ def run_doctor(args: argparse.Namespace) -> dict[str, Any]:
     )
 
 
+def build_assimilation_plan(
+    target_repository: str,
+    root: Path,
+    inventory: list[dict[str, Any]],
+    capabilities: list[dict[str, str]],
+) -> str:
+    lines = [
+        "# Target repository assimilation plan",
+        "",
+        f"- assimilated_repository: `{target_repository}`",
+        f"- target_root: `{root}`",
+        "- plugin package: `target-capabilities`",
+        "- command namespace: `target`",
+        "",
+        "## Capability hints",
+    ]
+    if capabilities:
+        lines.extend(f"- `{item['capability']}` from `{item['source']}`" for item in capabilities)
+    else:
+        lines.append("- No standard hints found; manual capability review required.")
+    lines.extend([
+        "",
+        "## Proposed command mapping",
+        "",
+        "| Target capability | Ouroboros command | Risk | Permissions | "
+        "Artifact contract | Handoff |",
+        "|---|---|---|---|---|---|",
+        "| command inventory | `ooo target list-commands` | read_only | "
+        "filesystem:read, filesystem:write | result/report/provenance/handoff | yes |",
+        "| repository inspection | `ooo target inspect` | read_only | "
+        "filesystem:read, filesystem:write | result/report/provenance/handoff | yes |",
+        "| readiness check | `ooo target doctor` | read_only | "
+        "filesystem:read, filesystem:write | result/report/provenance/handoff | yes |",
+        "| assimilation planning | `ooo target plan` | write | "
+        "filesystem:read, filesystem:write | plus assimilation-plan.md | yes |",
+        "| remote publication | `ooo target publish` | destructive | "
+        "exact destructive scopes | blocked proof artifact | yes |",
+        "",
+        "## Drift inputs",
+    ])
+    for item in inventory[:20]:
+        lines.append(f"- `{item['path']}` ({item['bytes']} bytes)")
+    lines.extend([
+        "",
+        "## Deferred manual review",
+        "",
+        "- Validate command risk against actual upstream side effects.",
+        "- Keep managed install disabled until trust invalidation is implemented.",
+        "- Do not grant destructive scopes at install time.",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def run_plan(args: argparse.Namespace) -> dict[str, Any]:
+    root = resolve_target_root(args.target_root, required=True)
+    target_repository = target_repository_value(args.target_repository, root)
+    inventory = safe_file_inventory(root, limit=args.inventory_limit)
+    capabilities = infer_capabilities(root)
+    run_id = stable_run_id("plan", target_repository, root)
+    run_dir, _, _ = artifact_paths("plan", run_id)
+    plan_path = run_dir / "assimilation-plan.md"
+    plan_text = build_assimilation_plan(target_repository, root, inventory, capabilities)
+    plan_path.write_text(plan_text, encoding="utf-8")
+    return write_artifacts(
+        command="plan",
+        run_id=run_id,
+        status="completed",
+        risk="write",
+        target_repository=target_repository,
+        target_root=root,
+        body={
+            "target_root": str(root),
+            "capability_hints": capabilities,
+            "inventory_count": len(inventory),
+            "writes": [str(plan_path)],
+        },
+        report_extra=f"Generated bounded assimilation plan: `{plan_path}`.",
+    )
+
+
+def run_publish(args: argparse.Namespace) -> dict[str, Any]:
+    root = resolve_target_root(args.target_root, required=False)
+    target_repository = target_repository_value(args.target_repository, root)
+    trusted = set(args.trusted_scope or [])
+    required = {"network:write", "target:publish:write"}
+    missing = sorted(required - trusted)
+    confirmed = bool(args.confirm_destructive)
+    blocked_reasons: list[str] = []
+    if missing:
+        blocked_reasons.append("missing_destructive_trust")
+    if not confirmed:
+        blocked_reasons.append("missing_destructive_confirmation")
+    if not blocked_reasons:
+        blocked_reasons.append("destructive_reference_command_deferred")
+    return write_artifacts(
+        command="publish",
+        run_id=stable_run_id("publish", target_repository, root),
+        status="blocked",
+        risk="destructive",
+        target_repository=target_repository,
+        target_root=root,
+        body={
+            "reason": "+".join(blocked_reasons),
+            "message": "Reference package never performs remote destructive mutation in v0.",
+            "missing_scopes": missing,
+            "confirmed": confirmed,
+        },
+        report_extra=(
+            "No remote mutation was attempted. This command exists to prove "
+            "destructive gating semantics."
+        ),
+    )
+
+
 def add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--target-root",
@@ -419,6 +545,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     inspect_p.add_argument("--inventory-limit", type=int, default=60)
 
+    plan_p = sub.add_parser("plan")
+    add_common(plan_p)
+    plan_p.add_argument("--inventory-limit", type=int, default=60)
+
+    publish_p = sub.add_parser("publish")
+    add_common(publish_p)
+    publish_p.add_argument("--trusted-scope", action="append", default=[])
+    publish_p.add_argument("--confirm-destructive", action="store_true")
     return parser
 
 
@@ -429,6 +563,10 @@ def dispatch(args: argparse.Namespace) -> dict[str, Any]:
         return run_inspect(args)
     if args.command == "doctor":
         return run_doctor(args)
+    if args.command == "plan":
+        return run_plan(args)
+    if args.command == "publish":
+        return run_publish(args)
     raise UserError(f"unknown command: {args.command}")
 
 
