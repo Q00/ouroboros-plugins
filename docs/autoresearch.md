@@ -73,6 +73,13 @@ The plugin writes:
 .ouroboros/autoresearch/handoff.json
 ```
 
+`seed.md` is only the plugin handoff brief. The saved Ouroboros Seed artifact is
+created by the Ouroboros runtime, usually under the user's Ouroboros data
+directory, and should not be declared as a repository-local output. Do not add
+or require `.ouroboros/autoresearch/seed.yaml`,
+`.ouroboros/autoresearch/generated-seed.yaml`, or a top-level
+`seed_artifact_path` in the target checkout.
+
 ## Run The Full Ouroboros Loop
 
 The plugin only prepares. The full loop starts when you pass the generated goal
@@ -86,7 +93,7 @@ The expected flow is:
 
 ```text
 plugin prepare
-  -> generated Seed and auto goal
+  -> handoff brief and auto goal
   -> auto interview
   -> Seed generation / review / repair
   -> experiment execution
@@ -113,7 +120,11 @@ smoke runs showed that prose-only guidance can be treated as examples or schema
 instead of concrete Seed values. The contract spells out the repository,
 editable files, fixed files, primary metric, experiment budget, candidate
 sequence, non-goals, runtime context, metric fallback, ledger columns, and
-validity rules so the generated Seed can instantiate them directly.
+validity rules so the generated Seed can instantiate them directly. It also
+includes `seed_artifact_policy` so `ooo auto` treats the plugin files as input
+briefs rather than saved Seed outputs, and `execution_command` so the command
+string stays stable while timeout enforcement remains a separate orchestration
+budget.
 
 ## Demo
 

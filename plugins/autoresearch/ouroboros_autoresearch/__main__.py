@@ -108,6 +108,25 @@ def build_autoresearch_contract(
         "experiment_budget": max_experiments,
         "timeout_seconds": experiment_seconds,
         "verification_command": train_command,
+        "execution_command": {
+            "command": train_command,
+            "cwd": str(inspection.root),
+            "timeout_seconds": experiment_seconds,
+            "timeout_policy": (
+                "Apply timeout_seconds in the harness/orchestrator. Do not rewrite "
+                "the command string by prefixing shell-specific timeout wrappers."
+            ),
+        },
+        "seed_artifact_policy": {
+            "handoff_brief_path": str(inspection.root / ARTIFACT_DIR / "seed.md"),
+            "handoff_brief_only": True,
+            "saved_seed_path_runtime_owned": True,
+            "repo_local_seed_output_required": False,
+            "forbidden_repo_local_seed_outputs": [
+                str(ARTIFACT_DIR / "seed.yaml"),
+                str(ARTIFACT_DIR / "generated-seed.yaml"),
+            ],
+        },
         "candidate_sequence": candidate_sequence(
             max_experiments=max_experiments,
             train_command=train_command,
@@ -151,10 +170,12 @@ def build_autoresearch_contract(
             "seed_creation": [
                 "Inspect the generated Ouroboros Seed artifact; do not run training while authoring the Seed.",
                 "Confirm the Seed artifact carries the autoresearch contract as concrete structured fields.",
+                "Do not create or require a repository-local Seed YAML such as .ouroboros/autoresearch/seed.yaml or generated-seed.yaml.",
+                "Treat the saved Seed artifact path as owned by the Ouroboros runtime, not by the target repository.",
             ],
             "experiment_execution": [
                 f"Run every experiment from the repository root with `{train_command}`.",
-                f"Enforce a {experiment_seconds}-second timeout for each experiment.",
+                f"Enforce a {experiment_seconds}-second timeout for each experiment via the harness/orchestrator, without changing the command string.",
                 f"Parse `{metric}` from output, using `best_{metric}` only as the legacy JSON fallback.",
                 "Record every attempted experiment in the configured ledger path.",
                 "Attempt experiments 2 through the configured budget as concrete train.py candidate changes; a baseline-only rerun or policy-inspection report is not sufficient.",
@@ -313,6 +334,8 @@ def build_seed_markdown(
         "## Execution Boundary",
         "",
         "- This Markdown file is the plugin handoff brief. The generated Ouroboros Seed artifact may use the normal Ouroboros YAML/Seed serialization.",
+        "- Do not create or require `.ouroboros/autoresearch/seed.yaml`, `.ouroboros/autoresearch/generated-seed.yaml`, or any other repository-local saved Seed YAML.",
+        "- The saved Seed artifact path is owned by the Ouroboros runtime. It must not be declared as a target-repository output or top-level `seed_artifact_path` requirement.",
         f"- Edit only `{target_rel}` unless the user explicitly widens scope.",
         f"- Treat `{program_rel}` as the research program and product requirements.",
         f"- Treat `{support_rel}` as fixed data prep and runtime utility code.",
@@ -346,6 +369,7 @@ def build_seed_markdown(
         "",
         f"- Work from repository root `{inspection.root}`.",
         f"- Run verification from that root with `{train_command}`.",
+        f"- Apply the {experiment_seconds}-second experiment timeout as a harness/orchestrator budget; keep the command string exactly `{train_command}`.",
         f"- Keep `{support_rel}` fixed and use it only as support/evaluation infrastructure.",
         f"- Keep generated experiment artifacts local to the repository unless the user asks for export.",
         "",
@@ -392,7 +416,7 @@ def build_auto_goal(
         experiment_seconds=experiment_seconds,
         train_command=train_command,
     )
-    contract_json = json.dumps(contract, indent=2)
+    contract_json = json.dumps(contract, separators=(",", ":"))
     return "\n".join(
         [
             goal,
@@ -409,10 +433,13 @@ def build_auto_goal(
             f"- Keep each experiment bounded to {experiment_seconds} seconds.",
             f"- Use `{metric}` as the primary metric; lower is better.",
             f"- Verification command: `{train_command}`.",
+            f"- Apply the {experiment_seconds}-second timeout as a separate execution budget; do not rewrite the command into a shell-specific timeout wrapper.",
             f"- Experiment 1 must be an unmodified baseline run and counts against the {max_experiments}-experiment budget.",
             f"- Experiments 2-{max_experiments} must be concrete candidate changes or decision branches inside `{target_rel}`.",
             f"- Include top-level non_goals: do not change datasets, splits, metric code, `{support_rel}`, external services, credentials, deployment, or frameworks.",
             f"- Include runtime_context: run from `{inspection.root}` with `{train_command}` and keep artifacts local.",
+            "- Include seed_artifact_policy: `seed.md` is only the plugin handoff brief, saved Seed paths are runtime-owned, and repo-local Seed YAML outputs are not required.",
+            "- Do not declare top-level `seed_artifact_path`, `.ouroboros/autoresearch/seed.yaml`, or `.ouroboros/autoresearch/generated-seed.yaml` as required target-repository outputs.",
             f"- Accept parseable `{metric}` as primary; if output is JSON and only `best_{metric}` exists, treat that as a legacy fallback.",
             "- Do not run training during Seed creation; only prepare the bounded plan unless execution is explicitly requested.",
             "- The generated Ouroboros Seed artifact may use the normal Ouroboros YAML/Seed serialization. `seed.md` is the plugin handoff brief, not a required output format for auto's saved Seed.",
