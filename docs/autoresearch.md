@@ -126,6 +126,12 @@ briefs rather than saved Seed outputs, and `execution_command` so the command
 string stays stable while timeout enforcement remains a separate orchestration
 budget.
 
+Ownership stays on the plugin side: this repository defines the
+`autoresearch_contract` shape and the handoff policy. Ouroboros core should stay
+domain-agnostic; it only needs to preserve structured Seed data, including
+plugin-owned extra fields, while running the normal interview, execution,
+evaluation, ledger, and reflection machinery.
+
 ## Demo
 
 Run the deterministic character-language-model demo:

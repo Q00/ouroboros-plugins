@@ -71,6 +71,13 @@ or require `.ouroboros/autoresearch/seed.yaml`,
 `.ouroboros/autoresearch/generated-seed.yaml`, or a top-level
 `seed_artifact_path`.
 
+The autoresearch contract is plugin-owned. Ouroboros core should not import an
+`autoresearch` module, special-case research loops, or normalize this contract
+with domain-specific code. The plugin writes the authoritative
+`autoresearch_contract` into the handoff; `ooo auto` treats it as structured
+Seed data and preserves plugin-specific values through normal Seed extra-field
+serialization.
+
 The optional layout flags (`--program-file`, `--target-file`, and
 `--support-file`) must be repository-relative paths. Absolute paths and `..`
 escapes are rejected so the handoff remains bounded to the inspected checkout.
@@ -140,7 +147,8 @@ This plugin owns the autoresearch-specific workflow:
 - Mapping `program.md` and `train.py` into an Ouroboros Seed
 - Preserving the experiment budget and metric as auditable constraints
 - Handing the prepared Seed to `ooo auto`
+- Owning the `autoresearch_contract` schema, policy, and handoff wording
 
 `ooo auto` remains responsible for interview, Seed execution, ledger, and
-runtime orchestration. Ouroboros core does not need to understand neural
-network research loops directly.
+runtime orchestration. Ouroboros core remains domain-agnostic and does not need
+to understand neural-network research loops directly.
