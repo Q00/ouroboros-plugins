@@ -85,7 +85,13 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn('"runtime_context":', seed)
             self.assertIn('"validity_rules":', seed)
             self.assertIn('"verification_plan":', seed)
+            self.assertIn('"execution_command":', seed)
+            self.assertIn('"seed_artifact_policy":', seed)
+            self.assertIn('"saved_seed_path_runtime_owned": true', seed)
             self.assertIn("normal Ouroboros YAML/Seed serialization", seed)
+            self.assertIn("Do not create or require `.ouroboros/autoresearch/seed.yaml`", seed)
+            self.assertIn("must not be declared as a target-repository output", seed)
+            self.assertIn("keep the command string exactly `uv run train.py`", seed)
             self.assertIn("baseline-only rerun", seed)
             self.assertIn("final best", seed)
             self.assertIn("Instantiate these values as concrete top-level Seed fields", seed)
@@ -97,10 +103,14 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn("Experiments 2-2 must be concrete candidate changes", auto_goal)
             self.assertIn("Include top-level non_goals", auto_goal)
             self.assertIn("Include runtime_context", auto_goal)
+            self.assertIn("Include seed_artifact_policy", auto_goal)
+            self.assertIn("Do not declare top-level `seed_artifact_path`", auto_goal)
+            self.assertIn("do not rewrite the command into a shell-specific timeout wrapper", auto_goal)
             self.assertIn("Do not run training during Seed creation", auto_goal)
             self.assertIn("Authoritative autoresearch_contract JSON follows", auto_goal)
-            self.assertIn('"experiment_budget": 2', auto_goal)
-            self.assertIn('"legacy_json_fallback": "best_val_bpb"', auto_goal)
+            self.assertIn('"experiment_budget":2', auto_goal)
+            self.assertIn('"legacy_json_fallback":"best_val_bpb"', auto_goal)
+            self.assertIn('"repo_local_seed_output_required":false', auto_goal)
             self.assertIn('"verification_plan":', auto_goal)
             self.assertIn("normal Ouroboros YAML/Seed serialization", auto_goal)
             self.assertIn("baseline-only rerun", auto_goal)
@@ -116,6 +126,11 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertEqual(
                 payload["ooo_auto"]["autoresearch_contract"]["candidate_sequence"][1]["name"],
                 "additive-smoothing",
+            )
+            self.assertFalse(
+                payload["ooo_auto"]["autoresearch_contract"]["seed_artifact_policy"][
+                    "repo_local_seed_output_required"
+                ]
             )
 
     def test_prepare_requires_autoresearch_files(self):

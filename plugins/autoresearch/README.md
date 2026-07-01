@@ -65,6 +65,11 @@ The generated handoff includes the recommended
 boundary, experiment budget, metric, and verification command. `--attach-source`
 is intentionally not used here because current Ouroboros uses it only for
 attaching an already-started run handle, not for loading a Seed or brief file.
+`seed.md` is a handoff brief for `ooo auto`, not the saved Ouroboros Seed. The
+saved Seed path is owned by the Ouroboros runtime, so the plugin does not create
+or require `.ouroboros/autoresearch/seed.yaml`,
+`.ouroboros/autoresearch/generated-seed.yaml`, or a top-level
+`seed_artifact_path`.
 
 The optional layout flags (`--program-file`, `--target-file`, and
 `--support-file`) must be repository-relative paths. Absolute paths and `..`
@@ -105,7 +110,7 @@ The key boundary is:
 
 ```text
 autoresearch plugin prepare
-  -> Seed/handoff artifacts
+  -> handoff brief + auto goal
   -> ouroboros auto
   -> interview -> seed review/repair -> run -> evaluate -> reflect/recover
 ```
@@ -121,7 +126,8 @@ correctly stop in Seed QA rather than running an under-specified experiment.
 It also writes an `autoresearch_contract` JSON block into `seed.md`,
 `auto_goal.txt`, and `handoff.json` so the generated Seed has exact values for
 the repository, editable files, fixed files, metric, experiment budget,
-candidate sequence, ledger, and validity rules.
+candidate sequence, ledger, validity rules, runtime-owned Seed artifact policy,
+and the separate experiment timeout budget.
 
 See [`docs/autoresearch.md`](../../docs/autoresearch.md) for a fuller guide and
 [`examples/autoresearch-char-lm`](../../examples/autoresearch-char-lm) for a
