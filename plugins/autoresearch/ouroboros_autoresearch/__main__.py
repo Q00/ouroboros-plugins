@@ -169,7 +169,7 @@ def build_autoresearch_contract(
         "verification_plan": {
             "seed_creation": [
                 "Inspect the generated Ouroboros Seed artifact; do not run training while authoring the Seed.",
-                "Confirm the Seed artifact carries the autoresearch contract as concrete structured fields.",
+                "Confirm the Seed artifact preserves the plugin-owned autoresearch contract as structured Seed data.",
                 "Do not create or require a repository-local Seed YAML such as .ouroboros/autoresearch/seed.yaml or generated-seed.yaml.",
                 "Treat the saved Seed artifact path as owned by the Ouroboros runtime, not by the target repository.",
             ],
@@ -355,7 +355,7 @@ def build_seed_markdown(
         "",
         "## Authoritative Autoresearch Contract",
         "",
-        "Instantiate these values as concrete top-level Seed fields. Do not convert them into examples, ontology schema, personas, or optional guidance.",
+        "Preserve these values as concrete Seed data: use native Seed fields where they fit, and plugin-owned extra fields for autoresearch-specific values. Do not convert them into examples, ontology schema, personas, or optional guidance.",
         "",
         *fenced_code_block("json", contract_json),
         "",
@@ -444,7 +444,7 @@ def build_auto_goal(
             "- Do not run training during Seed creation; only prepare the bounded plan unless execution is explicitly requested.",
             "- The generated Ouroboros Seed artifact may use the normal Ouroboros YAML/Seed serialization. `seed.md` is the plugin handoff brief, not a required output format for auto's saved Seed.",
             "",
-            "Authoritative autoresearch_contract JSON follows. The generated Seed must instantiate these as concrete top-level values, not merely schema examples:",
+            "Authoritative autoresearch_contract JSON follows. The generated Seed must preserve these as concrete Seed data, using plugin-owned extra fields for autoresearch-specific values, not merely schema examples:",
             "",
             *fenced_code_block("json", contract_json),
             "",
