@@ -293,7 +293,7 @@ def cmd_review(args: argparse.Namespace) -> int:
             "revision_actions": report["revision_actions"],
         }
     )
-    return 0 if report["status"] == "review_passed" else 1
+    return 0 if report["status"].startswith("review_passed") else 1
 
 
 def cmd_revise(args: argparse.Namespace) -> int:
@@ -304,7 +304,7 @@ def cmd_revise(args: argparse.Namespace) -> int:
     out_dir = artifact_dir(root)
     policy = contract["revision_loop_policy"]
 
-    if review_report["status"] == "review_passed":
+    if review_report["status"].startswith("review_passed"):
         emit(
             {
                 "plugin": PLUGIN_NAME,

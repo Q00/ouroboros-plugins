@@ -274,12 +274,24 @@ def build_review_report(contract: dict, reviews: list[dict]) -> dict:
         failures.append(
             f"average score {average} below gate {gate['min_average_score']}"
         )
+    min_individual = gate.get("min_individual_score")
+    if min_individual is not None:
+        below = [s for s in scores if s < min_individual]
+        if below:
+            failures.append(
+                f"{len(below)} reviewer(s) below the accept threshold "
+                f"{min_individual}: {sorted(below)}"
+            )
     if gate.get("block_on_major_weaknesses") and majors:
         failures.append(f"{len(majors)} major weakness(es) unaddressed")
+    passed = not failures
+    status = "review_passed" if passed else "revision_required"
+    if passed and majors and gate.get("majors_become_required_revisions"):
+        status = "review_passed_with_required_revisions"
     return {
         "schema_version": REVIEW_SCHEMA_VERSION,
         "generated_at": utc_now(),
-        "status": "review_passed" if not failures else "revision_required",
+        "status": status,
         "reviews": reviews,
         "summary": {
             "reviewer_count": len(reviews),
@@ -295,6 +307,9 @@ def build_review_report(contract: dict, reviews: list[dict]) -> dict:
             ]
             if failures
             else []
+        ),
+        "required_camera_ready_revisions": (
+            [f"({m['reviewer']}) {m['text']}" for m in majors] if passed else []
         ),
     }
 

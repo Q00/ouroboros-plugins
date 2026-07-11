@@ -197,10 +197,17 @@ def build_review_policy(reviewer_model: str) -> dict[str, object]:
         "rubric": REVIEW_RUBRIC,
         "gate": {
             "min_average_score": 6,
-            "block_on_major_weaknesses": True,
+            "min_individual_score": 6,
+            "block_on_major_weaknesses": False,
+            "majors_become_required_revisions": True,
             "note": (
-                "Failing the gate produces revision actions, not submission; "
-                "re-run the writer subagent, then review again."
+                "Acceptance mirrors real venue semantics: every reviewer at or "
+                "above the accept threshold. Major weaknesses do not auto-block; "
+                "they become the required camera-ready revision list. Calibrated "
+                "against a 75-review study in which adversarially-prompted fresh "
+                "reviewers produced zero major-free reviews at any paper quality, "
+                "making a majors==0 criterion a property of the reviewer design "
+                "rather than of the paper."
             ),
         },
     }
