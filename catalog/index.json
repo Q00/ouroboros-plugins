@@ -126,6 +126,12 @@
       "version": "0.1.0",
       "path": "../plugins/swe-agent-harness",
       "description": "AgentOS assimilation adapter for running SWE-agent as a permissioned, auditable issue-to-patch harness."
+    },
+    {
+      "name": "paper-writer",
+      "version": "0.1.0",
+      "path": "../plugins/paper-writer",
+      "description": "Turn Ouroboros run evidence into a venue-ready paper draft through a plugin-owned paper contract, evidence harvest, gap analysis, and verified compose handoff."
     }
   ]
 }

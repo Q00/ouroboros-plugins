@@ -1,0 +1,226 @@
+{
+  "schema_version": "0.1",
+  "name": "paper-writer",
+  "version": "0.1.0",
+  "description": "Turn Ouroboros run evidence into a venue-ready paper draft through a plugin-owned paper contract, evidence harvest, gap analysis, and verified compose handoff.",
+  "source": {
+    "type": "local_path",
+    "path": "plugins/paper-writer"
+  },
+  "commands": [
+    {
+      "namespace": "paper",
+      "name": "inspect",
+      "summary": "Inspect a target repository and report which paper evidence sources are available.",
+      "usage": "ooo paper inspect <repository-path>",
+      "risk": "read_only",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "prepare",
+      "summary": "Generate the plugin-owned paper contract (thesis, venue rules, claims, evidence sufficiency rules).",
+      "usage": "ooo paper prepare <repository-path> --thesis <thesis>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        },
+        {
+          "name": "thesis",
+          "type": "string",
+          "required": true,
+          "description": "One-sentence core thesis the paper must argue."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "harvest",
+      "summary": "Collect repository evidence (spec, RFDs, domain packs, adapters, conformance, tests, experiment logs) into a research bundle.",
+      "usage": "ooo paper harvest <repository-path>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "gap",
+      "summary": "Compare contract claims against harvested evidence and emit unsupported-claim actions, including bounded ooo auto goals.",
+      "usage": "ooo paper gap <repository-path>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "brief",
+      "summary": "Build the writing brief for the host writer subagent from the contract, bundle, and gap report.",
+      "usage": "ooo paper brief <repository-path>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "compose",
+      "summary": "Verify a written draft against the paper contract and evidence bundle, then emit the handoff bundle.",
+      "usage": "ooo paper compose <repository-path> --draft <draft-path>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        },
+        {
+          "name": "draft",
+          "type": "path",
+          "required": true,
+          "description": "Path to the draft markdown produced by the writer subagent."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "revise",
+      "summary": "Advance the revision loop: record the failed round in the loop ledger, archive its reviews, and emit the writer revision brief with evidence-bound routing.",
+      "usage": "ooo paper revise <repository-path>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "review",
+      "summary": "Generate independent reviewer-subagent briefs for the composed draft, or ingest their reviews and enforce the review gate.",
+      "usage": "ooo paper review <repository-path> [--ingest]",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        }
+      ]
+    },
+    {
+      "namespace": "paper",
+      "name": "latex",
+      "summary": "Convert the composed, verified paper.md into paper.tex plus references.bib for a local LaTeX build.",
+      "usage": "ooo paper latex <repository-path>",
+      "risk": "write",
+      "requires_confirmation": false,
+      "arguments": [
+        {
+          "name": "repository_path",
+          "type": "path",
+          "required": true,
+          "description": "Path to the local repository that is the subject of the paper."
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "seed",
+      "access": "write",
+      "reason": "Emit bounded ooo auto goal strings for additional evidence-gathering experiments."
+    },
+    {
+      "name": "ledger",
+      "access": "write",
+      "reason": "Record claim-evidence status, gap decisions, and compose verification results."
+    },
+    {
+      "name": "provenance",
+      "access": "write",
+      "reason": "Record which repository files and experiment logs back each evidence item."
+    },
+    {
+      "name": "state",
+      "access": "write",
+      "reason": "Persist paper contract, research bundle, gap report, brief, and draft under the target repository."
+    },
+    {
+      "name": "handoff",
+      "access": "attach",
+      "reason": "Attach the verified paper draft and remaining venue checklist as a handoff bundle."
+    },
+    {
+      "name": "progress",
+      "access": "write",
+      "reason": "Report evidence readiness and unsupported claims before writing starts."
+    }
+  ],
+  "permissions": [
+    {
+      "scope": "filesystem:read",
+      "risk": "read_only",
+      "required": true,
+      "reason": "Read spec, RFD, domain pack, adapter, conformance, test, and experiment-log files as paper evidence."
+    },
+    {
+      "scope": "filesystem:write",
+      "risk": "write",
+      "required": true,
+      "reason": "Write contract, bundle, gap report, brief, draft, and handoff files into .ouroboros/paper-writer/."
+    }
+  ],
+  "entrypoint": {
+    "type": "command",
+    "command": "python -m ouroboros_paper_writer"
+  },
+  "audit": {
+    "events": [
+      "plugin.invoked",
+      "plugin.permission_used",
+      "plugin.completed",
+      "plugin.failed"
+    ]
+  }
+}
