@@ -201,6 +201,22 @@ class PaperWriterPluginTests(unittest.TestCase):
             self.assertIn(r"\item first bullet", tex)
             self.assertIn(r"\includegraphics[width=\linewidth]{figures/f1-architecture.pdf}", tex)
             self.assertIn(r"\caption{F1: System architecture overview}", tex)
+            self.assertEqual(latex_payload["style"], "generic-preprint")
+
+            (root / ".ouroboros" / "paper-writer" / "iclr2099_conference.sty").write_text(
+                "% fake venue style for test\n", encoding="utf-8"
+            )
+            (root / ".ouroboros" / "paper-writer" / "iclr2099_conference.bst").write_text(
+                "% fake bst\n", encoding="utf-8"
+            )
+            proc = self._run("latex", str(root))
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            latex_payload = json.loads(proc.stdout)
+            self.assertEqual(latex_payload["style"], "iclr2099_conference")
+            tex = Path(latex_payload["tex_path"]).read_text(encoding="utf-8")
+            self.assertIn(r"\usepackage{iclr2099_conference,times}", tex)
+            self.assertIn(r"\bibliographystyle{iclr2099_conference}", tex)
+            self.assertIn(r"%\iclrfinalcopy", tex)
             self.assertNotIn("*", tex.split(r"\begin{abstract}")[1].split(r"\bibliography")[0].replace(r"$\times$", ""))
 
     def test_compose_rejects_fabricated_evidence_and_missing_sections(self):
