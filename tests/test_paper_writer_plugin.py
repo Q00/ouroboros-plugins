@@ -219,6 +219,70 @@ class PaperWriterPluginTests(unittest.TestCase):
             self.assertIn(r"%\iclrfinalcopy", tex)
             self.assertNotIn("*", tex.split(r"\begin{abstract}")[1].split(r"\bibliography")[0].replace(r"$\times$", ""))
 
+            (root / ".ouroboros" / "paper-writer" / "iclr2099_conference.sty").unlink()
+            (root / ".ouroboros" / "paper-writer" / "iclr2099_conference.bst").unlink()
+            (root / ".ouroboros" / "paper-writer" / "icml2099.sty").write_text(
+                "% fake icml style for test\n", encoding="utf-8"
+            )
+            (root / ".ouroboros" / "paper-writer" / "icml2099.bst").write_text(
+                "% fake bst\n", encoding="utf-8"
+            )
+            proc = self._run("latex", str(root))
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            latex_payload = json.loads(proc.stdout)
+            self.assertEqual(latex_payload["style"], "icml2099")
+            tex = Path(latex_payload["tex_path"]).read_text(encoding="utf-8")
+            self.assertIn(r"\usepackage{icml2099}", tex)
+            self.assertIn(r"\twocolumn[", tex)
+            self.assertIn(r"\icmltitle{", tex)
+            self.assertIn(r"\printAffiliationsAndNotice{}", tex)
+            self.assertIn(r"\bibliographystyle{icml2099}", tex)
+            self.assertIn(r"\begin{table*}[t]", tex)
+            self.assertNotIn(r"\begin{table}[ht]", tex)
+
+    def test_icml_venue_contract_and_reviewer_criteria(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            make_target_repo(root)
+            proc = self._run(
+                "prepare",
+                str(root),
+                "--thesis",
+                "Agent claims need deterministic verification.",
+                "--venue",
+                "icml",
+                "--page-limit",
+                "4",
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            contract = json.loads(
+                (root / ".ouroboros" / "paper-writer" / "paper_contract.json").read_text()
+            )
+
+        self.assertEqual(contract["venue"]["name"], "ICML")
+        self.assertEqual(contract["venue"]["page_limit_main_text"], 4)
+        self.assertTrue(contract["venue"]["review_criteria"])
+        self.assertTrue(
+            any("automatic desk reject" in item for item in contract["venue"]["readiness_checklist"])
+        )
+
+        sys.path.insert(0, str(PLUGIN_PATH))
+        try:
+            from ouroboros_paper_writer.contract import REVIEW_PERSONAS
+            from ouroboros_paper_writer.report import build_reviewer_brief
+        finally:
+            sys.path.pop(0)
+        brief = build_reviewer_brief(
+            contract,
+            dict(REVIEW_PERSONAS[0]),
+            paper_path="paper.md",
+            bundle_path="bundle.json",
+            gap_path="gap.json",
+            output_path="review.json",
+        )
+        self.assertIn("Venue review criteria", brief)
+        self.assertIn("Claims and evidence", brief)
+
     def test_compose_rejects_fabricated_evidence_and_missing_sections(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

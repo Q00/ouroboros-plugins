@@ -232,6 +232,10 @@ def build_reviewer_brief(
         "",
     ]
     lines += [f"- {rule}" for rule in rubric["rules"]]
+    criteria = contract["venue"].get("review_criteria") or []
+    if criteria:
+        lines += ["", "## Venue review criteria (score against these)", ""]
+        lines += [f"- {item}" for item in criteria]
     lines += [
         "",
         "## Output",

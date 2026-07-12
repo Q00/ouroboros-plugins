@@ -65,6 +65,38 @@ ICLR_WORKSHOP_READINESS_CHECKLIST = (
     "vision, so feedback targets the right scope.",
 )
 
+ICML_READINESS_CHECKLIST = (
+    "Use the official icml<year>.sty/.bst template; any other format is an "
+    "automatic desk reject. Submission mode stays anonymous "
+    "(\\usepackage{icml<year>}); camera-ready switches to [accepted].",
+    "Main body must fit the track's page limit (main conference: 8 pages, "
+    "auto-reject if exceeded; shorter tracks override via the contract's "
+    "page_limit_main_text). References and appendices are unlimited.",
+    "Include the impact statement required for main-track papers.",
+    "Anonymize fully: no author names, affiliations, acknowledgements, or "
+    "identifying repository links in the submission PDF.",
+    "Disclose LLM usage per the current ICML policy.",
+    "Keep the submission PDF under the size limit (50MB submission / 20MB "
+    "camera-ready).",
+)
+
+ICML_REVIEW_CRITERIA = (
+    "Claims and evidence: every claim in the abstract/intro is supported by "
+    "the results actually reported; numbers in the text match the artifacts.",
+    "Soundness: methodology and statistics are correct; conclusions do not "
+    "outrun the experimental design or sample sizes.",
+    "Novelty and significance: the delta over the closest prior work is "
+    "explicit and non-trivial.",
+    "Related work: adjacent literatures are engaged, not just adjacent "
+    "systems.",
+    "Clarity and presentation: a reviewer can reconstruct what was done and "
+    "why from the paper alone.",
+    "Reproducibility: artifacts, data, and procedures are described well "
+    "enough to replicate.",
+    "Limitations and impact: honest scoping, failure modes, and the impact "
+    "statement are present.",
+)
+
 VENUE_RULES = {
     "iclr": {
         "name": "ICLR",
@@ -83,6 +115,16 @@ VENUE_RULES = {
         "appendix_counted": False,
         "required_sections": list(REQUIRED_SECTIONS),
         "readiness_checklist": list(ICLR_WORKSHOP_READINESS_CHECKLIST),
+    },
+    "icml": {
+        "name": "ICML",
+        "review_model": "double_blind_openreview",
+        "page_limit_main_text": 8,
+        "references_counted": False,
+        "appendix_counted": False,
+        "required_sections": list(REQUIRED_SECTIONS),
+        "readiness_checklist": list(ICML_READINESS_CHECKLIST),
+        "review_criteria": list(ICML_REVIEW_CRITERIA),
     },
 }
 
