@@ -264,6 +264,11 @@ def build_latex_document(
         # columns via table*, and the title block is the \twocolumn[...] header.
         body_tex = body_tex.replace(r"\begin{table}[ht]", r"\begin{table*}[t]")
         body_tex = body_tex.replace(r"\end{table}", r"\end{table*}")
+        appendix_tex = appendix_tex.replace(r"\begin{table}[ht]", r"\begin{table*}[t]")
+        appendix_tex = appendix_tex.replace(r"\end{table}", r"\end{table*}")
+        appendix_block = (
+            ["", r"\appendix", "", appendix_tex] if appendix_tex.strip() else []
+        )
         # The icml style suppresses running titles that wrap in the header box;
         # empirically ~45+ chars is unsafe, so prefer the pre-colon short form.
         running = title
