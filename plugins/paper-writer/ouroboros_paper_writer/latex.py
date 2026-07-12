@@ -94,8 +94,11 @@ def convert_table(rows: list[str]) -> list[str]:
     return lines
 
 
-def markdown_to_latex_body(md_text: str) -> tuple[str, str, str]:
-    """Return (title, abstract_tex, body_tex) from the verified draft markdown."""
+def markdown_to_latex_body(md_text: str) -> tuple[str, str, str, str]:
+    """Return (title, abstract_tex, body_tex, appendix_tex) from the draft markdown.
+
+    Sections whose `##` heading starts with "Appendix" land in appendix_tex,
+    rendered after the bibliography under \\appendix."""
     lines = md_text.splitlines()
     title = "Untitled"
     sections: list[tuple[str, list[str]]] = []
@@ -182,14 +185,22 @@ def markdown_to_latex_body(md_text: str) -> tuple[str, str, str]:
 
     abstract_tex = ""
     body_parts: list[str] = []
+    appendix_parts: list[str] = []
     for name, content in sections:
         text = "\n".join(content).strip()
         if name.lower() == "abstract":
             abstract_tex = text
             continue
+        if name.lower().startswith("appendix"):
+            # Placed after the bibliography under \appendix (page-unlimited at
+            # most venues). Strip the "Appendix"/"Appendix X:" prefix.
+            heading = re.sub(r"(?i)^appendix\s*[A-Z]?\s*[:.\-]?\s*", "", name) or name
+            appendix_parts.append(r"\section{" + convert_inline(heading) + "}")
+            appendix_parts.append(text)
+            continue
         body_parts.append(r"\section{" + convert_inline(name) + "}")
         body_parts.append(text)
-    return title, abstract_tex, "\n\n".join(body_parts)
+    return title, abstract_tex, "\n\n".join(body_parts), "\n\n".join(appendix_parts)
 
 
 def cited_keys(md_text: str) -> list[str]:
@@ -243,7 +254,11 @@ def build_latex_document(
     official_style: str | None = None,
     official_bst: str | None = None,
     style_family: str | None = None,
+    appendix_tex: str = "",
 ) -> str:
+    appendix_block = (
+        ["", r"\appendix", "", appendix_tex] if appendix_tex.strip() else []
+    )
     if official_style and style_family == "icml":
         # ICML is two-column: tables produced at \textwidth must span both
         # columns via table*, and the title block is the \twocolumn[...] header.
@@ -298,6 +313,9 @@ def build_latex_document(
                 "",
                 r"\bibliographystyle{" + bib_style + "}",
                 r"\bibliography{" + bib_stem + "}",
+            ]
+            + appendix_block
+            + [
                 "",
                 r"\end{document}",
                 "",
@@ -359,6 +377,9 @@ def build_latex_document(
             "",
             r"\bibliographystyle{" + bib_style + "}",
             r"\bibliography{" + bib_stem + "}",
+        ]
+        + appendix_block
+        + [
             "",
             r"\end{document}",
             "",
@@ -374,7 +395,7 @@ def render_latex(
     venue_name: str,
 ) -> dict:
     md_text = paper_md.read_text(encoding="utf-8")
-    title, abstract_tex, body_tex = markdown_to_latex_body(md_text)
+    title, abstract_tex, body_tex, appendix_tex = markdown_to_latex_body(md_text)
     references = {}
     if references_json is not None and references_json.is_file():
         references = json.loads(references_json.read_text(encoding="utf-8"))
@@ -405,6 +426,7 @@ def render_latex(
         official_style=official_style,
         official_bst=official_bst,
         style_family=style_family,
+        appendix_tex=appendix_tex,
     )
     tex_path = out_dir / "paper.tex"
     bib_path = out_dir / "references.bib"
