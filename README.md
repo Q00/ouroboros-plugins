@@ -1,6 +1,8 @@
 # Ouroboros Plugins
 
-UserLevel plugin ecosystem for Ouroboros.
+Plugin contract and reference plugins for [Ouroboros](https://github.com/Q00/ouroboros), the Agent OS. Plugins compose the core's stable primitives into domain-specific workflows.
+
+New here? Install Ouroboros itself first — the [main repo's README](https://github.com/Q00/ouroboros#readme) covers install and setup. This repository is where the UserLevel plugin contract and reference plugin packages live.
 
 Ouroboros core should provide stable OS primitives. Plugins and first-party
 programs compose those primitives into domain-specific workflows.
