@@ -76,6 +76,7 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn("Keep each experiment bounded to 60 seconds.", seed)
             self.assertIn("## Experiment Plan", seed)
             self.assertIn("Experiment 1 is the unmodified baseline run", seed)
+            self.assertIn("Evaluate experiments sequentially", seed)
             self.assertIn("## Authoritative Autoresearch Contract", seed)
             self.assertIn('"repository":', seed)
             self.assertIn('"candidate_sequence":', seed)
@@ -98,6 +99,10 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn("## Non-Goals", seed)
             self.assertIn("## Runtime Context", seed)
             self.assertIn("`prepare.py` as fixed data prep", seed)
+            self.assertIn("## Runtime Context", seed)
+            self.assertIn("## Non-Goals", seed)
+            self.assertIn("Do not edit `prepare.py`.", seed)
+            self.assertIn("The Seed includes top-level runtime context", seed)
             self.assertIn("````markdown", seed)
             self.assertIn("Use the prepared autoresearch handoff brief", auto_goal)
             self.assertIn("Experiments 2-2 must be concrete candidate changes", auto_goal)
@@ -106,6 +111,11 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn("Include seed_artifact_policy", auto_goal)
             self.assertIn("Do not declare top-level `seed_artifact_path`", auto_goal)
             self.assertIn("do not rewrite the command into a shell-specific timeout wrapper", auto_goal)
+            self.assertIn("Runtime Context:", auto_goal)
+            self.assertIn("Non-Goals:", auto_goal)
+            self.assertIn("Acceptance Criteria:", auto_goal)
+            self.assertIn("current best commit", auto_goal)
+            self.assertIn("Seed QA Guardrails:", auto_goal)
             self.assertIn("Do not run training during Seed creation", auto_goal)
             self.assertIn("Authoritative autoresearch_contract JSON follows", auto_goal)
             self.assertIn("plugin-owned extra fields for autoresearch-specific values", auto_goal)
@@ -116,8 +126,13 @@ class AutoresearchPluginTests(unittest.TestCase):
             self.assertIn("normal Ouroboros YAML/Seed serialization", auto_goal)
             self.assertIn("baseline-only rerun", auto_goal)
             self.assertEqual(handoff, payload)
-            self.assertIn("ouroboros auto \"$(cat", payload["ooo_auto"]["recommended_command"])
-            self.assertIn("autoresearch path with spaces", payload["ooo_auto"]["recommended_command"])
+            self.assertIn(
+                'ouroboros auto "$(cat', payload["ooo_auto"]["recommended_command"]
+            )
+            self.assertIn(
+                "autoresearch path with spaces",
+                payload["ooo_auto"]["recommended_command"],
+            )
             self.assertIn("'", payload["ooo_auto"]["recommended_command"])
             self.assertEqual(payload["ooo_auto"]["editable_files"], ["train.py"])
             self.assertEqual(
@@ -133,6 +148,50 @@ class AutoresearchPluginTests(unittest.TestCase):
                     "repo_local_seed_output_required"
                 ]
             )
+
+    def test_prepare_records_custom_declared_options(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "brief.md").write_text("Improve perplexity.\n", encoding="utf-8")
+            (root / "setup.py").write_text("MAX_SEQ_LEN = 512\n", encoding="utf-8")
+            (root / "model.py").write_text("print('loss=1.0')\n", encoding="utf-8")
+
+            proc = self._run(
+                "prepare",
+                str(root),
+                "--program-file",
+                "brief.md",
+                "--support-file",
+                "setup.py",
+                "--target-file",
+                "model.py",
+                "--goal",
+                "Reduce validation loss.",
+                "--metric",
+                "loss",
+                "--max-experiments",
+                "3",
+                "--experiment-seconds",
+                "45",
+                "--train-command",
+                "uv run python model.py",
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            payload = json.loads(proc.stdout)
+            seed = Path(payload["seed_path"]).read_text(encoding="utf-8")
+            auto_goal = Path(payload["auto_goal_path"]).read_text(encoding="utf-8")
+            self.assertEqual(payload["ooo_auto"]["metric"], "loss")
+            self.assertEqual(payload["ooo_auto"]["max_experiments"], 3)
+            self.assertEqual(payload["ooo_auto"]["experiment_seconds"], 45)
+            self.assertEqual(
+                payload["ooo_auto"]["train_command"], "uv run python model.py"
+            )
+            self.assertEqual(payload["ooo_auto"]["editable_files"], ["model.py"])
+            self.assertIn("Treat `brief.md` as the research program", seed)
+            self.assertIn("Treat `setup.py` as fixed data prep", seed)
+            self.assertIn("Use `loss` as the primary comparison metric", seed)
+            self.assertIn("Verification command: `uv run python model.py`", auto_goal)
 
     def test_prepare_requires_autoresearch_files(self):
         with tempfile.TemporaryDirectory() as td:
@@ -160,7 +219,9 @@ class AutoresearchPluginTests(unittest.TestCase):
             (root / "prepare.py").write_text("MAX_SEQ_LEN = 1024\n", encoding="utf-8")
             (root / "train.py").write_text("print('val_bpb=1.0')\n", encoding="utf-8")
 
-            proc = self._run("inspect", str(root), "--program-file", str(root / "program.md"))
+            proc = self._run(
+                "inspect", str(root), "--program-file", str(root / "program.md")
+            )
 
         self.assertEqual(proc.returncode, 2)
         self.assertIn("--program-file must be a path relative", proc.stderr)

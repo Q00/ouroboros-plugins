@@ -240,9 +240,7 @@ def repo_member_path(root: Path, raw_path: str, label: str) -> Path:
     try:
         resolved.relative_to(root)
     except ValueError as exc:
-        raise ValueError(
-            f"{label} must stay inside the repository root"
-        ) from exc
+        raise ValueError(f"{label} must stay inside the repository root") from exc
     return resolved
 
 
@@ -343,6 +341,24 @@ def build_seed_markdown(
         f"- Keep each experiment bounded to {experiment_seconds} seconds.",
         f"- Use `{metric}` as the primary comparison metric.",
         f"- Prefer changes that improve `{metric}` and preserve a reproducible command trail.",
+        "- Evaluate experiments sequentially from the current best commit: keep an improvement, otherwise revert before the next experiment.",
+        "",
+        "## Runtime Context",
+        "",
+        f"- Local repository root: `{inspection.root}`.",
+        f"- Research program file: `{program_rel}`.",
+        f"- Editable implementation file: `{target_rel}`.",
+        f"- Fixed support/evaluation file: `{support_rel}`.",
+        f"- Verification command for baseline and experiments: `{train_command}`.",
+        f"- Experiment budget: at most {max_experiments} experiments, each bounded to {experiment_seconds} seconds.",
+        "",
+        "## Non-Goals",
+        "",
+        f"- Do not edit `{support_rel}`.",
+        f"- Do not edit files outside `{target_rel}` unless the ledger explicitly widens scope.",
+        "- Do not install new dependencies or change package metadata.",
+        "- Do not change the evaluation harness or primary metric.",
+        "- Do not run training during Seed creation; only plan the bounded loop until execution is explicitly requested.",
         "",
         "## Experiment Plan",
         "",
@@ -379,6 +395,11 @@ def build_seed_markdown(
         "",
         "## Acceptance Criteria",
         "",
+        f"- The Seed includes top-level runtime context for repository root, `{program_rel}`, `{target_rel}`, `{support_rel}`, experiment budget, metric, and verification command.",
+        f"- The Seed includes explicit non-goals forbidding `{support_rel}` edits, dependency changes, evaluation-harness changes, and training during Seed creation.",
+        f"- Execution, when requested, records a baseline experiment using `{train_command}` before comparing any `{target_rel}` change.",
+        "- Execution evaluates experiments sequentially from the current best commit, keeping improvements and reverting discarded changes before the next attempt.",
+        f"- Execution records no more than {max_experiments} experiments, each with command, changed files, diff summary, observed `{metric}`, memory, status, and keep/discard conclusion.",
         f"- The final result reports the best observed `{metric}` and the baseline value if available.",
         f"- Every planned candidate experiment records command, changed files, observed `{metric}`, and conclusion.",
         f"- The final report compares baseline `{metric}` against final best `{metric}` and states whether the best result improved.",
@@ -386,7 +407,8 @@ def build_seed_markdown(
         f"- The final patch is limited to `{target_rel}` unless scope was widened in the ledger.",
         f"- Experiment 1 is an unmodified baseline run and any improvement is compared against that baseline.",
         f"- The final verification command exits 0 and emits parseable `{metric}` or `best_{metric}` output.",
-        "- The run stops when the experiment budget is exhausted or no promising next edit remains.",
+        f"- The final kept patch is limited to `{target_rel}` unless scope was widened in the ledger.",
+        f"- The run stops when {max_experiments} experiments have been attempted or no promising reversible `{target_rel}` change remains.",
         "",
         "## Program Excerpt",
         "",
@@ -432,6 +454,7 @@ def build_auto_goal(
             f"- Run at most {max_experiments} experiments.",
             f"- Keep each experiment bounded to {experiment_seconds} seconds.",
             f"- Use `{metric}` as the primary metric; lower is better.",
+            "- Evaluate experiments sequentially from the current best commit: keep an improvement, otherwise revert before the next experiment.",
             f"- Verification command: `{train_command}`.",
             f"- Apply the {experiment_seconds}-second timeout as a separate execution budget; do not rewrite the command into a shell-specific timeout wrapper.",
             f"- Experiment 1 must be an unmodified baseline run and counts against the {max_experiments}-experiment budget.",
@@ -447,6 +470,34 @@ def build_auto_goal(
             "Authoritative autoresearch_contract JSON follows. The generated Seed must preserve these as concrete Seed data, using plugin-owned extra fields for autoresearch-specific values, not merely schema examples:",
             "",
             *fenced_code_block("json", contract_json),
+            "",
+            "Runtime Context:",
+            f"- Repository root: {inspection.root}",
+            f"- Research program: {program_rel}",
+            f"- Editable file: {target_rel}",
+            f"- Fixed support/evaluation file: {support_rel}",
+            f"- Experiment budget: at most {max_experiments} experiments, {experiment_seconds} seconds each.",
+            f"- Metric: {metric}, lower is better.",
+            f"- Verification command: {train_command}",
+            "",
+            "Non-Goals:",
+            f"- Do not edit {support_rel}.",
+            f"- Do not edit files outside {target_rel} unless the ledger explicitly widens scope.",
+            "- Do not install dependencies, change package metadata, or modify the evaluation harness.",
+            "- Do not run training during Seed creation.",
+            "",
+            "Acceptance Criteria:",
+            "- Seed has explicit runtime context and non-goals sections for this autoresearch contract.",
+            f"- Execution, when requested, runs and reports a baseline with {train_command} before evaluating changes.",
+            "- Execution evaluates experiments sequentially from the current best commit, keeping improvements and reverting discarded changes before the next attempt.",
+            f"- Execution records at most {max_experiments} experiments with command, changed files, diff summary, observed {metric}, memory, status, and keep/discard conclusion.",
+            f"- Final kept changes are limited to {target_rel} unless scope widening is explicitly recorded in the ledger.",
+            "- Ties, regressions, invalid runs, missing metric output, timeouts, memory-heavy changes, and scope expansions are discarded.",
+            "",
+            "Seed QA Guardrails:",
+            "- Preserve Runtime Context, Non-Goals, and Acceptance Criteria as first-class Seed content.",
+            "- Do not copy persona, repair transcript, failed-run transcript, or diagnostic recovery text into Seed constraints.",
+            "- Acceptance criteria must be direct observable requirements, not generic command/API placeholder language.",
             "",
         ]
     )
@@ -501,7 +552,7 @@ def write_handoff(
         "upstream": UPSTREAM_REPOSITORY,
         "ooo_auto": {
             "recommended_command": (
-                f"ouroboros auto \"$(cat {shlex.quote(str(auto_goal_path))})\""
+                f'ouroboros auto "$(cat {shlex.quote(str(auto_goal_path))})"'
             ),
             "goal": goal,
             "metric": metric,
@@ -528,9 +579,15 @@ def inspection_payload(inspection: RepoInspection) -> dict:
         "status": "ready" if inspection.ready else "missing_prerequisites",
         "repository": str(inspection.root),
         "required_files": {
-            display_path(inspection.program_file, inspection.root): inspection.program_exists,
-            display_path(inspection.target_file, inspection.root): inspection.target_exists,
-            display_path(inspection.support_file, inspection.root): inspection.support_exists,
+            display_path(
+                inspection.program_file, inspection.root
+            ): inspection.program_exists,
+            display_path(
+                inspection.target_file, inspection.root
+            ): inspection.target_exists,
+            display_path(
+                inspection.support_file, inspection.root
+            ): inspection.support_exists,
         },
         "missing": inspection.missing,
         "ooo_auto_ready": inspection.ready,
@@ -553,8 +610,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--support-file", default=DEFAULT_SUPPORT_FILE)
     parser.add_argument("--goal", default="")
     parser.add_argument("--metric", default=DEFAULT_METRIC)
-    parser.add_argument("--max-experiments", type=positive_int, default=DEFAULT_MAX_EXPERIMENTS)
-    parser.add_argument("--experiment-seconds", type=positive_int, default=DEFAULT_EXPERIMENT_SECONDS)
+    parser.add_argument(
+        "--max-experiments", type=positive_int, default=DEFAULT_MAX_EXPERIMENTS
+    )
+    parser.add_argument(
+        "--experiment-seconds", type=positive_int, default=DEFAULT_EXPERIMENT_SECONDS
+    )
     parser.add_argument("--train-command", default=DEFAULT_TRAIN_COMMAND)
     return parser
 
